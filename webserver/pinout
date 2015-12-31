@@ -1,0 +1,18 @@
+1 X =RST=
+2   (adc)
+3 X =CH_PD=
+4 X (gpio16) onewire temp. innen DS18B20 
+5 X (gpio14) SSR3
+6 X (gpio12) SSR1
+7 X (gpio13) SSR2
+
+8 X =VCC=
+9 X =GND=
+
+10 X (gpio15) [pulldown] -spare-
+11 X (gpio2) rgb licht neopixel
+12 - (gpio0) =PROG=
+13 X (gpio5/twi scl) \
+14 X (gpio4/twi sda) / temp mantel ADS1115
+15   (rxd) 
+16   (txd)

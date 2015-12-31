@@ -1,0 +1,20 @@
+@mixin showOnDemand( $height ) {
+
+	max-height: 0;
+	overflow: hidden;
+
+	transition: max-height .5s;
+
+	&.visible {
+		max-height: $height;
+	}
+	
+}
+
+@mixin transform( $x ){
+	-webkit-transform: $x;
+	transform: $x;
+}
+@mixin speedupRendering {
+	@include transform( translateZ(0) );
+}

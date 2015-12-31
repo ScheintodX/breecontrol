@@ -1,0 +1,10 @@
+*.swp
+*.bak
+*-bak
+node_modules
+webclient/.sass-cache
+
+1wire_oi_expander
+braukessel_control
+kicad-ESP8266
+schaltschrank

@@ -1,0 +1,11 @@
+{
+	"boilers": [
+		"abc",
+		{
+			"mode": "stopped",
+			"start": 0,
+			"index": 0,
+			"elapsed": 0
+		}
+	]
+}

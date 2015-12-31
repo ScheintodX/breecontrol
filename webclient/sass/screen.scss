@@ -1,0 +1,217 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+
+@import "sprites.lib";
+@import "control.lib";
+
+//$bg: #204a87;
+$bg: #16335e;
+$bg_ctrl: lighten( $bg, 10% );
+$bg_chart: lighten( $bg, 5% );
+
+html {
+	font-family: "Droid Sans", "Roboto", sans-serif;
+	font-size: 16px;
+}
+
+body {
+	background-color: $bg;
+	color: white;
+}
+
+select {
+	padding: 4px;
+}
+input {
+
+	position: relative;
+	border-radius: 4px;
+	border: 1px solid #aaa;
+
+	&[type='number'], &[type='text'] {
+		padding: 4px;
+	}
+
+	&[type='checkbox'] {
+
+		width: 24px; height: 24px;
+
+		border: 2px solid black;
+		background-color: white;
+	}
+
+	&[type='number'] {
+		width: 60px;
+	}
+
+	&.temp, &.time {
+	}
+}
+
+
+section.tab {
+
+	header {
+		box-shadow: 0 -8px 8px rgba( black, .3 );
+		text-align: center;
+		position: relative;
+	}
+	h1 {
+		font-size: 22px;
+		background-color: white;
+		color: $bg;
+		padding: 6px 32px;
+	}
+	h2 {
+		background-color: white;
+		color: $bg;
+		padding: 3px 6px;
+	}
+
+}
+section.tab > section {
+	@include speedupRendering();
+}
+
+section.boiler {
+
+	header {
+		button {
+			@include button( absolute );
+			@include buttonStyleFlat( white );
+			&.chart {
+				@include isIcon( chart );
+				top: 3px; left: 3px;
+			}
+			&.settings {
+				@include isIcon( settings );
+				top: 3px; right: 3px;
+			}
+		}
+	}
+}
+
+section.chart, section.ctrl {
+}
+
+section.chart {
+
+	@include showOnDemand( 240px );
+
+	background-color: $bg_chart;
+}
+
+section.ctrl {
+
+	box-shadow: inset 0 4px 4px rgba( black, .3 );
+
+	@include showOnDemand( 400px );
+	overflow: scroll;
+
+	background-color: $bg_ctrl;
+
+	button {
+		@include button( relative );
+		padding-left: 20px;
+		margin: 6px;
+		&.set {
+			display: block;
+			width: auto;
+		}
+
+		&.prev {
+			@include hasIcon( prev, 4px, 4px );
+		}
+		&.next {
+			@include hasIcon( next, 4px, 4px );
+		}
+		&.start {
+			@include hasIcon( start, 4px, 4px );
+		}
+		&.stop {
+			@include hasIcon( stop, 4px, 4px );
+		}
+		&.pause {
+			@include hasIcon( pause, 4px, 4px );
+		}
+		&.save {
+			@include hasIcon( save, 4px, 4px );
+		}
+		&.load {
+			@include hasIcon( load, 4px, 4px );
+		}
+		&.set {
+			@include hasIcon( set, 4px, 4px );
+		}
+	}
+
+	label {
+
+		display: block;
+		position: relative;
+
+		margin: 3px;
+		padding: 12px;
+
+		border: 1px solid white;
+		border-radius: 4px;
+
+		input {
+			position: absolute;
+			top: 4px; right: 4px;
+		}
+	}
+
+	div.step {
+		display: flex;
+		label {
+			flex-grow: 1;
+			display: inline-block;
+		}
+	}
+
+
+	& > section {
+
+		$ind: 8px;
+
+		padding: 8px;
+
+		h2 {
+			margin: -8px -8px 0 -8px;
+		}
+
+		h3 {
+			margin: 12px 0 4px 0;
+			font-weight: bold;
+			&:before { content: "= "; }
+			&:after { content: " ="; }
+		}
+
+		label {
+
+/*
+			display: block;
+			position: relative;
+
+			min-height: 40px;
+
+			& > * {
+				position: absolute;
+				right: 0;
+			}
+*/
+
+		}
+	}
+}
+
+.buttongroup {
+
+	text-align: center;
+}
+

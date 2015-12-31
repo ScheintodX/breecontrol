@@ -1,0 +1,189 @@
+$sprites: url( ../images/sprites.svg );
+
+$w: 28px;
+$h: 28px;
+
+@mixin button( $position, $height: $h ) {
+
+	position: $position; // must be set if we need icons to work properly
+	height: $height;
+	cursor: pointer;
+}
+@mixin buttonStyleFlat( $color, $textColor: white ) {
+
+	color: $textColor;
+	background-color: $color;
+	border: none;
+}
+
+// Position is of the element, not the icon!
+@mixin hasIcon( $name, $pos: left, $top: 0 ) {
+
+	&:before {
+
+		content: "";
+		position: absolute;
+		top: $top;
+		@if $pos == left {
+			left: 0;
+		} @else if $pos == right {
+			right: 0;
+		} @else {
+			left: $pos;
+		}
+		@include sprite( $name );
+		@include spriteSize( $name );
+	}
+}
+
+@mixin isIcon( $name, $pos: left, $top: 0 ){
+
+	@include hasIcon( $name, $pos, $top );
+	@include spriteSize( $name );
+	@include hideText();
+}
+
+@mixin hideText() {
+	text-indent: -9999px;
+}
+
+@mixin spriteAt( $x, $y ) {
+
+	@if( type-of( $x ) == 'number' ) {
+		$x: -$x;
+	}
+	@if( type-of( $y ) == 'number' ) {
+		$y: -$y;
+	}
+	background: $sprites no-repeat $x $y;
+}
+
+@mixin hasSprite() {
+	@include spriteAt( 0, 0 );
+}
+
+@mixin spritePosAt( $x, $y ) {
+
+	@if( type-of( $x ) == 'number' ) {
+		$x: -$x;
+	}
+	@if( type-of( $y ) == 'number' ) {
+		$y: -$y;
+	}
+	background-position: $x $y;
+}
+
+@mixin spritePosYAt( $x, $y ) {
+
+	@if( type-of( $y ) == 'number' ) {
+		$y: -$y;
+	}
+	background-position-y: $y;
+}
+
+$ctrl: 16px;
+
+$_positions: (
+	// name x y width height
+
+	// Use this if not directly set
+	yes 0 0 $w $h,
+
+	chart		0	0	$w	$h,
+	settings	$w	0	$w	$h,
+
+	prev		0*$ctrl	32px	$ctrl	$ctrl,
+	next		1*$ctrl	32px	$ctrl	$ctrl,
+	start		2*$ctrl	32px	$ctrl	$ctrl,
+	stop		3*$ctrl	32px	$ctrl	$ctrl,
+	pause		4*$ctrl	32px	$ctrl	$ctrl,
+	save		5*$ctrl	32px	$ctrl	$ctrl,
+	load		6*$ctrl	32px	$ctrl	$ctrl,
+	set			7*$ctrl	32px	$ctrl	$ctrl,
+
+	xxx 0 0 0 0
+);
+
+@function _find( $name ){
+
+	@each $pos in $_positions {
+		@if _name( $pos ) == $name {
+			@return $pos;
+		}
+	}
+}
+
+@function _name( $row ){
+	@return nth( $row, 1 );
+}
+@function _posX( $row ){
+	@return nth( $row, 2 );
+}
+@function _posY( $row ){
+	@return nth( $row, 3 );
+}
+@function _width( $row ){
+	@return nth( $row, 4 );
+}
+@function _height( $row ){
+	@return nth( $row, 5 );
+}
+
+@mixin sprite( $name ){
+
+	$row: _find( $name );
+
+	@include spriteAt( _posX( $row ), _posY( $row ) );
+}
+@mixin spritePos( $name, $xOff: 0, $yOff: 0 ){
+
+	$row: _find( $name );
+
+	$x: _posX( $row );
+	$y: _posY( $row );
+
+	@if( $xOff > 0 ) {
+		$x: $x - $xOff;
+	}
+	@if( $yOff > 0 ) {
+		$y: $y - $yOff;
+	}
+
+	@include spritePosAt( $x, $y );
+}
+
+@function spriteWidth( $name ){
+	@return _width( _find( $name ) );
+}
+@function spriteHeight( $name ){
+	@return _height( _find( $name ) );
+}
+@function spriteX( $name ){
+	@return _posX( _find( $name ) );
+}
+@function spriteY( $name ){
+	@return _posY( _find( $name ) );
+}
+
+@mixin spriteSize( $name ){
+
+	$row: _find( $name );
+	width: _width( $row );
+	height: _height( $row );
+}
+@mixin spriteWidth( $name ){
+
+	$row: _find( $name );
+	width: _width( $row );
+}
+@mixin spriteHeight( $name ){
+
+	$row: _find( $name );
+	height: _height( $row );
+}
+@mixin spriteInBackground( $name, $color ){
+	$row: _find( $name );
+	$x: _posX( $row );
+	$y: _posY( $row );
+	background: $color $sprites no-repeat $x $y;
+}

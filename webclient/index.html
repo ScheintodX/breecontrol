@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+	<title>Brauerei am Gries</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+	<!--<link rel="stylesheet" href="csslib/jquery-mobile-1.4.5-min.css"/>-->
+
+	<script src="jslib/jquery-2.1.4-min.js"></script>
+	<!--<script src="jslib/jquery-mobile-1.4.5-min.js"></script>-->
+	<script src="jslib/velocity-1.2.3-min.js"></script>
+
+	<script src="js/helpers.js"></script>
+	<script src="js/ctrl.js"></script>
+	<script src="js/controls.js"></script>
+	<script src="js/com_ws.js"></script>
+	<script src="js/boiler.js"></script>
+	<script src="js/chart.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/usability.js"></script>
+
+	<link rel="stylesheet" href="css/screen.css" />
+
+</head>
+
+<body>
+
+	<section class="tab boiler" id="t1">
+
+		<header>
+			<h1>Boiler 1: Grieser Böckchen</h1>
+			<button class="chart">Chart</button>
+			<button class="settings">Settings</button>
+		</header>
+
+		<object id="b1" class="boiler" data="boiler.svg"></object>
+
+		<section class="chart" id="chart1">
+
+			<object id="c1" class="chart" data="chart.svg"></object>
+
+		</section>
+
+		<section class="ctrl visible" id="ctrl1">
+
+			<section class="manual">
+
+				<h2>Manual</h2>
+				
+				<h3>On / Off</h3>
+
+				<label>
+					<h6>Aggitator</h6>
+					<input type="checkbox" name=".aggitator" />
+				</label>
+
+				<label>
+					<h6>Temp / °C</h6>
+					<input class="temp" type="number" name=".temp.nominal"/>
+				</label>
+
+				<h3>Sensors</h3>
+
+				<label>
+					<h6>Override Water Level / %</h6>
+					<input class="fill" type="number" name=".fill" />
+				</label>
+
+				<label>
+					<h6>Override Lid Closed</h6>
+					<input type="checkbox" name=".lid" />
+				</label>
+
+
+			</section><!--/.override-->
+
+			<section class="runstop">
+
+				<h2>Control</h2>
+
+				<div class="buttongroup">
+					<button class="start">Start</button>
+					<button class="pause">Pause</button>
+					<button class="stop">Stop</button>
+				</div>
+
+				<div class="buttongroup">
+					<button class="prev">Prev</button>
+					<button class="next">Next</button>
+				</div>
+			</section><!--/.runstop-->
+
+			<section class="loadsave">
+
+				<h2>Programm</h2>
+
+				<div id="ctrl_program">
+
+					<label class="load">Load
+						<select name="load">
+							<option>Grießer Böckchen</option>
+							<option>Weihnachtsbier</option>
+							<option>Craft Punk</option>
+							<option>Dunkle Brühe</option>
+						</select>
+						<button class="load">Load</button>
+					</label>
+					
+					<label class="name">
+						Name
+						<input name="name" type="text" value="Grießer Böckchen" />
+						<button class="save">Save</button>
+					</label>
+
+					<div class="step step0">
+						<label>Step 1: <input class="temp" type="number" name="temp" value="123"/>°C</label>
+						<label><input class="time" type="number" name="time" value="234"/>min</label>
+					</div>
+					
+					<div class="step step1">
+						<label>Step 2: <input class="temp" type="number" name="temp" value="345"/>°C</label>
+						<label><input class="time" type="number" name="time" value="456"/>min</label>
+					</div>
+					
+					<div class="step step2">
+						<label>Step 3: <input class="temp" type="number" name="temp" value="567"/>°C</label>
+						<label><input class="time" type="number" name="time" value="678"/>min</label>
+					</div>
+
+					<button class="set">Set</button>
+
+				</div>
+			</section><!--/.loadsave-->
+
+		</section>
+
+		<section class="override">
+
+
+
+		</section>
+
+	</section>
+
+	<section class="tab boiler" id="t2">
+
+		<header>
+			<h1>Boiler 2</h1>
+			<button class="chart">Chart</button>
+			<button class="settings">Settings</button>
+		</header>
+
+		<object id="b2" class="boiler" data="boiler.svg"></object>
+
+		<section class="chart">
+			<object id="c2" class="chart" data="chart.svg"></object>
+		</section>
+
+		<section class="ctrl" id="ctrl2"><!-- content copied by js--></section>
+
+	</section>
+
+
+</body>
+
+</html>

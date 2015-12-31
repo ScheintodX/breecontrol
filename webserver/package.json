@@ -1,0 +1,12 @@
+{
+  "name": "brew-controller",
+  "version": "0.0.1",
+  "description": "controlling the brewery talking mqtt and websocket",
+  "dependencies": {
+    "mqtt": "~1.6.3",
+    "nodejs-websocket": "~1.4.1",
+    "async": "~1.5.0",
+    "tracer": "~0.8.2",
+    "colors": "~1.1.2"
+  }
+}

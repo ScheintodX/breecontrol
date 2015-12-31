@@ -1,0 +1,11 @@
+{
+	"name": "Brauers Delight",
+	"steps": [
+		{ "action": "heat", "temp": 60.0 },
+		{ "action": "hold", "time": 3600 },
+		{ "action": "heat", "temp": 82.0 },
+		{ "action": "hold", "time": 3600 },
+		{ "action": "heat", "temp": 100 },
+		{ "action": "hold", "time": 1800 }
+	]
+}
