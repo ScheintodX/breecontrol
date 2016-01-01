@@ -12,7 +12,7 @@ var BAG_Ctrl = (function($){
 
 	function gotManual( ev ) {
 
-		_com( { action: "set", key: "boiler" + ev.no + ev.ctrl, value: ev.value } );
+		_com( { action: "set", topic: "boiler" + ev.no + ev.ctrl, value: ev.value } );
 	}
 
 	function gotLoadSave( ev ) {
@@ -22,7 +22,7 @@ var BAG_Ctrl = (function($){
 	function gotRunStop( ev ) {
 		console.debug( "runstop", ev );
 	}
-	
+
 	var Ctrl = {
 
 		init: function( controls ) {

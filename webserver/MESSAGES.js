@@ -1,5 +1,7 @@
 "use strict";
 
+var H = require( './helpers.js' ).mqtt;
+
 var MESSAGES = [
 
 	{ topic: "boiler1/jacket/upper/temp/status", type: "f", range: [ -50, 500 ], iv: 1000 },
@@ -18,9 +20,9 @@ var MESSAGES = [
 	{ topic: "boiler1/temp/set" },
 
 	{ topic: "boiler1/fill/status", type: "f", range: [ 0, 1 ], iv: 5000 },
-	//[boiler1/fill/override]
+	//{ topic: "boiler1/fill/override" },
 	{ topic: "boiler1/lid/status", type: "b", iv: 300 },
-	//[boiler1/lid/override]
+	//{ topic: "boiler1/lid/override" },
 
 	{ topic: "boiler1/aggitator/status", type: "b", iv: 700 },
 	{ topic: "boiler1/aggitator/set" },
@@ -32,6 +34,9 @@ var MESSAGES = [
 	{ topic: "boiler1/indicator/mode/set" },   // off | on | rotate | alarm
 ];
 
+/*
+ * Create /lower/
+ */
 for( var i=0; i < MESSAGES.length; i++ ) {
 
 	var msg = MESSAGES[ i ];
@@ -40,5 +45,40 @@ for( var i=0; i < MESSAGES.length; i++ ) {
 		MESSAGES.push( { topic: msg.topic.replace( "/upper/", "/lower/" ), type: msg.type, range: msg.range, iv: msg.iv } );
 	}
 }
+
+/*
+ * Create index
+ */
+for( var i=0; i < MESSAGES.length; i++ ) {
+
+	var msg = MESSAGES[ i ];
+
+	H.setByTopic( MESSAGES, msg.topic, msg );
+	MESSAGES[ msg.topic ] = msg;
+}
+
+
+MESSAGES.find = function( topic ) {
+
+	var msg = false;
+
+	for( var i=0; i<MESSAGES.length; i++ ) {
+
+		msg = MESSAGES[ i ];
+
+		if( msg.topic == topic ) {
+			return msg;
+		}
+	}
+}
+
+MESSAGES.info = function() {
+	MESSAGES.forEach( function( msg ) {
+
+		console.log( 'M.' + msg.topic.replace( /\//g, '.' ) + '.value' , msg.value );
+
+	} );
+}
+
 
 module.exports = MESSAGES;

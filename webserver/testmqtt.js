@@ -4,7 +4,19 @@
 
 var MESSAGES = require( './MESSAGES.js' );
 
+var MQH = require( './helpers.js').mqtt;
+
 var mqtt = require( 'mqtt' );
+
+var log = require( './logging.js' )
+		.file( '/var/log/brauerei.test' )
+		//.pause( true )
+		;
+
+require( './repl.js' )( {
+	M: MESSAGES,
+	log: log
+} );
 
 var mqttClient = mqtt.connect( 'mqtt://localhost:1883/', {
 		username: 'test',
@@ -16,33 +28,40 @@ function Task( msg ) {
 	return function() {
 
 		var val;
+
+		if( 'value' in msg ) {
+
+			val = msg.value;
+
+		} else {
 		
-		if( !( 'old' in msg ) ) {
+			if( !( 'old' in msg ) ) {
+				switch( msg.type ) {
+					case "b": 
+						msg.old = 1;
+						break;
+					case "f":
+						var r = msg.range;
+						msg.old = (r[1]-r[0])/2;
+				}
+			}
+
 			switch( msg.type ) {
-				case "b": 
-					msg.old = 1;
+				case "b":
+					val = msg.old;
+					if( Math.random() < 0.1 ) val = ( val == 0 ? 1 : 0 );
 					break;
 				case "f":
-					var r = msg.range;
-					msg.old = (r[1]-r[0])/2;
+					var r = msg.range,
+						rnd = Math.random() * ( r[1]-r[0]) + r[0];
+					val = ( msg.old + 4*rnd ) / 5;
+					val = Math.round( val*10 ) / 10;
 			}
+
+			msg.old = val;
 		}
 
-		switch( msg.type ) {
-			case "b":
-				val = msg.old;
-				if( Math.random() < 0.1 ) val = ( val == 0 ? 1 : 0 );
-				break;
-			case "f":
-				var r = msg.range,
-					rnd = Math.random() * ( r[1]-r[0]) + r[0];
-				val = ( msg.old + 4*rnd ) / 5;
-				val = Math.round( val*10 ) / 10;
-		}
-
-		msg.old = val;
-
-		console.log( msg.topic, val );
+		log.info( msg.topic, val );
 		mqttClient.publish( msg.topic, '' + val );
 	}
 
@@ -54,32 +73,39 @@ mqttClient.on( 'connect', function() {
 
 	//mqttClient.subscribe( 'presence' );
 	//mqttClient.publish( 'presence', 'sensor' );
+	
+	mqttClient.subscribe( 'boiler1/+/set' );
+	mqttClient.subscribe( 'boiler1/+/override' );
+	mqttClient.subscribe( 'boiler1/jacket/upper/+/set' );
+	mqttClient.subscribe( 'boiler1/jacket/lower/+/set' );
 
-	/*
-	setInterval( function() {
-		temp += .1;
-		mqttClient.publish( 'boiler1/temp/is', ''+ temp );
-	}, 100 );
-	*/
+	MESSAGES
+			.filter( function( msg ){ return msg.iv; } )
+			.forEach( function( msg ){
 
-	for( var i=0; i<MESSAGES.length; i++ ) {
+				var iv = msg.iv;
+				iv = iv * ( 1 + 0.1 * (Math.random()-0.5) ); // timing jitter
 
-		var msg = MESSAGES[ i ];
+				msg.task = setInterval( Task( msg ), iv );
 
-		if( msg.iv ) {
-
-			var iv = msg.iv;
-			iv = iv * ( 1 + 0.1 * (Math.random()-0.5) ); // timing jitter
-
-			setInterval( Task( msg ), iv );
-		}
-
-	}
-
+			} );
+		
 	console.log( "MQTT STARTED" );
 });
 
 mqttClient.on( 'message', function( topic, message ) {
 
-	console.log( topic, message );
+	message = message.toString();
+
+	if( ! /\/set$/.test( topic ) ) return;
+
+	console.log( "!!!!!!!", topic, message );
+
+	var msg = MESSAGES.find( topic.replace( /set$/, 'nominal' ) );
+	if( !msg ) msg = MESSAGES.find( topic.replace( /set$/, 'status' ) );
+
+	msg.value = message;
+
+	if( typeof( msg.task ) == 'function' ) msg.task();
+
 });

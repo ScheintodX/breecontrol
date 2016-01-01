@@ -61,15 +61,10 @@ function sendToAll( data ) {
 
 	_wsServer.connections.forEach( function( conn ){
 
-		console.log( "send" );
+		log.trace( "send" );
 		conn.sendText( text );
 	} );
 
-}
-
-function sendPeriodically() {
-
-	sendToAll( _data );
 }
 
 module.exports = function( onData, config, data, done ) {
@@ -96,8 +91,6 @@ module.exports = function( onData, config, data, done ) {
 		log.failure( "WS", ex );
 		return done( ex );
 	}
-
-	_sender = setInterval( sendPeriodically, config.interval );
 
 	var __websocket = {
 

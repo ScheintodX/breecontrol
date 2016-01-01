@@ -1,30 +1,35 @@
 "use strict";
 
-var _FILE_ = "STATE.json";
-
 var fs = require( 'fs' );
 var log = require( './logging.js' );
+var assert = require( './assert.js' );
 
 var _data;
 
-module.exports = function( done ) {
+var _file;
 
-	if( ! fs.existsSync( _FILE_ ) ) {
-		log.warn( "Cannot find: '" + _FILE_ + "' starting with empty state" );
+module.exports = function( config, done ) {
+
+	assert.present( 'config.state.file', config.file );
+
+	_file = config.file;
+
+	if( ! fs.existsSync( _file ) ) {
+		log.warn( "Cannot find: '" + _file + "' starting with empty state" );
 		_data = {};
 		return done( null, _data );
 	}
 
-	fs.readFile( _FILE_, "utf-8", function( err, data ) {
+	fs.readFile( _file, "utf-8", function( err, data ) {
 
-		log.trace( "LOADED %s", _FILE_, data );
+		log.trace( "LOADED %s", _file, data );
 
 		if( err ) return done( err );
 
 		try {
 			_data = JSON.parse( data );
 		} catch( ex ) {
-			log.warn( "Cannot read: '" + _FILE_ + "' starting with empty state" );
+			log.warn( "Cannot read: '" + _file + "' starting with empty state" );
 			_data = {};
 			return done( null, _data );
 		}
@@ -38,7 +43,7 @@ module.exports.save = function( done ) {
 
 	var data = JSON.stringify( _data, null, '\t' );
 
-	fs.writeFile( _FILE_, data, function( err ) {
+	fs.writeFile( _file, data, function( err ) {
 
 		if( err ) return done( err );
 

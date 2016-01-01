@@ -66,6 +66,13 @@ var BAG_Com = (function($){
 		connect();
 	}
 
+	function monitor() {
+
+		if( _websocket.readyState > 1 ){
+			reconnect();
+		}
+	}
+
 	var Com = {
 
 		onData: function( callback ) {
@@ -78,6 +85,8 @@ var BAG_Com = (function($){
 		start: function() {
 
 			connect();
+
+			setInterval( monitor, 1000 );
 
 			return Com;
 		},

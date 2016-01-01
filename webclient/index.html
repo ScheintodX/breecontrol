@@ -14,6 +14,7 @@
 	<script src="jslib/velocity-1.2.3-min.js"></script>
 
 	<script src="js/helpers.js"></script>
+	<script src="js/jqhelpers.js"></script>
 	<script src="js/ctrl.js"></script>
 	<script src="js/controls.js"></script>
 	<script src="js/com_ws.js"></script>
@@ -53,25 +54,26 @@
 				<h3>On / Off</h3>
 
 				<label>
-					<h6>Aggitator</h6>
-					<input type="checkbox" name=".aggitator" />
+					<h6>Temp / °C</h6>
+					<input class="temp" type="number" name=".temp.nominal"/>
 				</label>
 
 				<label>
-					<h6>Temp / °C</h6>
-					<input class="temp" type="number" name=".temp.nominal"/>
+					<h6>Aggitator</h6>
+					<input type="checkbox" name=".aggitator.status" />
+					<!--<button class="checkbox unknown" name=".aggitator" />-->
 				</label>
 
 				<h3>Sensors</h3>
 
 				<label>
 					<h6>Override Water Level / %</h6>
-					<input class="fill" type="number" name=".fill" />
+					<input class="fill" type="number" name=".fill.override" />
 				</label>
 
 				<label>
 					<h6>Override Lid Closed</h6>
-					<input type="checkbox" name=".lid" />
+					<input type="checkbox" name=".lid.override" />
 				</label>
 
 

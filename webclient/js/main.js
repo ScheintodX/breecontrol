@@ -2,10 +2,6 @@
 
 (function($){
 
-	function onControl( ev ) {
-
-	}
-
 	function main() {
 
 		$('#ctrl1').children()

@@ -21,37 +21,6 @@ var BAG_Chart = (function($){
 
 			_svg = _elem.get( 0 ).contentDocument;
 
-			Chart.setTemp1( 'temp1' ),
-			Chart.setTemp2( 'temp2' ),
-			Chart.setTemp3( 'temp3' ),
-			Chart.setTempBar( .20 ),
-			Chart.setTempStatus( 'temp_status' ),
-
-			Chart.setTime1( 'time1' ),
-			Chart.setTime2( 'time2' ),
-			Chart.setTime3( 'time3' ),
-			Chart.setTimeBar( .20 ),
-			Chart.setTimeStatus( 'time_status' )
-
-			/*
-			var i=0, up=true;;
-
-			setInterval( function() {
-				
-				Chart.setTimeBar( i );
-				Chart.setTempBar( i );
-
-				if( up ) {
-					i+=.02;
-					if( i>=1 ) up=false;
-				} else {
-					i-=.02;
-					if( i<=0 ) up=true;
-				}
-
-			}, 100 );
-			*/
-
 		} );
 
 		function svg( id ) {

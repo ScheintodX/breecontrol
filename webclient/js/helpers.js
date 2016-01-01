@@ -61,6 +61,22 @@ Number.fromMinSecLong( str ) {
 }
 */
 
+String.prototype.getFrom = function( obj ) {
+
+	var parts = this.split( '.' );
+
+	for( var i=0; i<parts.length; i++ ) {
+
+		var part = parts[ i ];
+
+		if( !( part in obj ) ) return undefined;
+
+		obj = obj[ parts[ i ] ];
+	}
+
+	return obj;
+}
+
 /*
 var H = (function($){
 	return {

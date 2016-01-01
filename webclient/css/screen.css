@@ -132,7 +132,7 @@ section.tab > section {
   transform: translateZ(0);
 }
 
-/* line 83, ../sass/screen.scss */
+/* line 84, ../sass/screen.scss */
 section.boiler header button {
   position: absolute;
   height: 28px;
@@ -141,7 +141,7 @@ section.boiler header button {
   background-color: white;
   border: none;
 }
-/* line 86, ../sass/screen.scss */
+/* line 87, ../sass/screen.scss */
 section.boiler header button.chart {
   width: 28px;
   height: 28px;
@@ -159,7 +159,7 @@ section.boiler header button.chart:before {
   width: 28px;
   height: 28px;
 }
-/* line 90, ../sass/screen.scss */
+/* line 91, ../sass/screen.scss */
 section.boiler header button.settings {
   width: 28px;
   height: 28px;
@@ -178,7 +178,7 @@ section.boiler header button.settings:before {
   height: 28px;
 }
 
-/* line 101, ../sass/screen.scss */
+/* line 102, ../sass/screen.scss */
 section.chart {
   max-height: 0;
   overflow: hidden;
@@ -190,7 +190,7 @@ section.chart.visible {
   max-height: 240px;
 }
 
-/* line 108, ../sass/screen.scss */
+/* line 109, ../sass/screen.scss */
 section.ctrl {
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.3);
   max-height: 0;
@@ -203,7 +203,7 @@ section.ctrl {
 section.ctrl.visible {
   max-height: 400px;
 }
-/* line 117, ../sass/screen.scss */
+/* line 118, ../sass/screen.scss */
 section.ctrl button {
   position: relative;
   height: 28px;
@@ -211,7 +211,7 @@ section.ctrl button {
   padding-left: 20px;
   margin: 6px;
 }
-/* line 121, ../sass/screen.scss */
+/* line 122, ../sass/screen.scss */
 section.ctrl button.set {
   display: block;
   width: auto;
@@ -296,7 +296,7 @@ section.ctrl button.set:before {
   width: 16px;
   height: 16px;
 }
-/* line 152, ../sass/screen.scss */
+/* line 153, ../sass/screen.scss */
 section.ctrl label {
   display: block;
   position: relative;
@@ -305,43 +305,43 @@ section.ctrl label {
   border: 1px solid white;
   border-radius: 4px;
 }
-/* line 163, ../sass/screen.scss */
+/* line 164, ../sass/screen.scss */
 section.ctrl label input {
   position: absolute;
   top: 4px;
   right: 4px;
 }
-/* line 169, ../sass/screen.scss */
+/* line 170, ../sass/screen.scss */
 section.ctrl div.step {
   display: flex;
 }
-/* line 171, ../sass/screen.scss */
+/* line 172, ../sass/screen.scss */
 section.ctrl div.step label {
   flex-grow: 1;
   display: inline-block;
 }
-/* line 178, ../sass/screen.scss */
+/* line 179, ../sass/screen.scss */
 section.ctrl > section {
   padding: 8px;
 }
-/* line 184, ../sass/screen.scss */
+/* line 185, ../sass/screen.scss */
 section.ctrl > section h2 {
   margin: -8px -8px 0 -8px;
 }
-/* line 188, ../sass/screen.scss */
+/* line 189, ../sass/screen.scss */
 section.ctrl > section h3 {
   margin: 12px 0 4px 0;
   font-weight: bold;
 }
-/* line 191, ../sass/screen.scss */
+/* line 192, ../sass/screen.scss */
 section.ctrl > section h3:before {
   content: "= ";
 }
-/* line 192, ../sass/screen.scss */
+/* line 193, ../sass/screen.scss */
 section.ctrl > section h3:after {
   content: " =";
 }
-/* line 195, ../sass/screen.scss */
+/* line 196, ../sass/screen.scss */
 section.ctrl > section label {
   /*
   			display: block;
@@ -356,7 +356,7 @@ section.ctrl > section label {
   */
 }
 
-/* line 213, ../sass/screen.scss */
+/* line 214, ../sass/screen.scss */
 .buttongroup {
   text-align: center;
 }

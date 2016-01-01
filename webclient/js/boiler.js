@@ -15,27 +15,17 @@ var BAG_Boiler = (function($){
 
 		passive = passive || true;
 
-		var _elem = $( elem ),
+		var $elem = $( elem ),
 		    _svg = false;
 
-		_elem.on( 'load', function() {
-
-			_svg = _elem.get( 0 ).contentDocument;
-
-			Boiler.setTempInnerStatus( "ti_status°" );
-			Boiler.setTempInnerNominal( "ti_nominal" );
-			Boiler.setAggitator( false );
-			Boiler.setTimeRemaining( "t_rem" );
-			Boiler.setTimeElapsed( "t_elap" );
-			Boiler.setUpperTempIcon( "#00ff00" );
-			Boiler.setLowerTempIcon( "#0000ff" );
-			Boiler.setFill( 1 );
-			Boiler.setLid( 1 );
-
-		} );
-
+		// Find svg element via dom
 		function svg( id ) {
-			return _svg ? _svg.getElementById( id ) : false;
+			return _svg.getElementById( id );
+		}
+		// Find svg element via jQuery
+		function $svg( id ) {
+			//return $elem.contents().find( '#' + id );
+			return $(svg(id));
 		}
 
 		function ifchanged( f ) {
@@ -61,7 +51,6 @@ var BAG_Boiler = (function($){
 
 		function color( id ) {
 			return ifchanged( function( color ) {
-				console.log( color );
 				var svgE = svg( id );
 				if( svgE ) svgE.style.fill = color;
 			} );
@@ -97,13 +86,23 @@ var BAG_Boiler = (function($){
 			setLid: visible( 'lid' ),
 			setAggitator: ifchanged( function( on ) {
 
+				var aggi = svg('aggitator');
+
 				if( on ) {
-					_elem.contents().find('#aggitator')
-							.velocity( { opacity: [ .7, .9 ] }, { duration: 317, loop: true } )
-							;
+					$(aggi).velocity(
+							{ opacity: .7 },
+							{ duration: 400 }
+
+							).velocity(
+							{ opacity: [ .7, .9 ] },
+							{ duration: 317, loop: true }
+					);
 				} else {
-					_elem.contents().find('#aggitator')
-							.velocity( { opacity: .2 }, { duration: 700 } )
+					$(aggi).velocity( "stop" ).velocity(
+							{ opacity: .2 },
+							{ duration: 400 }
+					) ;
+					//aggi.style.opacity = .2;
 				}
 
 			} ),
@@ -112,17 +111,16 @@ var BAG_Boiler = (function($){
 				var move = 100-value*100.0;
 
 				// Using plain js and attribute in svg
+				/*
 				svg( 'fill_content' )
 						.setAttribute( 'transform', 'translate( 0, ' + move + ' )' )
 						;
-				
-				/*
-				// Using jQuery and Velocity
-				_elem.contents().find('#fill_content')
-						//.velocity( { translateY: move }, { duration: 0 } )
-						.velocity( { translateY: move }, { duration: 2000 } )
-						;
 				*/
+				
+				// Using jQuery and Velocity
+				$svg('fill_content')
+						.velocity( { translateY: move }, { duration: 500 } )
+						;
 					
 			} ),
 
@@ -132,8 +130,6 @@ var BAG_Boiler = (function($){
 
 				var boiler = data.boilers[ 'boiler' + boilerNo ]
 					;
-
-				console.log( boiler );
 
 				Boiler.setAggitator( boiler.aggitator.status );
 				Boiler.setFill( boiler.fill.status );
@@ -159,14 +155,24 @@ var BAG_Boiler = (function($){
 			}
 		}
 
-		console.log( "ANIM" );
-		// Animate stuff
-		_elem.contents().find('#fill_content')
-				.velocity( { translateY: [0, 50] }, { duration: 2000, loop: true } )
-				;
-		_elem.contents().find('#bier')
-				.velocity( { fill: ['#f4da00','#aaaaaa'] }, { duration: 1000, loop: true } )
-				;
+		$elem.on( 'load', function() {
+
+			_svg = $elem.get( 0 ).contentDocument;
+
+			// Animate stuff
+			$svg('fill_content_anim')
+					.expectOne()
+					.velocity( { translateY: [0, 5] }, { duration: 2000, loop: true } )
+					;
+			/*
+			$svg('beer')
+					.expectOne()
+					.velocity( { fill: ['#f4da00','#f4d000'] }, { duration: 375, loop: true } )
+					;
+					*/
+
+		} );
+
 
 		return Boiler;
 	};

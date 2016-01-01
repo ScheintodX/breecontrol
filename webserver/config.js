@@ -4,10 +4,15 @@ module.exports = function( done ) {
 
 	return done( null, {
 
+		state: {
+			file: '.STATE.json'
+		},
+
 		ws: {
 			port: 8765,
-			interval: 500
 		},
+
+		updateInterval: 1000,
 
 		mqtt: {
 			url: 'mqtt://localhost:1883/',

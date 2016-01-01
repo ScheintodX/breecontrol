@@ -29,7 +29,7 @@ module.exports = function( onData, config, done ) {
 		log.trace( "MQTT Connect" );
 		mqttClient.subscribe( 'infrastructure/#' );
 		mqttClient.subscribe( 'boiler1/#' );
-		mqttClient.publish( 'infrastructure/mcp/presence', 'Hello mqtt' );
+		mqttClient.publish( 'infrastructure/presence', 'MCP' );
 		log.trace( "MQTT STARTED" );
 		return done( null, __mqtt );
 	});
@@ -51,6 +51,14 @@ module.exports = function( onData, config, done ) {
 		send: function( topic, data ) {
 
 			console.log( "MQTT send", topic, data );
+
+			var opts = {};
+
+			if( topic.match( /\/override$/ ) ) {
+				opts.retain = true;
+			}
+
+			mqttClient.publish( topic, data, opts );
 		}
 
 	};

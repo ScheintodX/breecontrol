@@ -101,6 +101,10 @@ $_positions: (
 	load		6*$ctrl	32px	$ctrl	$ctrl,
 	set			7*$ctrl	32px	$ctrl	$ctrl,
 
+	cb_unknown	0*88px	48px	48px	24px,
+	cb_on		1*88px	48px	48px	24px,
+	cb_off		2*88px	48px	48px	24px,
+
 	xxx 0 0 0 0
 );
 
