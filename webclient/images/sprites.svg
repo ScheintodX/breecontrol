@@ -26,18 +26,18 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="8"
-     inkscape:cx="127.12953"
-     inkscape:cy="157.01113"
+     inkscape:cx="49.70823"
+     inkscape:cy="124.38378"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     inkscape:snap-grids="false"
+     inkscape:current-layer="g4890"
+     showgrid="false"
+     inkscape:snap-grids="true"
      inkscape:window-width="1920"
      inkscape:window-height="1031"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
-     showguides="true"
+     showguides="false"
      inkscape:guide-bbox="true"
      inkscape:snap-to-guides="false">
     <inkscape:grid
@@ -107,8 +107,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="bg"
-     sodipodi:insensitive="true">
+     inkscape:label="bg">
     <rect
        style="color:#000000;fill:#204a87;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect4721"
@@ -116,6 +115,13 @@
        height="24"
        x="0"
        y="48" />
+    <rect
+       y="72"
+       x="0"
+       height="24"
+       width="200.47844"
+       id="rect4888"
+       style="color:#000000;fill:#204a87;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
   </g>
   <g
      inkscape:label="Layer 1"
@@ -425,6 +431,58 @@
            x="26.886269"
            y="917.25635"
            style="fill:#ffffff;font-family:Droid Sans;-inkscape-font-specification:Droid Sans">on</tspan></text>
+    </g>
+    <g
+       id="g4874"
+       transform="translate(144,0)">
+      <rect
+         style="color:#000000;fill:none;stroke:#ffffff;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect4876"
+         width="21"
+         height="20"
+         x="2"
+         y="50"
+         transform="translate(0,852.36218)"
+         rx="4"
+         ry="4" />
+      <text
+         xml:space="preserve"
+         style="font-size:13.83273411px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
+         x="9"
+         y="916.36218"
+         id="text4880"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4882"
+           x="9"
+           y="916.36218"
+           style="fill:#ffffff;font-family:Droid Sans;-inkscape-font-specification:Droid Sans">x</tspan></text>
+    </g>
+    <g
+       id="g4890"
+       transform="translate(0,23)">
+      <rect
+         style="color:#000000;fill:none;stroke:#ffffff;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect4892"
+         width="44"
+         height="20"
+         x="2"
+         y="50"
+         transform="translate(0,852.36218)"
+         rx="4"
+         ry="4" />
+      <text
+         xml:space="preserve"
+         style="font-size:13.83273411px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
+         x="8.8862696"
+         y="917.25635"
+         id="text4896"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4898"
+           x="8.8862696"
+           y="917.25635"
+           style="fill:#ffffff;font-family:Droid Sans;-inkscape-font-specification:Droid Sans">auto</tspan></text>
     </g>
   </g>
 </svg>

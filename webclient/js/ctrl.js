@@ -12,7 +12,7 @@ var BAG_Ctrl = (function($){
 
 	function gotManual( ev ) {
 
-		_com( { action: "set", topic: "boiler" + ev.no + ev.ctrl, value: ev.value } );
+		_com( { action: "set", topic: "boiler" + ev.no + ev.topic, value: ev.value } );
 	}
 
 	function gotLoadSave( ev ) {

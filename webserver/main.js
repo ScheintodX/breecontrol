@@ -2,12 +2,14 @@
 
 var log = require( './logging.js' ).file( '/var/log/brauerei.log' );
 
-require( './repl.js' )( {
+var repl = require( './repl.js' )( {} );
+/*
 	config: function(){ return config; },
 	boilers: function(){ return boilers; },
-	brewery: function(){ return brewery; },
+	brewery: function(){ return boilers; },
 	state: function(){ return state; }
 } );
+*/
 
 var async = require( 'async' );
 
@@ -41,6 +43,7 @@ function initConfig( done ) {
 		}
 
 		config = data;
+		repl.addContext( { config: config } );
 
 		log.startup( "config", "READY" );
 
@@ -61,6 +64,7 @@ function initState( done ) {
 		}
 
 		state = data;
+		repl.addContext( { state: state } );
 
 		setInterval( function() {
 
@@ -104,6 +108,13 @@ function initBoilers( done ) {
 				return JSON.parse( JSON.stringify( this ) );
 			}
 		};
+		repl.addContext( { brewery: brewery } );
+		repl.addContext( {
+				brewery: brewery,
+				boilers: boilers,
+				boiler1: boilers.boiler1,
+				boiler2: boilers.boiler2
+		} );
 
 		log.startup( "boilers", "READY" );
 

@@ -1,0 +1,22 @@
+button.auto, button.overridable {
+
+	$white: white;
+	$blue: blue;
+
+	padding: 4px;
+
+	border: 2px solid white;
+	border-radius: 4px;
+
+	color: $white;
+	background-color: rgba( $white, .5 );
+
+	&[value="on"] {
+		background-color: $white;
+		color: $blue;
+	}
+	&[value="off"] {
+		background-color: rgba( $white, 0 );
+		color: $white;
+	}
+}

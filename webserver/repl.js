@@ -3,9 +3,16 @@ var net = require('net')
 
 module.exports = function( context, port ) {
 
+	var r;
+
+	function addContext( context ) {
+		for( key in context ) {
+			r.context[ key ] = context[ key ];
+		}
+	}
+
 	if( port ) {
 
-		var r;
 		net.createServer( function( socket ) {
 			console.log( "start" );
 			r = repl.start( {
@@ -15,26 +22,24 @@ module.exports = function( context, port ) {
 				terminal: true,
 				useGlobal: false
 			});
-			for( key in context ) {
-				r.context[ key ] = context[ key ];
-			}
+			addContext( context );
 			r.on('exit', function () {
 				socket.end()
 			})
 		}).listen( port );
 	} else {
 
-		var r = repl.start( {
+		r = repl.start( {
 			prompt: '[' + process.pid + '] >',
 			terminal: true,
 			useGlobal: false
 		} );
 
-		for( key in context ) {
-			r.context[ key ] = context[ key ];
-		}
+		addContext( context );
 		
 	}
+
+	r.addContext = addContext;
 
 	return r;
 };

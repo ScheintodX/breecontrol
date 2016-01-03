@@ -71,9 +71,6 @@ mqttClient.on( 'connect', function() {
 
 	console.log( "MQTT Connect" );
 
-	//mqttClient.subscribe( 'presence' );
-	//mqttClient.publish( 'presence', 'sensor' );
-	
 	mqttClient.subscribe( 'boiler1/+/set' );
 	mqttClient.subscribe( 'boiler1/+/override' );
 	mqttClient.subscribe( 'boiler1/jacket/upper/+/set' );

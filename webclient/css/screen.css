@@ -204,20 +204,66 @@ section.ctrl.visible {
   max-height: 400px;
 }
 /* line 118, ../sass/screen.scss */
-section.ctrl button {
+section.ctrl label {
+  display: block;
+  position: relative;
+  margin: 3px;
+  padding: 12px;
+  border: 1px solid white;
+  border-radius: 4px;
+}
+/* line 129, ../sass/screen.scss */
+section.ctrl label input {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}
+/* line 135, ../sass/screen.scss */
+section.ctrl div.step {
+  display: flex;
+}
+/* line 137, ../sass/screen.scss */
+section.ctrl div.step label {
+  flex-grow: 1;
+  display: inline-block;
+}
+/* line 144, ../sass/screen.scss */
+section.ctrl > section {
+  padding: 8px;
+}
+/* line 150, ../sass/screen.scss */
+section.ctrl > section h2 {
+  margin: -8px -8px 0 -8px;
+}
+/* line 154, ../sass/screen.scss */
+section.ctrl > section h3 {
+  margin: 12px 0 4px 0;
+  font-weight: bold;
+}
+/* line 157, ../sass/screen.scss */
+section.ctrl > section h3:before {
+  content: "= ";
+}
+/* line 158, ../sass/screen.scss */
+section.ctrl > section h3:after {
+  content: " =";
+}
+
+/* line 165, ../sass/screen.scss */
+section.runstop button, section.loadsave button {
   position: relative;
   height: 28px;
   cursor: pointer;
   padding-left: 20px;
   margin: 6px;
 }
-/* line 122, ../sass/screen.scss */
-section.ctrl button.set {
+/* line 169, ../sass/screen.scss */
+section.runstop button.set, section.loadsave button.set {
   display: block;
   width: auto;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.ctrl button.prev:before {
+section.runstop button.prev:before, section.loadsave button.prev:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -227,7 +273,7 @@ section.ctrl button.prev:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.ctrl button.next:before {
+section.runstop button.next:before, section.loadsave button.next:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -237,7 +283,7 @@ section.ctrl button.next:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.ctrl button.start:before {
+section.runstop button.start:before, section.loadsave button.start:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -247,7 +293,7 @@ section.ctrl button.start:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.ctrl button.stop:before {
+section.runstop button.stop:before, section.loadsave button.stop:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -257,7 +303,7 @@ section.ctrl button.stop:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.ctrl button.pause:before {
+section.runstop button.pause:before, section.loadsave button.pause:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -267,7 +313,7 @@ section.ctrl button.pause:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.ctrl button.save:before {
+section.runstop button.save:before, section.loadsave button.save:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -277,7 +323,7 @@ section.ctrl button.save:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.ctrl button.load:before {
+section.runstop button.load:before, section.loadsave button.load:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -287,7 +333,7 @@ section.ctrl button.load:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.ctrl button.set:before {
+section.runstop button.set:before, section.loadsave button.set:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -296,67 +342,8 @@ section.ctrl button.set:before {
   width: 16px;
   height: 16px;
 }
-/* line 153, ../sass/screen.scss */
-section.ctrl label {
-  display: block;
-  position: relative;
-  margin: 3px;
-  padding: 12px;
-  border: 1px solid white;
-  border-radius: 4px;
-}
-/* line 164, ../sass/screen.scss */
-section.ctrl label input {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-}
-/* line 170, ../sass/screen.scss */
-section.ctrl div.step {
-  display: flex;
-}
-/* line 172, ../sass/screen.scss */
-section.ctrl div.step label {
-  flex-grow: 1;
-  display: inline-block;
-}
-/* line 179, ../sass/screen.scss */
-section.ctrl > section {
-  padding: 8px;
-}
-/* line 185, ../sass/screen.scss */
-section.ctrl > section h2 {
-  margin: -8px -8px 0 -8px;
-}
-/* line 189, ../sass/screen.scss */
-section.ctrl > section h3 {
-  margin: 12px 0 4px 0;
-  font-weight: bold;
-}
-/* line 192, ../sass/screen.scss */
-section.ctrl > section h3:before {
-  content: "= ";
-}
-/* line 193, ../sass/screen.scss */
-section.ctrl > section h3:after {
-  content: " =";
-}
-/* line 196, ../sass/screen.scss */
-section.ctrl > section label {
-  /*
-  			display: block;
-  			position: relative;
-  
-  			min-height: 40px;
-  
-  			& > * {
-  				position: absolute;
-  				right: 0;
-  			}
-  */
-}
 
-/* line 214, ../sass/screen.scss */
+/* line 201, ../sass/screen.scss */
 .buttongroup {
   text-align: center;
 }

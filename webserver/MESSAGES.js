@@ -5,7 +5,7 @@ var H = require( './helpers.js' ).mqtt;
 var MESSAGES = [
 
 	{ topic: "boiler1/jacket/upper/temp/status", type: "f", range: [ -50, 500 ], iv: 1000 },
-	{ topic: "boiler1/jacket/upper/temp/nominal", type: "f", range: [ 0, 300 ], iv: 1000 },
+	{ topic: "boiler1/jacket/upper/temp/nominal", value: 150, type: "f", range: [ 0, 300 ], iv: 1000 },
 	{ topic: "boiler1/jacket/upper/temp/set" },
 
 	{ topic: "boiler1/jacket/upper/power/status", type: "f", range: [ 0, 1 ], iv: 100 },
@@ -16,7 +16,7 @@ var MESSAGES = [
 	//............../lower/...........
 
 	{ topic: "boiler1/temp/status", type: "f", range: [ -50, 200 ], iv: 500 },
-	{ topic: "boiler1/temp/nominal", type: "f", range: [ 0, 100 ], iv: 500 },
+	{ topic: "boiler1/temp/nominal", value: 66, type: "f", range: [ 0, 100 ], iv: 500 },
 	{ topic: "boiler1/temp/set" },
 
 	{ topic: "boiler1/fill/status", type: "f", range: [ 0, 1 ], iv: 5000 },

@@ -22,8 +22,9 @@ var BAG_Controls = (function($){
 
 		// Comm
 
-		function notify( on, ctrl, value ) {
-			_onControl( { on: on, ctrl: ctrl, value: value, no: boilerNo } );
+		function notify( on, topic, value ) {
+			console.log( on, topic, value );
+			_onControl( { on: on, topic: topic, value: value, no: boilerNo } );
 		}
 
 		// Manual
@@ -38,54 +39,26 @@ var BAG_Controls = (function($){
 
 		function Control( sel, scale ) {
 
-			if( !scale ) scale=1;
-
 			var $e = $secManual.find( sel );
-
-			var control = {
-				element: $e
-			};
 
 			var topic = $e.attr('name')
 					.replace( /\.(nominal|status)$/, '.set' );
 
-			var edit = false;
+			var control = BAG_Button( $e.prop( 'type' ), $e, topic, scale )
+					.onNotify( notify )
+					;
+
+			console.log( topic );
+
+			if( topic.match( /\.override$/ ) )
+					control = control.override();
+
+			if( topic.match( /\.set$/ ) )
+					control = control.auto();
 			
-			switch( $e.prop( 'type' ) ) {
-
-				case 'number':
-
-					$e.on( 'change', function() {
-						notify( 'manual', topic, parseFloat( $e.val() ) / scale ); } )
-					  .on( 'focus', function() { edit=true; } )
-					  .on( 'focusout', function() { edit=false; } )
-
-					control.set = function( val ) {
-						if( edit ) return;
-						$e.val( val * scale );
-					}
-					break;
-
-				case 'checkbox':
-
-					$e.on( 'click', function( val ) {
-						$e.prop( 'disabled', true );
-						notify( 'manual', topic, $e.prop('checked') );
-						return false;
-					} );
-
-					control.set = function( val ) {
-						var checked = (val==1);
-						$e.prop( {
-							checked: checked,
-							disabled: false
-						} );
-					}
-					break;
-			}
-
 			return control;
 		}
+
 		var manualControls = {
 		// Set
 			'temp.nominal': Control( 'input[name=".temp.nominal" ]' ),
@@ -109,7 +82,6 @@ var BAG_Controls = (function($){
 			function val( $s, name ) {
 				return $s.find( '[name="' + name + '"]' ).val();
 			}
-
 			function valF( $s, name ) {
 				return parseFloat( val( $s, name ) );
 			}
@@ -125,6 +97,27 @@ var BAG_Controls = (function($){
 				} ).get()
 			}
 			return prog;
+		}
+
+		function storeProgramm( prog ) {
+
+			function val( $s, name, value ){
+				return $s.find( '[name="' + name + '"]' ).val( value );
+			}
+			function valF( $s, name, value ) {
+				return val( $s, name, ""+value );
+			}
+
+			var $sec = $ctrl.find( 'section.loadsave' );
+
+			val( $sec, 'name', prog.name );
+			val( $sec, 'load', prog.load );
+			$.each( prog.steps, function( step, i ){
+				var $step = $sec.find( 'div.step' + i );
+				valF( $step, 'temp', step.temp );
+				valF( $step, 'fill', step.fill );
+			} );
+
 		}
 
 		$ctrl.find( 'section.runstop button' )

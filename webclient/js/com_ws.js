@@ -5,10 +5,7 @@
  *
  * Only single instance
  */
-var BAG_Com = (function($){
-
-	//var _URL_ = 'ws://10.3.2.1:8765/';
-	var _URL_ = 'ws://localhost:8765/';
+var BAG_Com = (function(){
 
 	var _callback = false,
 		_websocket = false;
@@ -51,7 +48,7 @@ var BAG_Com = (function($){
 
 	function connect() {
 
-		_websocket = new WebSocket( _URL_ );
+		_websocket = new WebSocket( BAG_Config.com.url );
 		_websocket.onmessage = gotData;
 		_websocket.onopen = gotOpen;
 		_websocket.gotclose = gotClose;

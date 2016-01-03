@@ -115,41 +115,6 @@ section.ctrl {
 
 	background-color: $bg_ctrl;
 
-	button {
-		@include button( relative );
-		padding-left: 20px;
-		margin: 6px;
-		&.set {
-			display: block;
-			width: auto;
-		}
-
-		&.prev {
-			@include hasIcon( prev, 4px, 4px );
-		}
-		&.next {
-			@include hasIcon( next, 4px, 4px );
-		}
-		&.start {
-			@include hasIcon( start, 4px, 4px );
-		}
-		&.stop {
-			@include hasIcon( stop, 4px, 4px );
-		}
-		&.pause {
-			@include hasIcon( pause, 4px, 4px );
-		}
-		&.save {
-			@include hasIcon( save, 4px, 4px );
-		}
-		&.load {
-			@include hasIcon( load, 4px, 4px );
-		}
-		&.set {
-			@include hasIcon( set, 4px, 4px );
-		}
-	}
-
 	label {
 
 		display: block;
@@ -192,21 +157,43 @@ section.ctrl {
 			&:before { content: "= "; }
 			&:after { content: " ="; }
 		}
+	}
+}
 
-		label {
+section.runstop, section.loadsave {
 
-/*
+	button {
+		@include button( relative );
+		padding-left: 20px;
+		margin: 6px;
+		&.set {
 			display: block;
-			position: relative;
+			width: auto;
+		}
 
-			min-height: 40px;
-
-			& > * {
-				position: absolute;
-				right: 0;
-			}
-*/
-
+		&.prev {
+			@include hasIcon( prev, 4px, 4px );
+		}
+		&.next {
+			@include hasIcon( next, 4px, 4px );
+		}
+		&.start {
+			@include hasIcon( start, 4px, 4px );
+		}
+		&.stop {
+			@include hasIcon( stop, 4px, 4px );
+		}
+		&.pause {
+			@include hasIcon( pause, 4px, 4px );
+		}
+		&.save {
+			@include hasIcon( save, 4px, 4px );
+		}
+		&.load {
+			@include hasIcon( load, 4px, 4px );
+		}
+		&.set {
+			@include hasIcon( set, 4px, 4px );
 		}
 	}
 }

@@ -22,4 +22,15 @@
 		return this;
 	};
 
+	$.fn.isOn = function() {
+		return this.val() == 'on';
+	};
+	$.fn.setOn = function( val ){
+		if( val ) this.val( 'on' );
+		else this.val( 'off' );
+	};
+	$.fn.togOn = function() {
+		this.setOn( !this.isOn() );
+	};
+
 })($);

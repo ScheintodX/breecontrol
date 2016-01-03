@@ -25,9 +25,11 @@ module.exports = function( config, state, brewery ) {
 
 			var boiler = boilers[ i ];
 
+			/*
 			if( i == 0 ) {
 				console.log( "SEND", boiler.fill );
 			}
+			*/
 
 			if( 'override' in boiler.fill ) {
 				boiler.fill.status = boiler.fill.override;
@@ -37,9 +39,11 @@ module.exports = function( config, state, brewery ) {
 				boiler.lid.status = boiler.lid.override;
 			}
 
+			/*
 			if( i == 0 ) {
 				console.log( "stat", boiler.fill );
 			}
+			*/
 
 		}
 
@@ -59,12 +63,20 @@ module.exports = function( config, state, brewery ) {
 
 				case "set":
 
+					console.log( "WEB", data );
+
 					var val = data.value;
 					if( typeof val == 'boolean' ) val = val ? 1 : 0;
 
 					var topic = data.topic.replace( /\./g, '/' );
 
-					_mqtt( topic, ''+val );
+					console.log( "-AS", topic, val );
+
+					if( val == null ) {
+						_mqtt( topic, null );
+					} else {
+						_mqtt( topic, ''+val );
+					}
 
 				break;
 			}
@@ -74,15 +86,27 @@ module.exports = function( config, state, brewery ) {
 			
 			var t = topic.split( '/' );
 
-			if( t[ t.length-1 ] == 'override' ) {
-				console.log( "RECV", topic, data );
+			var parsed, parsedAs;
+			
+			if( data === null || typeof data == 'undefined' ){
+				parsed = null;
+				parsedAs = "nUlL";
+			} else{
+				parsed = parseFloat( data );
+				parsedAs = "float";
 			}
 
-			MQTT.setByTopic( brewery.boilers, topic, parseFloat( data ) );
+			if( topic.match( /.*\/(fill|lid)\/.*/ ) ){
+				console.log( "GOT", topic, data, parsed, typeof data, parsedAs );
+			}
 
+			MQTT.setByTopic( brewery.boilers, topic, parsed );
+
+			/*
 			if( t[ t.length-1 ] == 'override' ) {
 				console.log( brewery.boilers.boiler1.lid );
 			}
+			*/
 		},
 
 		onMqttMessage: function( mqtt ) {
