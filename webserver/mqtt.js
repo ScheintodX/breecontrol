@@ -1,9 +1,13 @@
 "use strict";
 
+var E = require( './E.js' );
+
 var Assert = require( './assert.js' );
 var log = require( './logging.js' );
 
 var mqtt = require( 'mqtt' );
+
+var Dot = require( 'dot-object' );
 
 
 // Scream server example: "hi" -> "HI!!!" 
@@ -29,7 +33,6 @@ module.exports = function( onData, config, done ) {
 		log.trace( "MQTT Connect" );
 		mqttClient.subscribe( 'infrastructure/#' );
 		mqttClient.subscribe( 'boiler1/#' );
-		mqttClient.publish( 'infrastructure/presence', 'MCP' );
 		log.trace( "MQTT STARTED" );
 		return done( null, __mqtt );
 	});
@@ -50,7 +53,7 @@ module.exports = function( onData, config, done ) {
 
 		send: function( topic, data ) {
 
-			console.log( "MQTT send", topic, data );
+			E.rr( "MQTT send", topic, data );
 
 			var opts = {};
 
@@ -59,6 +62,18 @@ module.exports = function( onData, config, done ) {
 			}
 
 			mqttClient.publish( topic, data, opts );
+		},
+
+		sendSet: function( obj ) {
+
+			var dot = new Dot( '/' ),
+				dotted = dot.dot( obj );
+
+			for( var key in dotted ) {
+
+				send( key, dottet[ key ] );
+			}
+
 		}
 
 	};

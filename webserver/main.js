@@ -1,15 +1,9 @@
 #!/usr/bin/nodejs
 
+var E = require( './E.js' );
 var log = require( './logging.js' ).file( '/var/log/brauerei.log' );
 
 var repl = require( './repl.js' )( {} );
-/*
-	config: function(){ return config; },
-	boilers: function(){ return boilers; },
-	brewery: function(){ return boilers; },
-	state: function(){ return state; }
-} );
-*/
 
 var async = require( 'async' );
 
@@ -23,12 +17,11 @@ var Config = require( './config.js' ),
 
 var Boilers = require( './boiler.js' ),
     boilers = false,
+	Brewery = require( './brewery.js' ),
 	brewery = false;
 
 var State = require( './state.js' ),
     state = false;
-
-var script = require( './script.js' );
 
 var Ctrl = require( './ctrl.js' ),
     ctrl = false;
@@ -102,12 +95,7 @@ function initBoilers( done ) {
 
 		boilers = data;
 
-		brewery = {
-			boilers: boilers,
-			clone: function() {
-				return JSON.parse( JSON.stringify( this ) );
-			}
-		};
+		brewery = Brewery( boilers );
 		repl.addContext( { brewery: brewery } );
 		repl.addContext( {
 				brewery: brewery,
@@ -125,7 +113,7 @@ function initBoilers( done ) {
 
 function startWebsocket( done ) {
 
-	Websocket( ctrl.gotWebData, config.ws, brewery, function( err, data ) {
+	Websocket( ctrl.gotWebData, config.ws, function( err, data ) {
 
 		if( err ){
 			log.failure( "websockets" );
@@ -177,29 +165,36 @@ function startupDone( err ) {
 		throw err;
 	}
 
+	setInterval( ctrl.run, 500 );
+
 	log.startup( "Startup", "DONE" );
 }
 
+E.cho( "Startup" );
 log.startup( "Startup...", "" );
 
+/*
 // Make cleaner exit handling:
 process.stdin.resume();
 
 function gotExit( opt, err ) {
 
-	if (opt.cleanup) console.log('clean');
-	if (err) console.log(err.stack);
+	E.rr( arguments );
+
+	if (opt.cleanup) E.cho( 'clean' );
+	if (err) E.cho( err.stack );
 	if (opt.exit) process.exit();
 }
 
 //do something when app is closing
-process.on( 'exit', gotExit.bind( null,{ cleanup: true } ) );
+process.on( 'exit', gotExit.bind( null, { cleanup: true } ) );
 
 //catches ctrl+c event
 process.on( 'SIGINT', gotExit.bind( null, { exit: true } ) );
 
 //catches uncaught exceptions
 process.on( 'uncaughtException', gotExit.bind( null, { exit: true } ) );
+*/
 
 // === Start Startup ===
 async.series( [ initConfig, initState, initBoilers ], stateReady );

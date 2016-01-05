@@ -28,9 +28,16 @@
 	$.fn.setOn = function( val ){
 		if( val ) this.val( 'on' );
 		else this.val( 'off' );
+		return this;
 	};
 	$.fn.togOn = function() {
-		this.setOn( !this.isOn() );
+		return this.setOn( !this.isOn() );
 	};
+
+	$.fn.replaceClass = function( what, withwhat ) {
+		return this.removeClass( what )
+				.addClass( withwhat )
+				;
+	}
 
 })($);

@@ -1,9 +1,15 @@
 "use strict";
 
-var MQTT = require( './helpers.js' ).mqtt;
+var E = require( './E.js' );
+var Dot = require( 'dot-object' ),
+	Dash = new Dot( '/' );
 
 var log = require( './logging.js' );
 var Assert = require( './assert.js' );
+
+var Script = require( './script.js' );
+
+var Boiler = require( './boiler.js' );
 
 module.exports = function( config, state, brewery ) {
 
@@ -15,42 +21,23 @@ module.exports = function( config, state, brewery ) {
 
 	var up=true;
 
-	function sendPeriodically() {
+	function sendStatusMqtt() {
+		
+		_mqtt( 'infrastructure/brewmaster/presence', "brewmaster" );
 
-		var patched = brewery.clone();
+		brewery.watch();
+		brewery.publish( _mqtt );
+	}
 
-		var boilers = [ patched.boilers.boiler1, patched.boilers.boiler2 ];
+	function sendStatusWeb() {
 
-		for( var i=0; i<boilers.length; i++ ) {
+		brewery.watch();
+		_web( { boilers: brewery.boilers } );
+	}
 
-			var boiler = boilers[ i ];
+	function notifyLoadSaveDone( err, data ) {
 
-			/*
-			if( i == 0 ) {
-				console.log( "SEND", boiler.fill );
-			}
-			*/
-
-			if( 'override' in boiler.fill ) {
-				boiler.fill.status = boiler.fill.override;
-			}
-
-			if( 'override' in boiler.lid ) {
-				boiler.lid.status = boiler.lid.override;
-			}
-
-			/*
-			if( i == 0 ) {
-				console.log( "stat", boiler.fill );
-			}
-			*/
-
-		}
-
-		delete patched.lastSend;
-		brewery.lastSend = patched;
-
-		_web( patched );
+		E.rr( err, data );
 	}
 
 	var __ctrl = {
@@ -59,68 +46,91 @@ module.exports = function( config, state, brewery ) {
 
 			log.trace( "WebData", data );
 
-			switch( data.action ) {
+			switch( data.on ) {
 
 				case "set":
 
-					console.log( "WEB", data );
+					E.rr( "WEB", data );
 
-					var val = data.value;
-					if( typeof val == 'boolean' ) val = val ? 1 : 0;
+					var val = data.value,
+						topic = data.topic
+						;
 
-					var topic = data.topic.replace( /\./g, '/' );
+					E.rr( "-AS", topic, val );
 
-					console.log( "-AS", topic, val );
+					E.rr( brewery.setByDot( topic, val ) );
 
-					if( val == null ) {
-						_mqtt( topic, null );
-					} else {
-						_mqtt( topic, ''+val );
+					break;
+
+				case "loadsave":
+
+					var boiler = brewery.boilers[ 'boiler' + data.value.no ];
+
+					switch( data.topic ) {
+
+						case "load": 
+
+							boiler.script = Script( data.value.load, notifyLoadSaveDone );
+
+							break;
+
+						case "save":
+
+							E.rr( "SAVE", data.value.name );
+
+							boiler.script = Script( data.value, notifyLoadSaveDone );
+
+							boiler.script.save();
+
+							break;
+
+						case "set":
+
+							E.rr( "SET" );
+
+							boiler.script = Script( data.value, notifyLoadSaveDone );
+
+							break;
+
+						default: 
+							throw "Unknown action: " + data.topic;
+
 					}
+					break;
 
-				break;
+				default:
+					throw "Unknown action: " + data.action;
+
 			}
+
 		},
 
 		gotMqttData: function( topic, data ) {
-			
-			var t = topic.split( '/' );
 
-			var parsed, parsedAs;
-			
-			if( data === null || typeof data == 'undefined' ){
-				parsed = null;
-				parsedAs = "nUlL";
-			} else{
-				parsed = parseFloat( data );
-				parsedAs = "float";
-			}
-
-			if( topic.match( /.*\/(fill|lid)\/.*/ ) ){
-				console.log( "GOT", topic, data, parsed, typeof data, parsedAs );
-			}
-
-			MQTT.setByTopic( brewery.boilers, topic, parsed );
-
-			/*
-			if( t[ t.length-1 ] == 'override' ) {
-				console.log( brewery.boilers.boiler1.lid );
-			}
-			*/
+			brewery.setByMqtt( topic, data );
 		},
 
 		onMqttMessage: function( mqtt ) {
 
 			_mqtt = mqtt;
+
+			Assert.present( "config.updateIntervalMqtt", config.updateIntervalMqtt );
+
+			setInterval( sendStatusMqtt, config.updateIntervalMqtt );
 		},
 
 		onWebMessage: function( web ) {
 
 			_web = web;
 
-			Assert.present( "config.updateInterval", config.updateInterval );
+			Assert.present( "config.updateIntervalWeb", config.updateIntervalWeb );
 
-			setInterval( sendPeriodically, config.updateInterval );
+			setInterval( sendStatusWeb, config.updateIntervalWeb );
+		},
+
+		run: function() {
+
+			var diff = brewery.watch();
 		}
 
 	};

@@ -19,6 +19,7 @@
 	<script src="js/buttons.js"></script>
 	<script src="js/ctrl.js"></script>
 	<script src="js/controls.js"></script>
+	<script src="js/info.js"></script>
 	<script src="js/com_ws.js"></script>
 	<script src="js/boiler.js"></script>
 	<script src="js/chart.js"></script>
@@ -42,6 +43,10 @@
 
 		<object id="b1" class="boiler" data="boiler.svg"></object>
 
+		<section class="info" id="info1">
+			<h2>Warn</h2>
+		</section>
+
 		<section class="chart" id="chart1">
 
 			<object id="c1" class="chart" data="chart.svg"></object>
@@ -63,19 +68,18 @@
 
 				<label>
 					<h6>Aggitator</h6>
-					<input type="checkbox" name=".aggitator.status" />
-					<!--<button class="checkbox unknown" name=".aggitator" />-->
+					<input type="checkbox" name=".aggitator.nominal" />
 				</label>
 
-				<h3>Sensors</h3>
+				<h3>Sensors override</h3>
 
 				<label>
-					<h6>Override Water Level / %</h6>
+					<h6>Water Level / %</h6>
 					<input class="fill" type="number" name=".fill.override" />
 				</label>
 
 				<label>
-					<h6>Override Lid Closed</h6>
+					<h6>Lid Closed</h6>
 					<input type="checkbox" name=".lid.override" />
 				</label>
 
@@ -120,20 +124,32 @@
 						<button class="save">Save</button>
 					</label>
 
+					<!--
 					<div class="step step0">
-						<label>Step 1: <input class="temp" type="number" name="temp" value="123"/>°C</label>
+						<label>Preheat1 <input class="temp" type="number" name="temp" value="123"/>°C</label>
+					</div>
+					-->
+
+					<div class="step step0">
+						<label>1. Step<input class="temp" type="number" name="temp" value="123"/>°C</label>
 						<label><input class="time" type="number" name="time" value="234"/>min</label>
 					</div>
 					
 					<div class="step step1">
-						<label>Step 2: <input class="temp" type="number" name="temp" value="345"/>°C</label>
+						<label>2. Step<input class="temp" type="number" name="temp" value="345"/>°C</label>
 						<label><input class="time" type="number" name="time" value="456"/>min</label>
 					</div>
 					
 					<div class="step step2">
-						<label>Step 3: <input class="temp" type="number" name="temp" value="567"/>°C</label>
+						<label>3. Step<input class="temp" type="number" name="temp" value="567"/>°C</label>
 						<label><input class="time" type="number" name="time" value="678"/>min</label>
 					</div>
+
+					<!--
+					<div class="step step4">
+						<label>Postheat <input class="temp" type="number" name="temp" value="123"/>°C</label>
+					</div>
+					-->
 
 					<button class="set">Set</button>
 
@@ -159,6 +175,10 @@
 		</header>
 
 		<object id="b2" class="boiler" data="boiler.svg"></object>
+
+		<section class="info" id="info2">
+			<h2>Warn</h2>
+		</section>
 
 		<section class="chart">
 			<object id="c2" class="chart" data="chart.svg"></object>

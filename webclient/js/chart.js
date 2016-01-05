@@ -89,6 +89,8 @@ var BAG_Chart = (function($){
 
 				if( ! Chart.ready() ) return;
 
+				if( !( 'boilers' in data ) ) return;
+
 				var boiler = data.boilers[ 'boiler' + boilerNo ],
 					script = boiler.script
 					;

@@ -1,18 +1,48 @@
-/* line 1, ../sass/elements.scss */
-button.auto, button.overridable {
+/* line 2, ../sass/elements.scss */
+.buttongroup {
+  text-align: center;
+}
+
+/* line 7, ../sass/elements.scss */
+input {
+  position: relative;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+}
+/* line 13, ../sass/elements.scss */
+input[type='number'], input[type='text'] {
+  padding: 4px;
+}
+/* line 17, ../sass/elements.scss */
+input[type='checkbox'] {
+  width: 24px;
+  height: 24px;
+  border: 2px solid black;
+  background-color: white;
+}
+/* line 25, ../sass/elements.scss */
+input[type='number'] {
+  width: 50px;
+}
+
+/* line 33, ../sass/elements.scss */
+button.auto, button.override {
+  position: absolute;
+  top: 4px;
+  right: 100px;
   padding: 4px;
   border: 2px solid white;
   border-radius: 4px;
   color: white;
   background-color: rgba(255, 255, 255, 0.5);
 }
-/* line 14, ../sass/elements.scss */
-button.auto[value="on"], button.overridable[value="on"] {
+/* line 49, ../sass/elements.scss */
+button.auto[value="on"], button.override[value="on"] {
   background-color: white;
   color: blue;
 }
-/* line 18, ../sass/elements.scss */
-button.auto[value="off"], button.overridable[value="off"] {
+/* line 53, ../sass/elements.scss */
+button.auto[value="off"], button.override[value="off"] {
   background-color: rgba(255, 255, 255, 0);
   color: white;
 }

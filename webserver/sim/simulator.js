@@ -4,24 +4,33 @@
 
 var MESSAGES = require( './MESSAGES.js' );
 
-var MQH = require( './helpers.js').mqtt;
+var MQH = require( '../helpers.js').mqtt;
 
 var mqtt = require( 'mqtt' );
 
-var log = require( './logging.js' )
+var log = require( '../logging.js' )
 		.file( '/var/log/brauerei.test' )
 		//.pause( true )
 		;
 
-require( './repl.js' )( {
+var Ctrl = {
+	random: true
+};
+
+var repl = require( '../repl.js' )( {
 	M: MESSAGES,
-	log: log
+	log: log,
+	Ctrl: Ctrl
 } );
+
+log.info( "start mqtt test" );
 
 var mqttClient = mqtt.connect( 'mqtt://localhost:1883/', {
 		username: 'test',
 		password: 'test'
 } );
+
+repl.addContext( { mqtt: mqttClient } );
 
 function Task( msg ) {
 
@@ -34,7 +43,7 @@ function Task( msg ) {
 			val = msg.value;
 
 		} else {
-		
+
 			if( !( 'old' in msg ) ) {
 				switch( msg.type ) {
 					case "b": 
@@ -46,19 +55,25 @@ function Task( msg ) {
 				}
 			}
 
-			switch( msg.type ) {
-				case "b":
-					val = msg.old;
-					if( Math.random() < 0.1 ) val = ( val == 0 ? 1 : 0 );
-					break;
-				case "f":
-					var r = msg.range,
-						rnd = Math.random() * ( r[1]-r[0]) + r[0];
-					val = ( msg.old + 4*rnd ) / 5;
-					val = Math.round( val*10 ) / 10;
-			}
+			if( Ctrl.random ) {
+		
+				switch( msg.type ) {
+					case "b":
+						val = msg.old;
+						if( Math.random() < 0.1 ) val = ( val == 0 ? 1 : 0 );
+						break;
+					case "f":
+						var r = msg.range,
+							rnd = Math.random() * ( r[1]-r[0]) + r[0];
+						val = ( msg.old + 4*rnd ) / 5;
+						val = Math.round( val*10 ) / 10;
+				}
 
-			msg.old = val;
+				msg.old = val;
+
+			} else {
+				val = msg.old;
+			}
 		}
 
 		log.info( msg.topic, val );
@@ -68,8 +83,6 @@ function Task( msg ) {
 }
 
 mqttClient.on( 'connect', function() {
-
-	console.log( "MQTT Connect" );
 
 	mqttClient.subscribe( 'boiler1/+/set' );
 	mqttClient.subscribe( 'boiler1/+/override' );
@@ -100,6 +113,8 @@ mqttClient.on( 'message', function( topic, message ) {
 
 	var msg = MESSAGES.find( topic.replace( /set$/, 'nominal' ) );
 	if( !msg ) msg = MESSAGES.find( topic.replace( /set$/, 'status' ) );
+
+	console.log( msg.topic );
 
 	msg.value = message;
 

@@ -7,57 +7,40 @@
  */
 var BAG_Ctrl = (function($){
 
-	var _com = false;
-	var _controls = false;
+	return function( controls ) {
 
-	function gotManual( ev ) {
+		var _com = false;
 
-		_com( { action: "set", topic: "boiler" + ev.no + ev.topic, value: ev.value } );
-	}
+		function gotManual( ev ) {
 
-	function gotLoadSave( ev ) {
-		console.debug( "loadsave", ev );
-	}
+			_com( { on: "set", topic: "boiler" + ev.no + ev.topic, value: ev.value } );
+		}
 
-	function gotRunStop( ev ) {
-		console.debug( "runstop", ev );
-	}
+		function gotLoadSave( ev ) {
 
-	var Ctrl = {
+			_com( ev );
+		}
 
-		init: function( controls ) {
+		function gotRunStop( ev ) {
 
-			$.each( controls, function( name, control ){
+			_com( ev );
+		}
 
-				if( ! 'gotData' in control ) {
-					console.warn( "Missing 'gotData'" );
-				}
-
-				if( 'onControl' in control ) {
-					control.onControl( Ctrl.gotControl );
-				}
-
-			} );
-
-			_controls = controls;
-
-			return Ctrl;
-		},
-
-		gotData: function( data ) {
+		function gotData( data ) {
 
 			//console.log( "gotData", data );
 
-			if( !_controls ) return Ctrl;
+			if( !controls ) return Ctrl;
 
-			$.each( _controls, function( name, control ) {
+			$.each( controls, function( name, control ) {
 
 				control.gotData( data );
 
 			} );
-		},
+			return Ctrl;
+		}
 
-		gotControl: function( ev ) {
+		function gotControl( ev ) {
 
 			switch( ev.on ) {
 
@@ -65,16 +48,37 @@ var BAG_Ctrl = (function($){
 				case "loadsave": gotLoadSave( ev ); break;
 				case "runstop": gotRunStop( ev ); break;
 			}
-			
-		},
-
-		onCom: function( com ) {
-
-			_com = com;
+			return Ctrl;
 		}
 
-	};
+		$.each( controls, function( name, control ){
 
-	return Ctrl;
+			if( ! 'gotData' in control ) {
+				console.warn( "Missing 'gotData'" );
+			}
+
+			if( 'onControl' in control ) {
+				control.onControl( gotControl );
+			}
+
+		} );
+
+		var Ctrl = {
+
+			controls: controls,
+
+			gotData: gotData,
+
+			gotControl: gotControl,
+
+			onCom: function( com ) {
+
+				_com = com;
+			}
+
+		};
+
+		return Ctrl;
+	}
 
 })($);

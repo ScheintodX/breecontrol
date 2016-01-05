@@ -23,7 +23,7 @@ var BAG_Controls = (function($){
 		// Comm
 
 		function notify( on, topic, value ) {
-			console.log( on, topic, value );
+			console.trace( "NOTIFY", on, topic, value );
 			_onControl( { on: on, topic: topic, value: value, no: boilerNo } );
 		}
 
@@ -48,21 +48,16 @@ var BAG_Controls = (function($){
 					.onNotify( notify )
 					;
 
-			console.log( topic );
-
 			if( topic.match( /\.override$/ ) )
 					control = control.override();
 
-			if( topic.match( /\.set$/ ) )
-					control = control.auto();
-			
 			return control;
 		}
 
 		var manualControls = {
 		// Set
 			'temp.nominal': Control( 'input[name=".temp.nominal" ]' ),
-			'aggitator.status': Control( 'input[name=".aggitator.status" ]' ),
+			'aggitator.nominal': Control( 'input[name=".aggitator.nominal" ]' ),
 
 		// Override
 			'fill.override': Control( 'input[name=".fill.override"] ', 100 ),
@@ -143,7 +138,6 @@ var BAG_Controls = (function($){
 
 					manualControls[ key ].set( value );
 				}
-
 			}
 		}
 

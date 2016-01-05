@@ -1,14 +1,14 @@
 "use strict";
 
-var H = require( './helpers.js' ).mqtt;
+var H = require( '../helpers.js' ).mqtt;
 
 var MESSAGES = [
 
 	{ topic: "boiler1/jacket/upper/temp/status", type: "f", range: [ -50, 500 ], iv: 1000 },
 	{ topic: "boiler1/jacket/upper/temp/nominal", value: 150, type: "f", range: [ 0, 300 ], iv: 1000 },
 	{ topic: "boiler1/jacket/upper/temp/set" },
-
 	{ topic: "boiler1/jacket/upper/power/status", type: "f", range: [ 0, 1 ], iv: 100 },
+	{ topic: "boiler1/jacket/upper/power/nominal", type: "f", range: [ 0, 1 ], iv: 100 },
 	{ topic: "boiler1/jacket/upper/power/set" },
 
 	{ topic: "boiler1/jacket/upper/heater/status", type: "b", iv: 100 },
@@ -25,9 +25,11 @@ var MESSAGES = [
 	//{ topic: "boiler1/lid/override" },
 
 	{ topic: "boiler1/aggitator/status", type: "b", iv: 700 },
+	{ topic: "boiler1/aggitator/nominal", type: "b", iv: 700 },
 	{ topic: "boiler1/aggitator/set" },
 
 	{ topic: "boiler1/spare/status", type: "b", iv: 700 },
+	{ topic: "boiler1/spare/nominal", type: "b", iv: 700 },
 	{ topic: "boiler1/spare/set" },
 
 	{ topic: "boiler1/indicator/color/set" },  // 123456,abcdef,012912 ....

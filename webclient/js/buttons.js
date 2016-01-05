@@ -14,7 +14,7 @@ var BAG_Button = function($){
 			return false;
 		} );
 
-		var self = Notifyable( Overridable( Automatic( {
+		var self = Notifyable( Overridable( {
 			$e: $e,
 			topic: topic,
 			trigger: trigger,
@@ -26,7 +26,7 @@ var BAG_Button = function($){
 				} );
 				return self;
 			},
-		} ) ) );
+		} ) );
 
 		return self;
 	}
@@ -43,11 +43,18 @@ var BAG_Button = function($){
 		}
 
 		$e.on( 'change', trigger )
-		  .on( 'focus', function() { edit=true; } )
-		  .on( 'focusout', function() { edit=false; } )
+				.on( 'focus', function() { edit=true; } )
+				.on( 'focusout', function() { edit=false; } )
+				.on( 'keypress', function( ev ) {
+					var code = ev.keyCode || e.which;
+					if( ev.keyCode == 13 ) {
+						$e.blur();
+						trigger();
+					}
+				} )
+				;
 
-
-		var self = Notifyable( Overridable( Automatic( {
+		var self = Notifyable( Overridable( {
 			$e: $e,
 			topic: topic,
 			trigger: trigger,
@@ -60,7 +67,7 @@ var BAG_Button = function($){
 				}
 				return self;
 			}
-		} ) ) );
+		} ) );
 
 		return self;
 	}
@@ -75,14 +82,6 @@ var BAG_Button = function($){
 		return what;
 	}
 
-	function Automatic( what ) {
-
-		what.auto = function() {
-			return Auto( what );
-		}
-		return what;
-	}
-
 	function Overridable( what ) {
 
 		what.override = function() {
@@ -91,53 +90,19 @@ var BAG_Button = function($){
 		return what;
 	}
 
-	function Auto( button ) {
-		
-		console.log( "AUTO", button.topic );
-
-		var $auto = $('<button class="auto" value="on">auto</button>')
-				.addClass( button.topic )
-				.on( 'click', function() {
-					$auto.togOn();
-					buttonSet();
-				} )
-				.insertAfter( button.$e )
-				;
-		console.log( $auto );
-
-
-		button.$auto = $auto;
-
-		var buttonSet = button.set;
-		button.set = function( val ) {
-			if( ! $auto.isOn() ) return;
-			buttonSet( val );
-			return button;
-		}
-		var buttonNotify = button.notify;
-		button.notify = function( on, topic, data ) {
-			$auto.setOn( false );
-			buttonNotify( on, topic, data );
-		}
-
-		return button;
-	}
-
 	function Override( button ) {
 
-		console.log( "OVERRIDE", button.topic );
-
 		var buttonSet = button.set;
 		var buttonNotify = button.notify;
 
-		var $override = $('<button class="overridable" value="off">override</button>')
+		var $override = $('<button class="override" value="off">override</button>')
 				.addClass( button.topic )
 				.on( 'click', function() {
 					$override.togOn();
 					if( $override.isOn() ) {
 						button.trigger();
 					} else {
-						buttonNotify( 'manual', button.topic );
+						buttonNotify( 'manual', button.topic, 'off' );
 					}
 				} )
 				.insertAfter( button.$e )
@@ -146,8 +111,15 @@ var BAG_Button = function($){
 		button.$override = $override;
 
 		button.set = function( val ) {
-			if( ! $override.isOn() ) return;
-			buttonSet( val );
+
+			if( typeof val == 'undefined' || val === null || val === 'off' ) {
+				$override.setOn( false );
+				buttonSet( undefined );
+			} else {
+				$override.setOn( true );
+				buttonSet( val );
+			}
+
 			return button;
 		}
 		button.notify = function( on, topic, data ) {
@@ -160,7 +132,6 @@ var BAG_Button = function($){
 	}
 
 	var self = function( type, $e, topic, scale ) {
-		console.log( type, topic );
 		switch( type ){
 			case 'number': return InputNumber( $e, topic, scale );
 			case 'checkbox': return InputCheckbox( $e, topic, scale );

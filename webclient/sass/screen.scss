@@ -26,33 +26,6 @@ body {
 select {
 	padding: 4px;
 }
-input {
-
-	position: relative;
-	border-radius: 4px;
-	border: 1px solid #aaa;
-
-	&[type='number'], &[type='text'] {
-		padding: 4px;
-	}
-
-	&[type='checkbox'] {
-
-		width: 24px; height: 24px;
-
-		border: 2px solid black;
-		background-color: white;
-	}
-
-	&[type='number'] {
-		width: 60px;
-	}
-
-	&.temp, &.time {
-	}
-}
-
-
 section.tab {
 
 	header {
@@ -106,11 +79,22 @@ section.chart {
 	background-color: $bg_chart;
 }
 
+section.info {
+
+	background-color: #eeff00;
+	color: black !important;
+
+	&.severe {
+		color: #bb0022 !important;
+		font-weight: bold;
+	}
+}
+
 section.ctrl {
 
 	box-shadow: inset 0 4px 4px rgba( black, .3 );
 
-	@include showOnDemand( 400px );
+	@include showOnDemand( 900px );
 	overflow: scroll;
 
 	background-color: $bg_ctrl;
@@ -197,9 +181,3 @@ section.runstop, section.loadsave {
 		}
 	}
 }
-
-.buttongroup {
-
-	text-align: center;
-}
-

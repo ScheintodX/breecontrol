@@ -16,7 +16,7 @@ var BAG_Com = (function(){
 
 		if( _websocket.readyState > 1 ) { //CLOSING,CLOSED
 
-			console.log( "Reconnecting in 2" );
+			console.info( "Reconnecting in 2" );
 
 			setTimeout( reconnect, 2000 );
 		}
@@ -25,7 +25,7 @@ var BAG_Com = (function(){
 
 	function gotOpen( what ) {
 
-		console.log( "OPEN", what );
+		console.info( "OPEN", what );
 	}
 
 	function gotData( what ) {

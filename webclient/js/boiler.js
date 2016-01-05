@@ -56,6 +56,14 @@ var BAG_Boiler = (function($){
 			} );
 		}
 
+		function border( id ) {
+			return ifchanged( function( on ) {
+				console.log( on );
+				var svgE = svg( id );
+				if( svgE ) svgE.style.stroke = on ? '#ef2929' : '#2e3436';
+			} );
+		}
+
 		function opacity( id ) {
 			return ifchanged( function( value ) {
 				var svgE = svg( id );
@@ -66,8 +74,19 @@ var BAG_Boiler = (function($){
 		function visible( id ) {
 			return ifchanged( function( visible ) {
 				var svgE = svg( id );
-				if( svgE ) svgE.style.visibility = visible ? 'visible' : 'hidden';
+				if( svgE ) svgE.style.opacity = visible ? 1 : 0;
 			} );
+		}
+
+		function override( f ) {
+			return function( value ) {
+				var isOverride = (
+						typeof value != 'undefined' 
+						&& value !== null
+						&& value != 'off'
+				);
+				return f( isOverride );
+			};
 		}
 
 		
@@ -80,10 +99,13 @@ var BAG_Boiler = (function($){
 			setUpperTemp: text( 'upper_temp' ),
 			setUpperPower: text( 'upper_power' ),
 			setUpperTempIcon: color( 'temp_upper_icon' ),
+			setUpperHeater: border( 'temp_upper_icon' ),
 			setLowerTemp: text( 'lower_temp' ),
 			setLowerPower: text( 'lower_power' ),
 			setLowerTempIcon: color( 'temp_lower_icon' ),
+			setLowerHeater: border( 'temp_lower_icon' ),
 			setLid: visible( 'lid' ),
+			setLidOverride: override( visible( 'lid_override' ) ),
 			setAggitator: ifchanged( function( on ) {
 
 				var aggi = svg('aggitator');
@@ -94,13 +116,13 @@ var BAG_Boiler = (function($){
 							{ duration: 400 }
 
 							).velocity(
-							{ opacity: [ .7, .9 ] },
+							{ opacity: [ .8, .9 ] },
 							{ duration: 317, loop: true }
 					);
 				} else {
 					$(aggi).velocity( "stop" ).velocity(
 							{ opacity: .2 },
-							{ duration: 400 }
+							{ duration: 400, loop: false }
 					) ;
 					//aggi.style.opacity = .2;
 				}
@@ -123,17 +145,22 @@ var BAG_Boiler = (function($){
 						;
 					
 			} ),
+			setFillOverride: override( visible( 'fill_override' ) ),
 
 			gotData: function( data ) {
 
 				if( !_svg ) return;
+
+				if( !( 'boilers' in data ) ) return;
 
 				var boiler = data.boilers[ 'boiler' + boilerNo ]
 					;
 
 				Boiler.setAggitator( boiler.aggitator.status );
 				Boiler.setFill( boiler.fill.status );
+				Boiler.setFillOverride( boiler.fill.override );
 				Boiler.setLid( boiler.lid.status );
+				Boiler.setLidOverride( boiler.lid.override );
 
 				Boiler.setTempInnerStatus( boiler.temp.status.toTemp() );
 				Boiler.setTempInnerNominal( boiler.temp.nominal.toTempC() );
@@ -144,10 +171,13 @@ var BAG_Boiler = (function($){
 				Boiler.setUpperTemp( boiler.jacket.upper.temp.status.toTemp(1) );
 				Boiler.setUpperPower( boiler.jacket.upper.power.status.toPercent() );
 				Boiler.setUpperTempIcon( p2C( boiler.jacket.upper.power.status ) );
+				Boiler.setUpperHeater( boiler.jacket.upper.heater.status );
 
 				Boiler.setLowerTemp( boiler.jacket.lower.temp.status.toTemp(1) );
 				Boiler.setLowerPower( boiler.jacket.lower.power.status.toPercent() );
 				Boiler.setLowerTempIcon( p2C( boiler.jacket.lower.power.status ) );
+				Boiler.setLowerHeater( boiler.jacket.lower.heater.status );
+
 			},
 
 			ready: function() {

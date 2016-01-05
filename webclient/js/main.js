@@ -2,7 +2,7 @@
 
 (function($){
 
-	function main() {
+	function main( done ) {
 
 		$('#ctrl1').children()
 			.clone()
@@ -11,7 +11,7 @@
 
 		BAG_Usability( $('body') );
 
-		var ctrl = BAG_Ctrl.init( {
+		var ctrl = BAG_Ctrl( {
 
 			b1: BAG_Boiler( '#b1', 1 ),
 			b2: BAG_Boiler( '#b2', 2 ),
@@ -20,7 +20,10 @@
 			c2: BAG_Chart( '#c2', 2 ),
 
 			ctrl1: BAG_Controls( '#t1', 1 ),
-			ctrl2: BAG_Controls( '#t2', 2 )
+			ctrl2: BAG_Controls( '#t2', 2 ),
+
+			info1: BAG_Info( '#info1', 'boiler1' ),
+			info2: BAG_Info( '#info2', 'boiler2' ),
 		} );
 
 
@@ -30,6 +33,8 @@
 			;
 
 		ctrl.onCom( com.send );
+
+		window.ctrl = ctrl;
 	}
 
 	$(main);

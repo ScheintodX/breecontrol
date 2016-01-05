@@ -8,13 +8,11 @@ var Assert = require( './assert.js' );
 
 var _onData = false;
 
-var _data = false,
-	_config = false
-	;
-
 var _wsServer = false,
 	_sender = false
 	;
+
+var _config = false;
 
 function gotText( conn, str ) {
 
@@ -48,7 +46,6 @@ function gotConnection( conn ) {
 
 	conn.sendText( JSON.stringify( {
 
-		boilers: _data.boilers,
 		config: _config.config
 
 	} ) );
@@ -67,19 +64,16 @@ function sendToAll( data ) {
 
 }
 
-module.exports = function( onData, config, data, done ) {
+module.exports = function( onData, config, done ) {
 
 	Assert.present( 'onData', onData );
 	Assert.present( 'config', config );
-	Assert.present( 'data', data );
 	Assert.present( 'done', done );
 
 	log.trace( "Websocket starting" );
 
-	_onData = onData;
-
 	_config = config;
-	_data = data;
+	_onData = onData;
 
 	_wsServer = ws.createServer( gotConnection );
 	try {
