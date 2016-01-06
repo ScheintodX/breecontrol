@@ -98,9 +98,8 @@ var BAG_Boiler = (function($){
 					if( heat < 300 ){
 						var perc = (heat/300);
 						color = col( perc*255, perc*127, 0 );
-					} else color = '#ddddff';
+					} else color = '#ffdd88';
 				}
-				console.log( color );
 				f( color );
 			}
 		}

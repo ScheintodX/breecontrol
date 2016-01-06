@@ -12,7 +12,7 @@ module.exports = function( done ) {
 			port: 8765,
 		},
 
-		updateIntervalWeb: 1000,
+		updateIntervalWeb: 100,
 		updateIntervalMqtt: 1000,
 
 		mqtt: {

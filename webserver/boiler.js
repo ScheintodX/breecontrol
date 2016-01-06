@@ -17,6 +17,10 @@ function createBoiler( index, config ) {
 		index: index,
 
 		upper: {
+			_conf: {
+				overheat: 20,
+				boost: 15
+			},
 			temp: {
 				_meta: {
 					type: 'f'
@@ -35,6 +39,10 @@ function createBoiler( index, config ) {
 		},
 
 		lower: {
+			_conf: {
+				overheat: 50,
+				boost: 50
+			},
 			temp: {
 				_meta: {
 					type: 'f'
@@ -179,13 +187,30 @@ function createBoiler( index, config ) {
 				delete( Boiler.temp.set );
 			}
 
+			function optiTemp( jacket ) {
+
+				var max = jacket.temp.max,
+				    actual = Boiler.temp.status,
+				    nominal = Boiler.temp.nominal,
+					overheat = jacket._conf.overheat,
+					boost = jacket._conf.boost
+					;
+
+				var opti = nominal
+						+ overheat
+						+ (nominal - actual) * boost
+						;
+
+				return Math.min( opti, max );
+			}
+
 			if( Boiler.temp.status >= Boiler.temp.nominal ) {
 
 				Boiler.upper.temp.set = 0;
 				Boiler.lower.temp.set = 0;
 			} else {
-				Boiler.upper.temp.set = Boiler.upper.temp.max;
-				Boiler.lower.temp.set = Boiler.lower.temp.max;
+				Boiler.upper.temp.set = optiTemp( Boiler.upper );
+				Boiler.lower.temp.set = optiTemp( Boiler.lower );
 			}
 
 			// ============ Security section ===============
