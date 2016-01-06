@@ -54,7 +54,18 @@ function gotConnection( conn ) {
 
 function sendToAll( data ) {
 
-	var text = JSON.stringify( data );
+	var text;
+	switch( typeof data ) {
+		case 'string':
+			text = data;
+			break;
+		case 'object':
+			text = JSON.stringify( data );
+			break;
+		default:
+			throw new Error( "Cannot send " + data + " because it's a " + (typeof data) );
+			break;
+	}
 
 	_wsServer.connections.forEach( function( conn ){
 

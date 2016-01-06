@@ -5,7 +5,7 @@
 var util = require( 'util' );
 
 var E = require( '../E.js' );
-require( './polyfill.js' );
+require( '../polyfill.js' );
 require( './patch.js' );
 
 var SFloat = require( './s_float.js' ),
@@ -26,13 +26,14 @@ var Sensors = {
 		topic: 'boiler1/upper',
 		temp: {
 			topic: 'boiler1/upper/temp',
-			status: { range: [ -20, 500 ], initial: 20 },
-			nominal: { range: [ 0, 300 ], initial: 0 },
+			status: { range: [ -20, 600 ], initial: 20 },
+			nominal: { range: [ 0, 400 ], initial: 0 },
 			timeout: 5000,
 			mode: 'simulate'
 		},
 		heater: {
 			topic: 'boiler1/upper/heater',
+			status: { initial: false },
 			freq: .5,
 			mode: 'simulate'
 		},
@@ -53,6 +54,7 @@ var Sensors = {
 		},
 		heater: {
 			topic: 'boiler1/lower/heater',
+			status: { initial: false },
 			req: .5,
 			mode: 'simulate'
 		},
@@ -82,7 +84,7 @@ var Sensors = {
 		status: { initial: true },
 		freq: .5,
 		iv: 300,
-		mode: 'random'
+		mode: 'simple'
 	} ),
 	aggitator: ABool( {
 		topic: 'boiler1/aggitator',

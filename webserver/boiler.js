@@ -11,10 +11,11 @@ function createBoiler( index, config ) {
 
 	var JACKET_MAX = 300;
 
-	var Boiler = {
+	var self = {
 
 		name: config.name,
 		index: index,
+		_conf: config,
 
 		upper: {
 			_conf: {
@@ -137,8 +138,8 @@ function createBoiler( index, config ) {
 
 		loadScript: function( newScript ) {
 
-			Boiler.script = newScript;
-			Boiler.script.state = {
+			self.script = newScript;
+			self.script.state = {
 				mode: 'stopped',
 				index: 0,
 				elapsed: 0,
@@ -148,16 +149,16 @@ function createBoiler( index, config ) {
 
 		publish: function( emit ) {
 
-			var boilerN = 'boiler' + (Boiler.index+1);
+			var boilerN = 'boiler' + (self.index+1);
 
-			_.each( Boiler.publishable, function( topic ) {
+			_.each( self.publishable, function( topic ) {
 
-				var val = H.message.getByMqtt( Boiler, topic );
+				var val = H.message.getByMqtt( self, topic );
 
 				if( typeof val == 'undefined' ) return;
 
 				var tType = topic.replace( /\/[^\/]+$/, '/_meta/type' ),
-					type = H.message.getByMqtt( Boiler, tType );
+					type = H.message.getByMqtt( self, tType );
 
 				emit( boilerN + '/' + topic, H.mqtt.toString( val, type, 1 ) );
 				
@@ -168,30 +169,30 @@ function createBoiler( index, config ) {
 
 		watch: function() {
 
-			Boiler.warn = {
+			self.warn = {
 				level: "warn",
 				messages: []
 			};
 
 			function warn( val ){
-				Boiler.warn.messages.push( { level: 'warn', text: val } );
+				self.warn.messages.push( { level: 'warn', text: val } );
 			}
 
 			function severe( val ){
-				Boiler.warn.level = 'severe';
-				Boiler.warn.messages.push( { level: 'severe', text: val } );
+				self.warn.level = 'severe';
+				self.warn.messages.push( { level: 'severe', text: val } );
 			}
 
-			if( Boiler.temp.set ) {
-				Boiler.temp.nominal = Boiler.temp.set;
-				delete( Boiler.temp.set );
+			if( self.temp.set ) {
+				self.temp.nominal = self.temp.set;
+				delete( self.temp.set );
 			}
 
 			function optiTemp( jacket ) {
 
 				var max = jacket.temp.max,
-				    actual = Boiler.temp.status,
-				    nominal = Boiler.temp.nominal,
+				    actual = self.temp.status,
+				    nominal = self.temp.nominal,
 					overheat = jacket._conf.overheat,
 					boost = jacket._conf.boost
 					;
@@ -204,56 +205,56 @@ function createBoiler( index, config ) {
 				return Math.min( opti, max );
 			}
 
-			if( Boiler.temp.status >= Boiler.temp.nominal ) {
+			if( self.temp.status >= self.temp.nominal ) {
 
-				Boiler.upper.temp.set = 0;
-				Boiler.lower.temp.set = 0;
+				self.upper.temp.set = 0;
+				self.lower.temp.set = 0;
 			} else {
-				Boiler.upper.temp.set = optiTemp( Boiler.upper );
-				Boiler.lower.temp.set = optiTemp( Boiler.lower );
+				self.upper.temp.set = optiTemp( self.upper );
+				self.lower.temp.set = optiTemp( self.lower );
 			}
 
 			// ============ Security section ===============
-			if( Boiler.lower.temp.set && Boiler.fill.status < .3 ) {
+			if( self.lower.temp.set && self.fill.status < .3 ) {
 				warn( "Water to low for lower heater" );
-				if( Boiler.fill.override >= .3 ) {
+				if( self.fill.override >= .3 ) {
 					severe( "OVERRIDE" );
 				} else {
-					Boiler.lower.temp.set = 0;
+					self.lower.temp.set = 0;
 				}
 			}
-			if( Boiler.upper.temp.set && Boiler.fill.status < .6 ) {
+			if( self.upper.temp.set && self.fill.status < .6 ) {
 				warn( "Water to low for upper heater" );
-				if( Boiler.fill.override >= .6 ) {
+				if( self.fill.override >= .6 ) {
 					severe( "OVERRIDE" );
 				} else {
-					Boiler.upper.temp.set = 0;
+					self.upper.temp.set = 0;
 				}
 			}
 
-			if( ( Boiler.upper.temp.set || Boiler.lower.temp.set ) && ! Boiler.lid.status ) {
+			if( ( self.upper.temp.set || self.lower.temp.set ) && ! self.lid.status ) {
 				warn( "Lid open: cant measure temp" );
-				if( Boiler.lid.override ) {
+				if( self.lid.override ) {
 					severe( "OVERRIDE" )
 				} else {
-					Boiler.upper.temp.set = 0;
-					Boiler.lower.temp.set = 0;
+					self.upper.temp.set = 0;
+					self.lower.temp.set = 0;
 				}
 			}
 
-			if( !( Boiler.lid.status ) && Boiler.aggitator.status ) {
+			if( !( self.lid.status ) && self.aggitator.status ) {
 				warn( "Aggitator on with Lid open" );
-				if( Boiler.lid.override ) {
+				if( self.lid.override ) {
 					severe( "OVERRIDE" );
 				} else {
-					Boiler.aggitator.status = 0;
+					self.aggitator.status = 0;
 				}
 			}
 		}
 
 	};
 
-	return Boiler;
+	return self;
 };
 
 module.exports = {};

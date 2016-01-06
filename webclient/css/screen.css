@@ -172,14 +172,15 @@ section.chart.visible {
 section.info {
   background-color: #eeff00;
   color: black !important;
+  padding: 6px;
 }
-/* line 87, ../sass/screen.scss */
+/* line 88, ../sass/screen.scss */
 section.info.severe {
   color: #bb0022 !important;
   font-weight: bold;
 }
 
-/* line 93, ../sass/screen.scss */
+/* line 94, ../sass/screen.scss */
 section.ctrl {
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.3);
   max-height: 0;
@@ -192,7 +193,7 @@ section.ctrl {
 section.ctrl.visible {
   max-height: 900px;
 }
-/* line 102, ../sass/screen.scss */
+/* line 103, ../sass/screen.scss */
 section.ctrl label {
   display: block;
   position: relative;
@@ -201,44 +202,44 @@ section.ctrl label {
   border: 1px solid white;
   border-radius: 4px;
 }
-/* line 113, ../sass/screen.scss */
+/* line 114, ../sass/screen.scss */
 section.ctrl label input {
   position: absolute;
   top: 4px;
   right: 4px;
 }
-/* line 119, ../sass/screen.scss */
+/* line 120, ../sass/screen.scss */
 section.ctrl div.step {
   display: flex;
 }
-/* line 121, ../sass/screen.scss */
+/* line 122, ../sass/screen.scss */
 section.ctrl div.step label {
   flex-grow: 1;
   display: inline-block;
 }
-/* line 128, ../sass/screen.scss */
+/* line 129, ../sass/screen.scss */
 section.ctrl > section {
   padding: 8px;
 }
-/* line 134, ../sass/screen.scss */
+/* line 135, ../sass/screen.scss */
 section.ctrl > section h2 {
   margin: -8px -8px 0 -8px;
 }
-/* line 138, ../sass/screen.scss */
+/* line 139, ../sass/screen.scss */
 section.ctrl > section h3 {
   margin: 12px 0 4px 0;
   font-weight: bold;
 }
-/* line 141, ../sass/screen.scss */
+/* line 142, ../sass/screen.scss */
 section.ctrl > section h3:before {
   content: "= ";
 }
-/* line 142, ../sass/screen.scss */
+/* line 143, ../sass/screen.scss */
 section.ctrl > section h3:after {
   content: " =";
 }
 
-/* line 149, ../sass/screen.scss */
+/* line 150, ../sass/screen.scss */
 section.runstop button, section.loadsave button {
   position: relative;
   height: 28px;
@@ -246,7 +247,7 @@ section.runstop button, section.loadsave button {
   padding-left: 20px;
   margin: 6px;
 }
-/* line 153, ../sass/screen.scss */
+/* line 154, ../sass/screen.scss */
 section.runstop button.set, section.loadsave button.set {
   display: block;
   width: auto;

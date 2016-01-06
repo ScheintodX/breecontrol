@@ -28,18 +28,18 @@ module.exports = function( boilers ) {
 
 	function doSupervised( f ) {
 
-		var original = Dot.dot( Brewery.boilers );
+		var original = Dot.dot( self.boilers );
 
 		f();
 
-		var changed = Dot.dot( Brewery.boilers );
+		var changed = Dot.dot( self.boilers );
 
 		var d = diff( original, changed );
 
 		return d;
 	}
 
-	var Brewery = {
+	var self = {
 
 		boilers: boilers,
 
@@ -49,17 +49,24 @@ module.exports = function( boilers ) {
 			return JSON.parse( JSON.stringify( this ) );
 		},
 
+		asJson: function() {
+			return JSON.stringify( { boilers: self.boilers }, function( key, val ) {
+			
+				return key.startsWith( '_' ) ? undefined : val;
+			} );
+		},
+
 		setByMqtt: function( topic, value ) {
 
 			if( topic.match( /^infrastructure\// ) ){
 
-				HM.setByMqtt( Brewery, topic, value );
+				HM.setByMqtt( self, topic, value );
 
 			} else if( topic.match( /^boiler[12]\// ) ) {
 
 				if( topic.match( /override/ ) ) E.rr( topic, value );
 
-				HM.setByMqttAutotype( Brewery.boilers, topic, value );
+				HM.setByMqttAutotype( self.boilers, topic, value );
 
 			} else {
 				log.warn( "Unknown topic: " + topic );
@@ -72,7 +79,7 @@ module.exports = function( boilers ) {
 
 				E.rr( "SET " + topic + " " + value, typeof value );
 
-				HM.setByDot( Brewery.boilers, topic, value );
+				HM.setByDot( self.boilers, topic, value );
 			}
 		},
 
@@ -80,22 +87,22 @@ module.exports = function( boilers ) {
 
 			return doSupervised( function() {
 
-				for( var boiler in Brewery.boilers ) {
+				for( var boiler in self.boilers ) {
 
-					Brewery.boilers[ boiler ].watch();
+					self.boilers[ boiler ].watch();
 				}
 			} );
 		},
 
 		publish: function( emit ) {
 
-			for( var boiler in Brewery.boilers ) {
+			for( var boiler in self.boilers ) {
 
-				Brewery.boilers[ boiler ].publish( emit );
+				self.boilers[ boiler ].publish( emit );
 			}
 		}
 
 	};
 
-	return Brewery;
+	return self;
 }

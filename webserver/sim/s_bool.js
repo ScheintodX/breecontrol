@@ -8,7 +8,7 @@ module.exports = function( conf ) {
 
 		conf: conf,
 
-		status: false,
+		status: conf.status.initial,
 
 		_genStatus: function( oldStatus ) {
 

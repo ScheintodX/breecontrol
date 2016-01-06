@@ -1,5 +1,6 @@
 #!/usr/bin/nodejs
 
+require( './polyfill.js' );
 require( 'colors' );
 var util = require( 'util' );
 var async = require( 'async' );

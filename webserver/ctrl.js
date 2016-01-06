@@ -31,7 +31,7 @@ module.exports = function( config, state, brewery ) {
 
 	function sendStatusWeb() {
 
-		_web( { boilers: brewery.boilers } );
+		_web( brewery.asJson() );
 	}
 
 	function notifyLoadSaveDone( err, data ) {

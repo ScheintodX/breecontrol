@@ -12,7 +12,7 @@ module.exports = function( done ) {
 			port: 8765,
 		},
 
-		updateIntervalWeb: 100,
+		updateIntervalWeb: 500,
 		updateIntervalMqtt: 1000,
 
 		mqtt: {
@@ -24,14 +24,16 @@ module.exports = function( done ) {
 		boilers: [
 			{
 				name: "Bernd der Braubottich",
-				minTemp: 0,
-				maxTemp: 100,
+				minTemp:   0, //°C
+				maxTemp: 100, //°C
+				capacity: 80, // L
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
 			}, {
 				name: "Kurt von Kessel",
-				minTemp: 0,
-				maxTemp: 100,
+				minTemp:   0, //°C
+				maxTemp: 100, //°C
+				capacity: 80, // L
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
 			}
