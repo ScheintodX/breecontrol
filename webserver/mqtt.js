@@ -39,7 +39,7 @@ module.exports = function( onData, config, done ) {
 
 	mqttClient.on( 'message', function( topic, message ) {
 
-		log.trace( 'MSG', topic, message.toString() );
+		log.trace( 'MQTT <recv', topic, message.toString() );
 
 		_onData( topic, message.toString() );
 	});
@@ -53,15 +53,9 @@ module.exports = function( onData, config, done ) {
 
 		send: function( topic, data ) {
 
-			E.rr( "MQTT send", topic, data );
+			log.trace( "MQTT send>", topic, data );
 
-			var opts = {};
-
-			if( topic.match( /\/override$/ ) ) {
-				opts.retain = true;
-			}
-
-			mqttClient.publish( topic, data, opts );
+			mqttClient.publish( topic, data );
 		},
 
 		sendSet: function( obj ) {

@@ -1,5 +1,7 @@
 "use strict";
 
+var HQ = require( '../helpers.js' ).mqtt;
+
 module.exports = function( conf ) {
 
 	var self = {
@@ -8,13 +10,19 @@ module.exports = function( conf ) {
 
 		status: false,
 
+		_genStatus: function( oldStatus ) {
+
+			if( Math.random() < conf.freq ) return oldStatus
+			else return !oldStatus;
+		},
+
 		run: function( emit ) {
 
-			if( conf.random ) {
-				if( Math.random() < conf.freq ) self.status = !self.status
+			if( conf.mode == 'random' ) {
+				self.status = self._genStatus( self.status );
 			}
 
-			emit( conf.topic + '/status', '' + self.status.mqtt() )
+			emit( conf.topic + '/status', '' + HQ.toString( self.status, 'b' ) );
 		}
 	}
 	return self;

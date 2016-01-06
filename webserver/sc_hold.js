@@ -15,10 +15,10 @@ module.exports = function( param ){
 
 			start = param.now;
 
-			boiler.jacket.upper.power.set = config.jacket.upper.power;
-			boiler.jacket.upper.temp.set = config.jacket.temp.power;
-			boiler.jacket.lower.power.set = config.jacket.lower.power;
-			boiler.jacket.upper.temp.set = config.jacket.temp.power;
+			boiler.upper.power.set = config.upper.power;
+			boiler.upper.temp.set = config.temp.power;
+			boiler.lower.power.set = config.lower.power;
+			boiler.upper.temp.set = config.temp.power;
 		},
 
 		run: function( param, boiler ) {

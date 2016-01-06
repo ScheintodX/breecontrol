@@ -150,9 +150,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="246.49722"
-     inkscape:cy="87.141252"
+     inkscape:zoom="4"
+     inkscape:cx="254.47566"
+     inkscape:cy="81.307128"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -434,85 +434,30 @@
        d="m 43.125,862.58093 0,6 12,0 0,-6 -12,0 z m 18,0 0,6 12,0 0,-6 -12,0 z m 18,0 0,6 12,0 0,-6 -12,0 z m 64,0 0,6 12,0 0,-6 -12,0 z m 18,0 0,6 12,0 0,-6 -12,0 z m 18,0 0,6 12,0 0,-6 -12,0 z"
        id="lid"
        inkscape:connector-curvature="0" />
-    <g
-       id="g4698">
-      <text
-         xml:space="preserve"
-         style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
-         x="332.09137"
+    <text
+       sodipodi:linespacing="125%"
+       id="upper_temp_status"
+       y="975.03003"
+       x="283.09137"
+       style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
+       xml:space="preserve"><tspan
+         style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
          y="975.03003"
-         id="upper_temp"
-         sodipodi:linespacing="125%"><tspan
-           sodipodi:role="line"
-           id="tspan4783"
-           x="332.09137"
-           y="975.03003"
-           style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold">287°</tspan></text>
-      <text
-         sodipodi:linespacing="125%"
-         id="upper_power"
-         y="975.03003"
-         x="278.09137"
-         style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
-         xml:space="preserve"><tspan
-           style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
-           y="975.03003"
-           x="278.09137"
-           id="tspan4692"
-           sodipodi:role="line">50%</tspan></text>
-      <text
-         sodipodi:linespacing="125%"
-         id="text4694"
-         y="975.03003"
-         x="292.09137"
-         style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
-         xml:space="preserve"><tspan
-           style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
-           y="975.03003"
-           x="292.09137"
-           id="tspan4696"
-           sodipodi:role="line">~</tspan></text>
-    </g>
-    <g
-       id="g4706"
-       transform="translate(0,42)">
-      <text
-         sodipodi:linespacing="125%"
-         id="lower_temp"
-         y="975.03003"
-         x="332.09137"
-         style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
-         xml:space="preserve"><tspan
-           style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
-           y="975.03003"
-           x="332.09137"
-           id="tspan4710"
-           sodipodi:role="line">287°</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
-         x="278.09137"
-         y="975.03003"
-         id="lower_power"
-         sodipodi:linespacing="125%"><tspan
-           sodipodi:role="line"
-           id="tspan4714"
-           x="278.09137"
-           y="975.03003"
-           style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold">50%</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
-         x="292.09137"
-         y="975.03003"
-         id="text4716"
-         sodipodi:linespacing="125%"><tspan
-           sodipodi:role="line"
-           id="tspan4718"
-           x="292.09137"
-           y="975.03003"
-           style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold">~</tspan></text>
-    </g>
+         x="283.09137"
+         id="tspan4783"
+         sodipodi:role="line">287°</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
+       x="283.09137"
+       y="1017.03"
+       id="lower_temp_status"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4710"
+         x="283.09137"
+         y="1017.03"
+         style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold">287°</tspan></text>
     <rect
        style="color:#000000;fill:#a40000;fill-opacity:1;fill-rule:nonzero;stroke:#c4a000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect3263"
@@ -605,5 +550,53 @@
          id="path4134"
          inkscape:connector-curvature="0" />
     </g>
+    <text
+       xml:space="preserve"
+       style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
+       x="333.09137"
+       y="975.03003"
+       id="upper_temp_nominal"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3985"
+         x="333.09137"
+         y="975.03003"
+         style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold">300°</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="lower_temp_nominal"
+       y="1017.03"
+       x="333.09137"
+       style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
+       xml:space="preserve"><tspan
+         style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
+         y="1017.03"
+         x="333.09137"
+         id="tspan3989"
+         sodipodi:role="line">250°</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
+       x="293.09137"
+       y="975.03003"
+       id="text3991"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3993"
+         x="293.09137"
+         y="975.03003"
+         style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold">/</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3995"
+       y="1017.03"
+       x="293.09137"
+       style="font-size:17.09720421px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
+       xml:space="preserve"><tspan
+         style="font-weight:bold;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
+         y="1017.03"
+         x="293.09137"
+         id="tspan3997"
+         sodipodi:role="line">/</tspan></text>
   </g>
 </svg>

@@ -1,11 +1,13 @@
 #!/usr/bin/nodejs
 
+require( 'colors' );
+var util = require( 'util' );
+var async = require( 'async' );
+
 var E = require( './E.js' );
 var log = require( './logging.js' ).file( '/var/log/brauerei.log' );
 
 var repl = require( './repl.js' )( {} );
-
-var async = require( 'async' );
 
 var Websocket = require( './websocket.js' ),
     websocket = false;
@@ -195,6 +197,13 @@ process.on( 'SIGINT', gotExit.bind( null, { exit: true } ) );
 //catches uncaught exceptions
 process.on( 'uncaughtException', gotExit.bind( null, { exit: true } ) );
 */
+process.on( 'uncaughtException', function( ex ) {
+
+	console.log( "SOME ERROR".red );
+	if( ex ) console.log( ex.orange );
+	console.log( util.inspect( brewery.boilers, {showHidden:false, depth: null} ) );
+	if( ex && ex.stack ) console.log( ex.stack.yellow );
+} );
 
 // === Start Startup ===
 async.series( [ initConfig, initState, initBoilers ], stateReady );

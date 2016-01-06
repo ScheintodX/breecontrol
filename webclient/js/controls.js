@@ -41,10 +41,10 @@ var BAG_Controls = (function($){
 
 			var $e = $secManual.find( sel );
 
-			var topic = $e.attr('name')
-					.replace( /\.(nominal|status)$/, '.set' );
+			// topic (for notify) is taken from button name.
+			var topic = $e.attr('name');
 
-			var control = BAG_Button( $e.prop( 'type' ), $e, topic, scale )
+			var control = BAG_Button( $e.attr( 'type' ), $e, topic, scale )
 					.onNotify( notify )
 					;
 
@@ -56,8 +56,12 @@ var BAG_Controls = (function($){
 
 		var manualControls = {
 		// Set
-			'temp.nominal': Control( 'input[name=".temp.nominal" ]' ),
-			'aggitator.nominal': Control( 'input[name=".aggitator.nominal" ]' ),
+			'temp.nominal': Control( 'input[name=".temp.set" ]' ),
+			'aggitator.nominal': Control( 'input[name=".aggitator.set" ]' ),
+
+		// Tunde
+		 	'upper.temp.max': Control( 'input[name=".upper.temp.max"]' ),
+		 	'lower.temp.max': Control( 'input[name=".lower.temp.max"]' ),
 
 		// Override
 			'fill.override': Control( 'input[name=".fill.override"] ', 100 ),
@@ -130,7 +134,7 @@ var BAG_Controls = (function($){
 
 				var boiler = data.boilers[ 'boiler' + boilerNo ];
 
-				for( key in manualControls ) {
+				for( var key in manualControls ) {
 
 					var value = key.getFrom( boiler );
 

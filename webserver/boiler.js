@@ -1,64 +1,92 @@
 "use strict";
 
-var E = require( './E.js' );
+var _ = require( 'underscore' );
 var Dot = require( 'dot-object' ),
 	dash = new Dot( '/' );
+var E = require( './E.js' );
+var H = require( './helpers.js' );
+var log = require( './logging.js' );
 
 function createBoiler( index, config ) {
+
+	var JACKET_MAX = 300;
 
 	var Boiler = {
 
 		name: config.name,
 		index: index,
 
-		jacket: {
-
-			upper: {
-				temp: {
-					status: 0,
-					nominal: 0
+		upper: {
+			temp: {
+				_meta: {
+					type: 'f'
 				},
-				power: {
-					status: 0,
-					nominal: 0
-				},
-				heater: {
-					status: 0
-				}
+				status: 0,
+				nominal: 0,
+				max: 300,
+				set: 0
 			},
-			lower: {
-				temp: {
-					status: 0,
-					nominal: 0
+			heater: {
+				_meta: {
+					type: 'b'
 				},
-				power: {
-					status: 0
-				},
-				heater: {
-					status: 0
-				}
+				status: false
 			}
+		},
 
+		lower: {
+			temp: {
+				_meta: {
+					type: 'f'
+				},
+				status: 0,
+				nominal: 0,
+				max: 300,
+				set: 0
+			},
+			heater: {
+				_meta: {
+					type: 'b'
+				},
+				status: false
+			}
 		},
 
 		temp: {
+			_meta: {
+				type: 'f'
+			},
 			status: 0,
-			nominal: 0
+			nominal: 0,
+			max: 100
 		},
 		aggitator: {
-			status: 0,
-			nominal: 0
+			_meta: {
+				type: 'b'
+			},
+			status: false,
+			nominal: false,
+			set: 0
 		},
 
 		fill: {
+			_meta: {
+				type: 'f'
+			},
 			status: 0,
 			override: null,
 		},
 		lid: {
-			status: 0,
+			_meta: {
+				type: 'b'
+			},
+			status: false,
 			override: null,
 		},
 		spare: {
+			_meta: {
+				type: 'b'
+			},
 			status: 0,
 			nominal: 0
 		},
@@ -88,6 +116,17 @@ function createBoiler( index, config ) {
 			}
 		},
 
+		publishable: [
+			"upper/temp/set",
+			//"upper/temp/max",
+			"lower/temp/set",
+			//"lower/temp/max",
+			//"temp/nominal",
+			"aggitator/set"
+			//"lid/override",
+			//"fill/override"
+		],
+
 		loadScript: function( newScript ) {
 
 			Boiler.script = newScript;
@@ -103,30 +142,18 @@ function createBoiler( index, config ) {
 
 			var boilerN = 'boiler' + (Boiler.index+1);
 
-			var topics = dash.dot( Boiler );
+			_.each( Boiler.publishable, function( topic ) {
 
-			for( var topic in topics ) {
+				var val = H.message.getByMqtt( Boiler, topic );
 
-				if( topic.match( '\/set$' ) ){
+				if( typeof val == 'undefined' ) return;
 
-					var tNominal = topic.replace( /\/set$/, '/nominal' );
+				var tType = topic.replace( /\/[^\/]+$/, '/_meta/type' ),
+					type = H.message.getByMqtt( Boiler, tType );
 
-					var val = topics[ topic ],
-						nominal = topics[ tNominal ]
-						;
-
-					if( val === nominal ) continue;
-
-					switch( typeof val ){
-						case 'number': val = ''+val; break;
-						case 'boolean': val = val ? '1' : '0';
-						case 'string': break;
-						default: throw "Unsupported Type: " + (typeof val);
-					}
-
-					emit( boilerN + '/' + topic, '' + topics[ topic ] );
-				}
-			}
+				emit( boilerN + '/' + topic, H.mqtt.toString( val, type, 1 ) );
+				
+			} );
 
 			
 		},
@@ -147,36 +174,51 @@ function createBoiler( index, config ) {
 				Boiler.warn.messages.push( { level: 'severe', text: val } );
 			}
 
+			if( Boiler.temp.set ) {
+				Boiler.temp.nominal = Boiler.temp.set;
+				delete( Boiler.temp.set );
+			}
+
 			if( Boiler.temp.status >= Boiler.temp.nominal ) {
 
-				Boiler.jacket.lower.temp.set = 0;
-				Boiler.jacket.upper.temp.set = 0;
+				Boiler.upper.temp.set = 0;
+				Boiler.lower.temp.set = 0;
 			} else {
-				Boiler.jacket.lower.temp.set = 300;
-				Boiler.jacket.upper.temp.set = 300;
+				Boiler.upper.temp.set = Boiler.upper.temp.max;
+				Boiler.lower.temp.set = Boiler.lower.temp.max;
 			}
 
 			// ============ Security section ===============
-			if( Boiler.jacket.lower.temp.set && Boiler.fill.status < .3 ) {
+			if( Boiler.lower.temp.set && Boiler.fill.status < .3 ) {
 				warn( "Water to low for lower heater" );
 				if( Boiler.fill.override >= .3 ) {
 					severe( "OVERRIDE" );
 				} else {
-					Boiler.jacket.lower.temp.set = 0;
+					Boiler.lower.temp.set = 0;
 				}
 			}
-			if( Boiler.jacket.upper.temp.set && Boiler.fill.status < .6 ) {
+			if( Boiler.upper.temp.set && Boiler.fill.status < .6 ) {
 				warn( "Water to low for upper heater" );
 				if( Boiler.fill.override >= .6 ) {
 					severe( "OVERRIDE" );
 				} else {
-					Boiler.jacket.upper.temp.set = 0;
+					Boiler.upper.temp.set = 0;
+				}
+			}
+
+			if( ( Boiler.upper.temp.set || Boiler.lower.temp.set ) && ! Boiler.lid.status ) {
+				warn( "Lid open: cant measure temp" );
+				if( Boiler.lid.override ) {
+					severe( "OVERRIDE" )
+				} else {
+					Boiler.upper.temp.set = 0;
+					Boiler.lower.temp.set = 0;
 				}
 			}
 
 			if( !( Boiler.lid.status ) && Boiler.aggitator.status ) {
 				warn( "Aggitator on with Lid open" );
-				if( Boiler.lid.override == 1 ) {
+				if( Boiler.lid.override ) {
 					severe( "OVERRIDE" );
 				} else {
 					Boiler.aggitator.status = 0;

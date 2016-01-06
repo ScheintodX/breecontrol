@@ -31,7 +31,6 @@ module.exports = function( config, state, brewery ) {
 
 	function sendStatusWeb() {
 
-		brewery.watch();
 		_web( { boilers: brewery.boilers } );
 	}
 
@@ -56,9 +55,7 @@ module.exports = function( config, state, brewery ) {
 						topic = data.topic
 						;
 
-					E.rr( "-AS", topic, val );
-
-					E.rr( brewery.setByDot( topic, val ) );
+					brewery.setByWeb( topic, val );
 
 					break;
 

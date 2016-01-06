@@ -1,6 +1,6 @@
 "use strict";
 
-var MSG = require( './helpers.js' ).message;
+var HM = require( './helpers.js' ).message;
 var Dot = require( 'dot-object' );
 var _ = require( 'underscore' );
 var E = require( './E.js' );
@@ -53,30 +53,27 @@ module.exports = function( boilers ) {
 
 			if( topic.match( /^infrastructure\// ) ){
 
-				MSG.setByMqtt( Brewery, topic, value );
+				HM.setByMqtt( Brewery, topic, value );
 
 			} else if( topic.match( /^boiler[12]\// ) ) {
 
-				if( topic.match( /heater/ ) )
-						E.rr( topic, value );
+				if( topic.match( /override/ ) ) E.rr( topic, value );
 
-				MSG.setByMqtt( Brewery.boilers, topic, parseFloat( value ) );
+				HM.setByMqttAutotype( Brewery.boilers, topic, value );
 
-				if( topic.match( /heater/ ) )
-						E.rr( Brewery.boilers.boiler1.jacket.upper.heater );
 			} else {
 				log.warn( "Unknown topic: " + topic );
 			}
-
-
-
 		},
 
-		setByDot: function( topic, value ) {
+		setByWeb: function( topic, value ) {
+
 			if( topic.match( /^boiler[12]\./ ) ){
-				MSG.setByDot( Brewery.boilers, topic, value );
+
+				E.rr( "SET " + topic + " " + value, typeof value );
+
+				HM.setByDot( Brewery.boilers, topic, value );
 			}
-			return "blah";
 		},
 
 		watch: function() {

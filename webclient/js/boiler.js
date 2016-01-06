@@ -43,13 +43,69 @@ var BAG_Boiler = (function($){
 				if( svgE ) svgE.children[ 0 ].textContent = text;
 			} );
 		}
+		/*
+		function degree( id ) {
+			return ifchanged( function( val ) {
+				var text;
+				if( val !== 0 && !val ) text = '??';
+				else text = val.toTemp();
+				var svgE = svg( id );
+				if( svgE ) svgE.children[ 0 ].textContent = text;
+			} );
+		}
+		*/
+		function asDegree( f, inclC, scale ) {
 
-		function p2C( power ) {
+			if( !scale ) scale = 1;
 
-				return '#'+(power*255*256*256).toString(16);
+			return function( val ) {
+				var text;
+				if( val !== 0 && !val ) text = '??';
+				else {
+					text = val.toTemp( scale );
+					if( inclC ) text += 'C';
+				}
+				return f( text );
+			}
+		}
+		function asHourMinSec( f ) {
+
+			return function( val ) {
+				var text;
+				if( ! val ) text = '??:??:??';
+				else {
+					text = val.toHourMinSec()
+				}
+				return f( text );
+			}
 		}
 
-		function color( id ) {
+		function asColor( f ) {
+
+			function d2h(c) {
+				var hex = (c<<0).toString(16);
+				return hex.length == 1 ? "0" + hex : hex;
+			}
+			function col( r,g,b ){
+				return '#' + d2h(r) + d2h(g) + d2h(b);
+			}
+
+			return function( heat ) {
+
+				var color = '#000000';
+				if( heat !== 0 && !heat ) color='#77ff00';
+				else {
+					if( heat < 300 ){
+						var perc = (heat/300);
+						color = col( perc*255, perc*127, 0 );
+					} else color = '#ddddff';
+				}
+				console.log( color );
+				f( color );
+			}
+		}
+
+		function fill( id ) {
 			return ifchanged( function( color ) {
 				var svgE = svg( id );
 				if( svgE ) svgE.style.fill = color;
@@ -58,7 +114,6 @@ var BAG_Boiler = (function($){
 
 		function border( id ) {
 			return ifchanged( function( on ) {
-				console.log( on );
 				var svgE = svg( id );
 				if( svgE ) svgE.style.stroke = on ? '#ef2929' : '#2e3436';
 			} );
@@ -92,17 +147,17 @@ var BAG_Boiler = (function($){
 		
 		var Boiler = {
 
-			setTempInnerStatus: text( 'temp_inner_status' ),
-			setTempInnerNominal: text( 'temp_inner_nominal' ),
-			setTimeRemaining: text( 'time_remaining' ),
-			setTimeElapsed: text( 'time_elapsed' ),
-			setUpperTemp: text( 'upper_temp' ),
-			setUpperPower: text( 'upper_power' ),
-			setUpperTempIcon: color( 'temp_upper_icon' ),
+			setTempInnerStatus: asDegree( text( 'temp_inner_status' ), true ),
+			setTempInnerNominal: asDegree( text( 'temp_inner_nominal' ) ),
+			setTimeRemaining: asHourMinSec( text( 'time_remaining' ) ),
+			setTimeElapsed: asHourMinSec( text( 'time_elapsed' ) ),
+			setUpperTempStatus: asDegree( text( 'upper_temp_status' ) ),
+			setUpperTempNominal: asDegree( text( 'upper_temp_nominal' ) ),
+			setUpperTempIcon: asColor( fill( 'temp_upper_icon' ) ),
 			setUpperHeater: border( 'temp_upper_icon' ),
-			setLowerTemp: text( 'lower_temp' ),
-			setLowerPower: text( 'lower_power' ),
-			setLowerTempIcon: color( 'temp_lower_icon' ),
+			setLowerTempStatus: asDegree( text( 'lower_temp_status' ) ),
+			setLowerTempNominal: asDegree( text( 'lower_temp_nominal' ) ),
+			setLowerTempIcon: asColor( fill( 'temp_lower_icon' ) ),
 			setLowerHeater: border( 'temp_lower_icon' ),
 			setLid: visible( 'lid' ),
 			setLidOverride: override( visible( 'lid_override' ) ),
@@ -111,20 +166,14 @@ var BAG_Boiler = (function($){
 				var aggi = svg('aggitator');
 
 				if( on ) {
+					aggi.style.opacity = .8;
 					$(aggi).velocity(
-							{ opacity: .7 },
-							{ duration: 400 }
-
-							).velocity(
 							{ opacity: [ .8, .9 ] },
 							{ duration: 317, loop: true }
 					);
 				} else {
-					$(aggi).velocity( "stop" ).velocity(
-							{ opacity: .2 },
-							{ duration: 400, loop: false }
-					) ;
-					//aggi.style.opacity = .2;
+					$(aggi).velocity( "stop" );
+					aggi.style.opacity = .2;
 				}
 
 			} ),
@@ -156,27 +205,29 @@ var BAG_Boiler = (function($){
 				var boiler = data.boilers[ 'boiler' + boilerNo ]
 					;
 
+				console.log( boiler );
+
 				Boiler.setAggitator( boiler.aggitator.status );
 				Boiler.setFill( boiler.fill.status );
 				Boiler.setFillOverride( boiler.fill.override );
 				Boiler.setLid( boiler.lid.status );
 				Boiler.setLidOverride( boiler.lid.override );
 
-				Boiler.setTempInnerStatus( boiler.temp.status.toTemp() );
-				Boiler.setTempInnerNominal( boiler.temp.nominal.toTempC() );
+				Boiler.setTempInnerStatus( boiler.temp.status );
+				Boiler.setTempInnerNominal( boiler.temp.nominal );
 
-				Boiler.setTimeRemaining( boiler.script.remaining.toHourMinSec() );
-				Boiler.setTimeElapsed( boiler.script.elapsed.toHourMinSec() );
+				Boiler.setTimeRemaining( boiler.script.remaining );
+				Boiler.setTimeElapsed( boiler.script.elapsed );
 
-				Boiler.setUpperTemp( boiler.jacket.upper.temp.status.toTemp(1) );
-				Boiler.setUpperPower( boiler.jacket.upper.power.status.toPercent() );
-				Boiler.setUpperTempIcon( p2C( boiler.jacket.upper.power.status ) );
-				Boiler.setUpperHeater( boiler.jacket.upper.heater.status );
+				Boiler.setUpperTempStatus( boiler.upper.temp.status );
+				Boiler.setUpperTempNominal( boiler.upper.temp.nominal );
+				Boiler.setUpperTempIcon( boiler.upper.temp.status );
+				Boiler.setUpperHeater( boiler.upper.heater.status );
 
-				Boiler.setLowerTemp( boiler.jacket.lower.temp.status.toTemp(1) );
-				Boiler.setLowerPower( boiler.jacket.lower.power.status.toPercent() );
-				Boiler.setLowerTempIcon( p2C( boiler.jacket.lower.power.status ) );
-				Boiler.setLowerHeater( boiler.jacket.lower.heater.status );
+				Boiler.setLowerTempStatus( boiler.lower.temp.status );
+				Boiler.setLowerTempNominal( boiler.lower.temp.nominal );
+				Boiler.setLowerTempIcon( boiler.lower.temp.status );
+				Boiler.setLowerHeater( boiler.lower.heater.status );
 
 			},
 

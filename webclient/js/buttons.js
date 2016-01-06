@@ -102,7 +102,7 @@ var BAG_Button = function($){
 					if( $override.isOn() ) {
 						button.trigger();
 					} else {
-						buttonNotify( 'manual', button.topic, 'off' );
+						buttonNotify( 'manual', button.topic, null );
 					}
 				} )
 				.insertAfter( button.$e )

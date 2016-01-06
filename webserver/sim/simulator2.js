@@ -2,14 +2,17 @@
 
 "use strict";
 
+var util = require( 'util' );
+
 var E = require( '../E.js' );
 require( './polyfill.js' );
+require( './patch.js' );
 
 var SFloat = require( './s_float.js' ),
 	SBool = require( './s_bool.js' ),
 	ABool = require( './a_bool.js' ),
-	STemp = require( './s_temp.js' ),
-	SJacket = require( './s_jacket.js' )
+	AJacket = require( './a_jacket.js' ),
+	SInnerTemp = require( './s_inner_temp.js' )
 	;
 
 var mqtt = require( 'mqtt' );
@@ -19,82 +22,81 @@ var log = require( '../logging.js' )
 
 var Sensors = {
 
-	temp: STemp( {
+	upper: AJacket( {
+		topic: 'boiler1/upper',
+		temp: {
+			topic: 'boiler1/upper/temp',
+			status: { range: [ -20, 500 ], initial: 20 },
+			nominal: { range: [ 0, 300 ], initial: 0 },
+			timeout: 5000,
+			mode: 'simulate'
+		},
+		heater: {
+			topic: 'boiler1/upper/heater',
+			freq: .5,
+			mode: 'simulate'
+		},
+		speed: 5,
+		jitter: 5,
+		iv: 1000,
+		mode: 'simulate'
+	} ),
+
+	lower: AJacket( {
+		topic: 'boiler1/lower',
+		temp: {
+			topic: 'boiler1/lower/temp',
+			status: { range: [ -20, 500 ], initial: 19 },
+			nominal: { range: [ 0, 300 ], initial: 0 },
+			timeout: 5000,
+			mode: 'simulate'
+		},
+		heater: {
+			topic: 'boiler1/lower/heater',
+			req: .5,
+			mode: 'simulate'
+		},
+		speed: 5,
+		jitter: 5,
+		iv: 1000,
+		mode: 'simulate'
+	} ),
+
+	temp: SInnerTemp( {
 		topic: 'boiler1/temp',
-		status: { range: [ -20, 200 ] },
-		nominal: { range: [ 0, 100 ] },
-		random: true,
+		status: { range: [ -20, 200 ], initial: 14 },
+		mode: 'simulate',
 		iv: 1000,
-		speed: 1
-	} ),
-
-	upper: SJacket( {
-		topic: 'boiler1/jacket/upper',
-		temp: {
-			topic: 'boiler1/jacket/upper/temp',
-			status: { range: [ -20, 200 ] },
-			nominal: { range: [ 0, 100 ] },
-			random: true
-		},
-		power: {
-			topic: 'boiler1/jacket/upper/power',
-			range: [ 0, 1 ],
-			random: true
-		},
-		heater: {
-			topic: 'boiler1/jacket/upper/heater',
-			freq: .5,
-			random: true
-		},
-		iv: 1000,
-		random: true
-	} ),
-
-	lower: SJacket( {
-		topic: 'boiler1/jacket/lower',
-		temp: {
-			topic: 'boiler1/jacket/lower/temp',
-			status: { range: [ -20, 200 ] },
-			nominal: { range: [ 0, 100 ] },
-			random: true
-		},
-		power: {
-			topic: 'boiler1/jacket/lower/power',
-			range: [ 0, 1 ],
-			random: true
-		},
-		heater: {
-			topic: 'boiler1/jacket/lower/heater',
-			freq: .5,
-			random: true
-		},
-		iv: 1000,
-		random: true
+		speed: 10,
+		jitter: .5
 	} ),
 
 	fill: SFloat( {
 		topic: 'boiler1/fill',
-		range: [ 0, 1 ],
+		status: { range: [ 0, 1 ], initial: .4 },
 		iv: 5000,
-		random: true
+		mode: 'random'
 	} ),
 	lid: SBool( {
 		topic: 'boiler1/lid',
+		status: { initial: true },
 		freq: .5,
 		iv: 300,
-		random: true
+		mode: 'random'
 	} ),
 	aggitator: ABool( {
 		topic: 'boiler1/aggitator',
+		status: { initial: false },
+		nominal: { initial: false },
+		initial: false,
+		timeout: 5000,
 		freq: .1,
 		iv: 700,
-		random: true
+		mode: 'simple'
 	} )
 }
 
-var repl = require( '../repl.js' )( {
-	Sensor: Sensors
-} );
+var repl = require( '../repl.js' )( Sensors );
 
 function round( val ) {
 	return Math.round( val * 10 ) / 10;
@@ -110,7 +112,7 @@ function run( sensor ) {
 
 	return function() {
 
-		sensor.run( emit );
+		sensor.run( emit, Sensors );
 	}
 }
 
@@ -129,6 +131,12 @@ function startSensors() {
 
 }
 
+process.on( 'uncaughtException', function( ex ) {
+
+	console.log( util.inspect( Sensors, {showHidden:false, depth: null} ) );
+	console.log( ex.stack );
+} );
+
 log.info( "start mqtt test" );
 
 var mqttClient = mqtt.connect( 'mqtt://localhost:1883/', {
@@ -138,9 +146,8 @@ var mqttClient = mqtt.connect( 'mqtt://localhost:1883/', {
 		.on( 'connect', function() {
 
 			mqttClient.subscribe( 'boiler1/+/set' );
-			mqttClient.subscribe( 'boiler1/+/override' );
-			mqttClient.subscribe( 'boiler1/jacket/upper/+/set' );
-			mqttClient.subscribe( 'boiler1/jacket/lower/+/set' );
+			mqttClient.subscribe( 'boiler1/upper/+/set' );
+			mqttClient.subscribe( 'boiler1/lower/+/set' );
 
 			E.cho( "MQTT STARTED" );
 

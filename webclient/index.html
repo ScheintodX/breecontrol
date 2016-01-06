@@ -3,14 +3,11 @@
 
 <head>
 
-	<title>Brauerei am Gries</title>
+	<title>Griesbräu</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-	<!--<link rel="stylesheet" href="csslib/jquery-mobile-1.4.5-min.css"/>-->
-
 	<script src="jslib/jquery-2.1.4-min.js"></script>
-	<!--<script src="jslib/jquery-mobile-1.4.5-min.js"></script>-->
 	<script src="jslib/velocity-1.2.3-min.js"></script>
 
 	<script src="js/config.js"></script>
@@ -24,7 +21,6 @@
 	<script src="js/boiler.js"></script>
 	<script src="js/chart.js"></script>
 	<script src="js/main.js"></script>
-	<script src="js/usability.js"></script>
 
 	<link rel="stylesheet" href="css/screen.css" />
 	<link rel="stylesheet" href="css/elements.css" />
@@ -63,19 +59,33 @@
 
 				<label>
 					<h6>Temp / °C</h6>
-					<input class="temp" type="number" name=".temp.nominal"/>
+					<input class="temp" type="number" min="0" max="100" step="1" name=".temp.set"/>
 				</label>
 
 				<label>
 					<h6>Aggitator</h6>
-					<input type="checkbox" name=".aggitator.nominal" />
+					<input type="checkbox" name=".aggitator.set" />
 				</label>
+
+
+				<h3>Tuning</h3>
+
+				<label>
+					<h6>Max. Upper Temp / °C</h6>
+					<input class="temp" type="number" min="0" max="300" step="10" name=".upper.temp.max"/>
+				</label>
+
+				<label>
+					<h6>Max. Lower Temp / °C</h6>
+					<input class="temp" type="number" min="0" max="300" step="10" name=".lower.temp.max"/>
+				</label>
+
 
 				<h3>Sensors override</h3>
 
 				<label>
 					<h6>Water Level / %</h6>
-					<input class="fill" type="number" name=".fill.override" />
+					<input class="fill" type="number" min="0" max="100" step="10" name=".fill.override" />
 				</label>
 
 				<label>
