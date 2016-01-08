@@ -35,6 +35,14 @@ log.failure = function( part, err ) {
 	console.log( part + ' ' + err.red );
 	log.error.apply( log, arguments );
 }
+log.ex = function( ex ) {
+	console.error.apply( console, arguments );
+	log.error.apply( arguments );
+	if( ex.stack ){
+		console.error( ex.stack );
+		log.error.apply( ex.stack );
+	}
+}
 
 module.exports = log;
 module.exports.file = function( file ) {

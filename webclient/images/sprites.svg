@@ -25,19 +25,19 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568543"
-     inkscape:cx="92.041217"
-     inkscape:cy="125.58533"
+     inkscape:zoom="4"
+     inkscape:cx="139.37181"
+     inkscape:cy="175.32934"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
-     showgrid="false"
+     inkscape:current-layer="layer1"
+     showgrid="true"
      inkscape:snap-grids="true"
      inkscape:window-width="1920"
      inkscape:window-height="1031"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
-     showguides="false"
+     showguides="true"
      inkscape:guide-bbox="true"
      inkscape:snap-to-guides="false">
     <inkscape:grid
@@ -91,6 +91,10 @@
        orientation="1,0"
        position="128,157"
        id="guide3031" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="144,163.16489"
+       id="guide3265" />
   </sodipodi:namedview>
   <metadata
      id="metadata4623">
@@ -454,5 +458,22 @@
     <g
        id="g4890"
        transform="translate(0,23)" />
+    <g
+       id="g3259"
+       transform="translate(63,0)">
+      <rect
+         style="color:#000000;fill:#ce5c00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3261"
+         width="3"
+         height="10"
+         x="68"
+         y="887.36218" />
+      <path
+         style="color:#000000;fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 73,887.36218 6,5 -6,5 z"
+         id="use3263"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc" />
+    </g>
   </g>
 </svg>

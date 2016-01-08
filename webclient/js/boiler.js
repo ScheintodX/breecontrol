@@ -72,7 +72,7 @@ var BAG_Boiler = (function($){
 
 			return function( val ) {
 				var text;
-				if( ! val ) text = '??:??:??';
+				if( ! val ) text = '--:--:--';
 				else {
 					text = val.toHourMinSec()
 				}
@@ -204,8 +204,6 @@ var BAG_Boiler = (function($){
 				var boiler = data.boilers[ 'boiler' + boilerNo ]
 					;
 
-				console.log( boiler );
-
 				Boiler.setAggitator( boiler.aggitator.status );
 				Boiler.setFill( boiler.fill.status );
 				Boiler.setFillOverride( boiler.fill.override );
@@ -214,9 +212,6 @@ var BAG_Boiler = (function($){
 
 				Boiler.setTempInnerStatus( boiler.temp.status );
 				Boiler.setTempInnerNominal( boiler.temp.nominal );
-
-				Boiler.setTimeRemaining( boiler.script.remaining );
-				Boiler.setTimeElapsed( boiler.script.elapsed );
 
 				Boiler.setUpperTempStatus( boiler.upper.temp.status );
 				Boiler.setUpperTempNominal( boiler.upper.temp.nominal );
@@ -227,6 +222,14 @@ var BAG_Boiler = (function($){
 				Boiler.setLowerTempNominal( boiler.lower.temp.nominal );
 				Boiler.setLowerTempIcon( boiler.lower.temp.status );
 				Boiler.setLowerHeater( boiler.lower.heater.status );
+
+				if( 'script' in boiler ) {
+					Boiler.setTimeRemaining( boiler.script.remaining );
+					Boiler.setTimeElapsed( boiler.script.elapsed );
+				} else {
+					Boiler.setTimeRemaining( undefined );
+					Boiler.setTimeElapsed( undefined );
+				}
 
 			},
 

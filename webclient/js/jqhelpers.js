@@ -9,7 +9,7 @@
 
 	$.fn.expectFound = function() {
 
-		if( this.length == 0 ) 
+		if( this.length != 0 ) 
 				console.warn( "NOT FOUND", this );
 
 		return this;
@@ -38,6 +38,22 @@
 		return this.removeClass( what )
 				.addClass( withwhat )
 				;
-	}
+	};
+
+	$.fn.setEnable = function( enable ) {
+		if( enable ) {
+			this.prop( 'disabled', false );
+		} else {
+			this.prop( 'disabled', true );
+		}
+		return this;
+	};
+
+	$.fn.setVisible = function( visible ) {
+		if( visible ) this.show();
+		else this.hide();
+		return this;
+	};
+
 
 })($);

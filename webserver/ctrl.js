@@ -7,19 +7,18 @@ var Dot = require( 'dot-object' ),
 var log = require( './logging.js' );
 var Assert = require( './assert.js' );
 
-var Script = require( './script.js' );
+var Scripts = require( './scripts.js' );
 
 var Boiler = require( './boiler.js' );
 
-module.exports = function( config, state, brewery ) {
+module.exports = function( config, hello, state, brewery ) {
 
 	Assert.present( "config", config );
+	Assert.present( "hello", hello );
 	Assert.present( "brewery", brewery );
 	Assert.present( "state", state );
 
 	var _mqtt, _web;
-
-	var up=true;
 
 	function sendStatusMqtt() {
 		
@@ -45,6 +44,13 @@ module.exports = function( config, state, brewery ) {
 
 			log.trace( "WebData", data );
 
+			// crude fix for placing load in the other section...
+			/*
+			if( data.on == 'runstop' && data.topic == 'load' ) {
+				data.on = 'loadsave';
+			}
+			*/
+
 			switch( data.on ) {
 
 				case "set":
@@ -61,13 +67,46 @@ module.exports = function( config, state, brewery ) {
 
 				case "loadsave":
 
-					var boiler = brewery.boilers[ 'boiler' + data.value.no ];
+					E.rr( 'loadsave' );
+
+					Assert.present( 'data.no', data.no );
+
+					var boiler = brewery.boilers[ 'boiler' + data.no ];
+
+					if( ! boiler ) throw "No boiler found";
 
 					switch( data.topic ) {
 
 						case "load": 
 
-							boiler.script = Script( data.value.load, notifyLoadSaveDone );
+							E.rr( 'load', data.value.load );
+
+							Scripts.load( data.value.load, function( err, Script, script ) {
+
+								if( err ){
+									E.rr( err );
+									E.rr( err.stack );
+								}
+								if( err ) return log.error( err );
+
+								var TheScript = Script( script, boiler, config, {
+
+									notify: function( boiler, what, message ){
+
+										E.rr( boiler.name, what, message );
+									},
+									time: function() {
+										// Fast
+										return (new Date().getTime()/10)<<0;
+									}
+
+								} );
+
+								boiler.script = TheScript.hello;
+								boiler._script = TheScript;
+
+								E.rr( 'load done' );
+							} );
 
 							break;
 
@@ -75,9 +114,16 @@ module.exports = function( config, state, brewery ) {
 
 							E.rr( "SAVE", data.value.name );
 
-							boiler.script = Script( data.value, notifyLoadSaveDone );
+							Scripts.parse( data.value, function( err, data ) {
 
-							boiler.script.save();
+								if( err ) E.rr( err );
+								if( err ) return log.error( err );
+
+								boiler.script = data;
+								boiler.script.save();
+
+								E.rr( 'save done' );
+							} );
 
 							break;
 
@@ -85,7 +131,15 @@ module.exports = function( config, state, brewery ) {
 
 							E.rr( "SET" );
 
-							boiler.script = Script( data.value, notifyLoadSaveDone );
+							Scripts.parse( data.value, function( err, data ) {
+
+								if( err ) E.rr( err );
+								if( err ) return log.error( err );
+
+								boiler.script = data;
+
+								E.rr( 'set done' );
+							} );
 
 							break;
 
@@ -95,8 +149,29 @@ module.exports = function( config, state, brewery ) {
 					}
 					break;
 
+				case "runstop":
+
+					Assert.present( 'data.no', data.no );
+
+					var boiler = brewery.boilers[ 'boiler' + data.no ];
+
+					Assert.present( 'boiler', boiler );
+
+					if( [ 'start', 'pause', 'resume', 'stop', 'next', 'prev' ].indexOf( data.topic ) >= 0 ){
+
+						var script = boiler._script;
+
+						Assert.present( 'script', script );
+
+						script[ data.topic ]();
+
+					} else {
+						throw "Unknown action: " + data.topic;
+					}
+					break;
+
 				default:
-					throw "Unknown action: " + data.action;
+					throw "Unknown action: " + data.on;
 
 			}
 
@@ -127,7 +202,35 @@ module.exports = function( config, state, brewery ) {
 
 		run: function() {
 
-			var diff = brewery.watch();
+			//var diff = brewery.watch();
+			
+			if( !( 'scripts' in hello ) ) {
+
+				log.trace( "NOSCRIPT" );
+
+				Scripts.list( function( err, data ) {
+
+					if( err ) E.rr( err );
+
+					if( err ) return log.error( err );
+
+					hello.scripts = data;
+
+					log.trace( "SEND", hello );
+
+					_web( hello );
+
+				} );
+			}
+
+			for( var key in brewery.boilers ) {
+
+				var boiler = brewery.boilers[ key ];
+
+				if( boiler._script ){
+					boiler._script.run();
+				}
+			}
 		}
 
 	};

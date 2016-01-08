@@ -73,11 +73,13 @@ var BAG_Chart = (function($){
 
 		var Chart = {
 
+			setTemp0: text( 'temp0' ),
 			setTemp1: text( 'temp1' ),
 			setTemp2: text( 'temp2' ),
 			setTemp3: text( 'temp3' ),
-			setTempBar: moveVert( 'temp_bar', 1, 130 ),
-			setTempStatus: text( 'temp_status' ),
+			setTemp4: text( 'temp4' ),
+			//setTempBar: moveVert( 'temp_bar', 1, 130 ),
+			//setTempStatus: text( 'temp_status' ),
 
 			setTime1: text( 'time1' ),
 			setTime2: text( 'time2' ),
@@ -91,26 +93,37 @@ var BAG_Chart = (function($){
 
 				if( !( 'boilers' in data ) ) return;
 
-				var boiler = data.boilers[ 'boiler' + boilerNo ],
-					script = boiler.script
-					;
+				var boiler = data.boilers[ 'boiler' + boilerNo ];
 
-				Chart.setTemp1( script.steps[ 0 ].temp.toTemp() );
-				Chart.setTemp2( script.steps[ 2 ].temp.toTemp() );
-				Chart.setTemp3( script.steps[ 4 ].temp.toTemp() );
-				Chart.setTempBar( boiler.temp.status / 100 );
-				Chart.setTempStatus( boiler.temp.status );
+				if( !( 'script' in boiler ) ) return;
 
-				Chart.setTime1( script.steps[ 1 ].time.toMinSec() );
-				Chart.setTime2( script.steps[ 3 ].time.toMinSec() );
-				Chart.setTime3( script.steps[ 5 ].time.toMinSec() );
-				var elapsed = script.current.elapsed,
-					remaining = script.current.remaining,
-					total = elapsed + remaining,
-					percent = elapsed / total
-					;
-				Chart.setTimeBar( script.current.index /6 + percent /6 ); 
-				Chart.setTimeStatus( '‒ ' + remaining.toMinSec() );
+				var script = boiler.script;
+
+				console.log( script );
+
+				Chart.setTemp0( script.steps[ 0 ].heat.toTemp() );
+				Chart.setTemp1( script.steps[ 1 ].heat.toTemp() );
+				Chart.setTemp2( script.steps[ 2 ].heat.toTemp() );
+				Chart.setTemp3( script.steps[ 3 ].heat.toTemp() );
+				Chart.setTemp4( script.steps[ 4 ].heat.toTemp() );
+				//Chart.setTempBar( boiler.temp.status / 100 );
+				//Chart.setTempStatus( boiler.temp.status );
+
+				Chart.setTime1( script.steps[ 1 ].hold.toMinSec() );
+				Chart.setTime2( script.steps[ 2 ].hold.toMinSec() );
+				Chart.setTime3( script.steps[ 3 ].hold.toMinSec() );
+				if( script.current ) {
+					var elapsed = script.current.elapsed,
+						remaining = script.current.remaining,
+						total = elapsed + remaining,
+						percent = total != 0 ? elapsed / total : 0
+						;
+					Chart.setTimeBar( script.current.index /6 + percent /6 ); 
+					Chart.setTimeStatus( '‒ ' + remaining.toMinSec() );
+				} else {
+					Chart.setTimeBar( 0 );
+					Chart.setTimeStatus( '??' );
+				}
 			},
 
 			ready: function() {

@@ -95,7 +95,7 @@ section.ctrl {
 
 	box-shadow: inset 0 4px 4px rgba( black, .3 );
 
-	@include showOnDemand( 900px );
+	@include showOnDemand( 1000px );
 	overflow: scroll;
 
 	background-color: $bg_ctrl;
@@ -155,29 +155,37 @@ section.runstop, section.loadsave {
 			display: block;
 			width: auto;
 		}
+		&:disabled {
+			&::before {
+				opacity: .3;
+			}
+		}
 
-		&.prev {
+		&[name="prev"] {
 			@include hasIcon( prev, 4px, 4px );
 		}
-		&.next {
+		&[name="next"] {
 			@include hasIcon( next, 4px, 4px );
 		}
-		&.start {
+		&[name="start"] {
 			@include hasIcon( start, 4px, 4px );
 		}
-		&.stop {
+		&[name="stop"] {
 			@include hasIcon( stop, 4px, 4px );
 		}
-		&.pause {
+		&[name="pause"] {
 			@include hasIcon( pause, 4px, 4px );
 		}
-		&.save {
+		&[name="resume"] {
+			@include hasIcon( resume, 4px, 4px );
+		}
+		&[name="save"] {
 			@include hasIcon( save, 4px, 4px );
 		}
-		&.load {
+		&[name="load"] {
 			@include hasIcon( load, 4px, 4px );
 		}
-		&.set {
+		&[name="set"] {
 			@include hasIcon( set, 4px, 4px );
 		}
 	}

@@ -2,122 +2,174 @@
 
 "use strict";
 
-var MESSAGES = require( './MESSAGES.js' );
+var util = require( 'util' );
 
-var MQH = require( '../helpers.js').mqtt;
+var E = require( '../E.js' );
+require( '../polyfill.js' );
+require( './patch.js' );
+
+var SFloat = require( './s_float.js' ),
+	SBool = require( './s_bool.js' ),
+	ABool = require( './a_bool.js' ),
+	AJacket = require( './a_jacket.js' ),
+	SInnerTemp = require( './s_inner_temp.js' )
+	;
 
 var mqtt = require( 'mqtt' );
 
 var log = require( '../logging.js' )
-		.file( '/var/log/brauerei.test' )
-		//.pause( true )
-		;
+		.file( '/var/log/brauerei.test' );
 
-var Ctrl = {
-	random: true
-};
+var Sensors = {
 
-var repl = require( '../repl.js' )( {
-	M: MESSAGES,
-	log: log,
-	Ctrl: Ctrl
+	upper: AJacket( {
+		topic: 'boiler1/upper',
+		temp: {
+			topic: 'boiler1/upper/temp',
+			status: { range: [ -20, 600 ], initial: 20 },
+			nominal: { range: [ 0, 400 ], initial: 0 },
+			timeout: 5000,
+			mode: 'simulate'
+		},
+		heater: {
+			topic: 'boiler1/upper/heater',
+			status: { initial: false },
+			freq: .5,
+			mode: 'simulate'
+		},
+		speed: 5,
+		jitter: 3,
+		iv: 1000,
+		mode: 'simulate'
+	} ),
+
+	lower: AJacket( {
+		topic: 'boiler1/lower',
+		temp: {
+			topic: 'boiler1/lower/temp',
+			status: { range: [ -20, 500 ], initial: 19 },
+			nominal: { range: [ 0, 300 ], initial: 0 },
+			timeout: 5000,
+			mode: 'simulate'
+		},
+		heater: {
+			topic: 'boiler1/lower/heater',
+			status: { initial: false },
+			req: .5,
+			mode: 'simulate'
+		},
+		speed: 5,
+		jitter: 2,
+		iv: 1000,
+		mode: 'simulate'
+	} ),
+
+	temp: SInnerTemp( {
+		topic: 'boiler1/temp',
+		status: { range: [ -20, 200 ], initial: 14 },
+		mode: 'simulate',
+		iv: 1000,
+		speed: 10,
+		jitter: .5
+	} ),
+
+	fill: SFloat( {
+		topic: 'boiler1/fill',
+		status: { range: [ 0, 1 ], initial: .4 },
+		iv: 5000,
+		mode: 'random'
+	} ),
+	lid: SBool( {
+		topic: 'boiler1/lid',
+		status: { initial: true },
+		freq: .5,
+		iv: 300,
+		mode: 'simple'
+	} ),
+	aggitator: ABool( {
+		topic: 'boiler1/aggitator',
+		status: { initial: false },
+		nominal: { initial: false },
+		initial: false,
+		timeout: 5000,
+		freq: .1,
+		iv: 700,
+		mode: 'simple'
+	} )
+}
+
+var repl = require( '../repl.js' )( Sensors );
+
+function round( val ) {
+	return Math.round( val * 10 ) / 10;
+}
+
+
+function emit( topic, data ) {
+
+	mqttClient.publish( topic, data );
+}
+
+function run( sensor ) {
+
+	return function() {
+
+		sensor.run( emit, Sensors );
+	}
+}
+
+function startSensors() {
+
+	for( var key in Sensors ) {
+
+		var sensor = Sensors[ key ];
+
+		E.cho( "Starting " + key + "(" + sensor.conf.iv + ")..." );
+
+		setInterval( run( sensor ), sensor.conf.iv );
+	}
+
+	E.cho( "Sensors started" );
+
+}
+
+process.on( 'uncaughtException', function( ex ) {
+
+	console.log( util.inspect( Sensors, {showHidden:false, depth: null} ) );
+	console.log( ex.stack );
 } );
 
 log.info( "start mqtt test" );
 
 var mqttClient = mqtt.connect( 'mqtt://localhost:1883/', {
-		username: 'test',
-		password: 'test'
-} );
+	username: 'test',
+	password: 'test'
+} )
+		.on( 'connect', function() {
+
+			mqttClient.subscribe( 'boiler1/+/set' );
+			mqttClient.subscribe( 'boiler1/upper/+/set' );
+			mqttClient.subscribe( 'boiler1/lower/+/set' );
+
+			E.cho( "MQTT STARTED" );
+
+			startSensors();
+} )
+		.on( 'message', function( topic, data ) {
+
+			var message = data.toString();
+
+			for( var key in Sensors ) {
+
+				var sensor = Sensors[ key ];
+
+				if( sensor.msg && topic.startsWith( sensor.conf.topic ) ) {
+					sensor.msg( emit, topic, message );
+				}
+			}
+
+		} )
+		;
 
 repl.addContext( { mqtt: mqttClient } );
 
-function Task( msg ) {
-
-	return function() {
-
-		var val;
-
-		if( 'value' in msg ) {
-
-			val = msg.value;
-
-		} else {
-
-			if( !( 'old' in msg ) ) {
-				switch( msg.type ) {
-					case "b": 
-						msg.old = 1;
-						break;
-					case "f":
-						var r = msg.range;
-						msg.old = (r[1]-r[0])/2;
-				}
-			}
-
-			if( Ctrl.random ) {
-		
-				switch( msg.type ) {
-					case "b":
-						val = msg.old;
-						if( Math.random() < 0.1 ) val = ( val == 0 ? 1 : 0 );
-						break;
-					case "f":
-						var r = msg.range,
-							rnd = Math.random() * ( r[1]-r[0]) + r[0];
-						val = ( msg.old + 4*rnd ) / 5;
-						val = Math.round( val*10 ) / 10;
-				}
-
-				msg.old = val;
-
-			} else {
-				val = msg.old;
-			}
-		}
-
-		log.info( msg.topic, val );
-		mqttClient.publish( msg.topic, '' + val );
-	}
-
-}
-
-mqttClient.on( 'connect', function() {
-
-	mqttClient.subscribe( 'boiler1/+/set' );
-	mqttClient.subscribe( 'boiler1/+/override' );
-	mqttClient.subscribe( 'boiler1/jacket/upper/+/set' );
-	mqttClient.subscribe( 'boiler1/jacket/lower/+/set' );
-
-	MESSAGES
-			.filter( function( msg ){ return msg.iv; } )
-			.forEach( function( msg ){
-
-				var iv = msg.iv;
-				iv = iv * ( 1 + 0.1 * (Math.random()-0.5) ); // timing jitter
-
-				msg.task = setInterval( Task( msg ), iv );
-
-			} );
-		
-	console.log( "MQTT STARTED" );
-});
-
-mqttClient.on( 'message', function( topic, message ) {
-
-	message = message.toString();
-
-	if( ! /\/set$/.test( topic ) ) return;
-
-	console.log( "!!!!!!!", topic, message );
-
-	var msg = MESSAGES.find( topic.replace( /set$/, 'nominal' ) );
-	if( !msg ) msg = MESSAGES.find( topic.replace( /set$/, 'status' ) );
-
-	console.log( msg.topic );
-
-	msg.value = message;
-
-	if( typeof( msg.task ) == 'function' ) msg.task();
-
-});

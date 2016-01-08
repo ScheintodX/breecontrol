@@ -15,7 +15,7 @@ function createBoiler( index, config ) {
 
 		name: config.name,
 		index: index,
-		_conf: config,
+		conf: config,
 
 		upper: {
 			_conf: {
@@ -69,13 +69,18 @@ function createBoiler( index, config ) {
 			nominal: 0,
 			max: 100
 		},
+
 		aggitator: {
 			_meta: {
 				type: 'b'
 			},
 			status: false,
 			nominal: false,
-			set: 0
+			set: 0/*,
+			_run {
+				requireRelease: false
+			}
+			*/
 		},
 
 		fill: {
@@ -99,23 +104,47 @@ function createBoiler( index, config ) {
 			status: 0,
 			nominal: 0
 		},
+		indicator: {
+			color: {
+
+			},
+			mode: {
+
+			},
+			_notify: function( what ){
+				switch( what ) {
+					case 'run':
+						self.indicator.color.set = '0000ff0000aa000044000000'.repeat(3);
+						self.indicator.mode.set = 'rotate';
+						break;
+					case 'ready':
+						self.indicator.color.set = 'ffff00'.repeat(12);
+						self.indicator.mode.set = 'fade';
+						break;
+					case 'done':
+						self.indicator.color.set = '00ff00'.repeat(12);
+						self.indicator.mode.set = 'show';
+						break;
+				}
+			}
+		},
 
 		script: {
 
-			name: 'Grießer Böckchen',
+			name: 'Braumeister Böhmke',
 			start: 1234567.89, //timestamp
 			elapsed: 3323, //s
 			remaining: 8352, //s
-			mode: 'heating', // heating | cooling
 
 			steps: [
-				{ action: 'heat', temp: 65.0 },
-				{ action: 'hold', time: 2700 },
-				{ action: 'heat', temp: 87.0 },
-				{ action: 'hold', time: 2700 },
-				{ action: 'heat', temp: 100 },
-				{ action: 'hold', time: 2700 }
+				{ heat: 70 },
+				{ heat: 65, hold: 2700 },
+				{ heat: 87, hold: 2700 },
+				{ heat: 100, hold: 2700 },
+				{ heat: 100 }
 			],
+
+			actions: [],
 
 			current: {
 				index: 3,
@@ -125,7 +154,7 @@ function createBoiler( index, config ) {
 			}
 		},
 
-		publishable: [
+		_publishable: [
 			"upper/temp/set",
 			//"upper/temp/max",
 			"lower/temp/set",
@@ -136,22 +165,11 @@ function createBoiler( index, config ) {
 			//"fill/override"
 		],
 
-		loadScript: function( newScript ) {
-
-			self.script = newScript;
-			self.script.state = {
-				mode: 'stopped',
-				index: 0,
-				elapsed: 0,
-				remaining: 0
-			}
-		},
-
 		publish: function( emit ) {
 
 			var boilerN = 'boiler' + (self.index+1);
 
-			_.each( self.publishable, function( topic ) {
+			_.each( self._publishable, function( topic ) {
 
 				var val = H.message.getByMqtt( self, topic );
 
@@ -242,12 +260,12 @@ function createBoiler( index, config ) {
 				}
 			}
 
-			if( !( self.lid.status ) && self.aggitator.status ) {
+			if( !( self.lid.status ) && (self.aggitator.status || self.aggitator.set ) ) {
 				warn( "Aggitator on with Lid open" );
 				if( self.lid.override ) {
 					severe( "OVERRIDE" );
 				} else {
-					self.aggitator.status = 0;
+					self.aggitator.set = 0;
 				}
 			}
 		}

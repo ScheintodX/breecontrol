@@ -77,6 +77,10 @@ String.prototype.getFrom = function( obj ) {
 	return obj;
 }
 
+Array.prototype.has = function( val ) {
+	return this.indexOf( val ) >= 0;
+}
+
 /*
 var H = (function($){
 	return {

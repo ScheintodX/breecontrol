@@ -28,8 +28,6 @@ var BAG_Ctrl = (function($){
 
 		function gotData( data ) {
 
-			//console.log( "gotData", data );
-
 			if( !controls ) return Ctrl;
 
 			$.each( controls, function( name, control ) {

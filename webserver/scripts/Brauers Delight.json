@@ -1,11 +1,12 @@
 {
 	"name": "Brauers Delight",
+	"script": "5steps.js",
+	"version": 1,
 	"steps": [
-		{ "action": "heat", "temp": 60.0 },
-		{ "action": "hold", "time": 3600 },
-		{ "action": "heat", "temp": 82.0 },
-		{ "action": "hold", "time": 3600 },
-		{ "action": "heat", "temp": 100 },
-		{ "action": "hold", "time": 1800 }
+		{ "heat": 70.0 },
+		{ "heat": 60.0, "hold": 3600 },
+		{ "heat": 82.0, "hold": 3600 },
+		{ "heat": 90, "hold": 1800 },
+		{ "heat": 100.0 }
 	]
 }

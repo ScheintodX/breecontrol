@@ -191,7 +191,7 @@ section.ctrl {
 }
 /* line 8, ../sass/_control.lib.scss */
 section.ctrl.visible {
-  max-height: 900px;
+  max-height: 1000px;
 }
 /* line 103, ../sass/screen.scss */
 section.ctrl label {
@@ -252,8 +252,12 @@ section.runstop button.set, section.loadsave button.set {
   display: block;
   width: auto;
 }
+/* line 159, ../sass/screen.scss */
+section.runstop button:disabled::before, section.loadsave button:disabled::before {
+  opacity: .3;
+}
 /* line 22, ../sass/_sprites.lib.scss */
-section.runstop button.prev:before, section.loadsave button.prev:before {
+section.runstop button[name="prev"]:before, section.loadsave button[name="prev"]:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -263,7 +267,7 @@ section.runstop button.prev:before, section.loadsave button.prev:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.runstop button.next:before, section.loadsave button.next:before {
+section.runstop button[name="next"]:before, section.loadsave button[name="next"]:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -273,7 +277,7 @@ section.runstop button.next:before, section.loadsave button.next:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.runstop button.start:before, section.loadsave button.start:before {
+section.runstop button[name="start"]:before, section.loadsave button[name="start"]:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -283,7 +287,7 @@ section.runstop button.start:before, section.loadsave button.start:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.runstop button.stop:before, section.loadsave button.stop:before {
+section.runstop button[name="stop"]:before, section.loadsave button[name="stop"]:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -293,7 +297,7 @@ section.runstop button.stop:before, section.loadsave button.stop:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.runstop button.pause:before, section.loadsave button.pause:before {
+section.runstop button[name="pause"]:before, section.loadsave button[name="pause"]:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -303,7 +307,17 @@ section.runstop button.pause:before, section.loadsave button.pause:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.runstop button.save:before, section.loadsave button.save:before {
+section.runstop button[name="resume"]:before, section.loadsave button[name="resume"]:before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: url(../images/sprites.svg) no-repeat -128px -32px;
+  width: 16px;
+  height: 16px;
+}
+/* line 22, ../sass/_sprites.lib.scss */
+section.runstop button[name="save"]:before, section.loadsave button[name="save"]:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -313,7 +327,7 @@ section.runstop button.save:before, section.loadsave button.save:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.runstop button.load:before, section.loadsave button.load:before {
+section.runstop button[name="load"]:before, section.loadsave button[name="load"]:before {
   content: "";
   position: absolute;
   top: 4px;
@@ -323,7 +337,7 @@ section.runstop button.load:before, section.loadsave button.load:before {
   height: 16px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.runstop button.set:before, section.loadsave button.set:before {
+section.runstop button[name="set"]:before, section.loadsave button[name="set"]:before {
   content: "";
   position: absolute;
   top: 4px;

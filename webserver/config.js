@@ -23,10 +23,12 @@ module.exports = function( done ) {
 
 		boilers: [
 			{
-				name: "Bernd der Braubottich",
+				name: "Bernd der Bottich",
 				minTemp:   0, //°C
 				maxTemp: 100, //°C
 				capacity: 80, // L
+				efficency: .8,
+				power: 9.000, // kw
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
 			}, {
@@ -34,25 +36,12 @@ module.exports = function( done ) {
 				minTemp:   0, //°C
 				maxTemp: 100, //°C
 				capacity: 80, // L
+				efficency: .8,
+				power: 9.000, // kw
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
 			}
-		],
-
-		scripts: {
-			heat: {
-				boiler: {
-					upper: { temp: 250 },
-					lower: { temp: 300 }
-				}
-			},
-			hold: {
-				boiler: {
-					upper: { temp: 200 },
-					lower: { temp: 200 }
-				}
-			}
-		}
+		]
 
 	} );
 }

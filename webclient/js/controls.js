@@ -72,11 +72,11 @@ var BAG_Controls = (function($){
 		function onClick( on ) {
 			return function() {
 				var $this = $(this);
-				notify( on, $this.attr('class'), readProgramm() );
+				notify( on, $this.attr('name'), readScript() );
 			}
 		}
 		
-		function readProgramm() {
+		function readScript() {
 
 			function val( $s, name ) {
 				return $s.find( '[name="' + name + '"]' ).val();
@@ -85,43 +85,75 @@ var BAG_Controls = (function($){
 				return parseFloat( val( $s, name ) );
 			}
 
-			var $sec = $ctrl.find( 'section.loadsave' );
+			var $loadsave = $ctrl.find( 'section.loadsave' );
+
+			var steps = []
+			for( var i=0; i<6; i++ ) {
+
+				var $step = $loadsave.find( 'div.step' + (i/2)<<0 )
+						.expectOne();;
+				steps.push( { action: 'heat', temp: valF( $step, 'temp' ) } )
+				steps.push( { action: 'hold', time: valF( $step, 'time' ) } )
+			}
 
 			var prog = {
-				name: val( $sec, 'name' ),
-				load: val( $sec, 'load' ),
-				steps: $sec.find( 'div.step' ).map( function() {
-					var $this = $(this);
-					return { temp: valF( $this, 'temp' ), time: valF( $this, 'time' ) * 60 }
-				} ).get()
+				name: val( $loadsave, 'name' ),
+				load: val( $loadsave, 'load' ),
+				steps: steps
 			}
 			return prog;
 		}
 
-		function storeProgramm( prog ) {
+		function storeScript( prog ) {
+
+			var $loadsave = $ctrl.find( 'section.loadsave' );
 
 			function val( $s, name, value ){
-				return $s.find( '[name="' + name + '"]' ).val( value );
+				return $s.find( '[name="' + name + '"]' )
+						.expectOne()
+						.val( value );
 			}
-			function valF( $s, name, value ) {
-				return val( $s, name, ""+value );
+			function valF( idx, name, value ) {
+				var $step = $loadsave.find( "div.step" + idx )
+						.expectOne();
+				val( $step, name, value );
 			}
 
-			var $sec = $ctrl.find( 'section.loadsave' );
+			val( $loadsave, 'name', prog.name );
 
-			val( $sec, 'name', prog.name );
-			val( $sec, 'load', prog.load );
-			$.each( prog.steps, function( step, i ){
-				var $step = $sec.find( 'div.step' + i );
-				valF( $step, 'temp', step.temp );
-				valF( $step, 'fill', step.fill );
-			} );
+			valF( 0, 'heat', prog.steps[ 0 ].heat );
 
+			for( var i=1; i<4; i++ ) {
+				var step = prog.steps[ i ];
+				valF( i, 'heat', step.heat );
+				valF( i, 'hold', step.hold );
+			}
+
+			valF( 4, 'heat', prog.steps[ 4 ].heat );
+		}
+
+		function enableButtons( actions ) {
+
+			function $button( name ) {
+				return $ctrl.find( 'section.runstop button[name="' + name + '"]' )
+						.expectOne();
+			}
+
+			$button( 'start' ).setEnable( actions.has( 'start' ) );
+			$button( 'stop' ).setEnable( actions.has( 'top' ) );
+			$button( 'pause' ).setEnable( actions.has( 'pause' ) );
+			$button( 'resume' ).setEnable( actions.has( 'resume' ) );
+			$button( 'next' ).setEnable( actions.has( 'next' ) );
+			$button( 'prev' ).setEnable( actions.has( 'prev' ) );
+
+			$button( 'pause' ).setVisible( !actions.has( 'pause' ) );
+			$button( 'resume' ).setVisible( actions.has( 'pause' ) );
 		}
 
 		$ctrl.find( 'section.runstop button' )
 				.on( 'click', onClick( 'runstop' ) )
 				;
+
 		$ctrl.find( 'section.loadsave button' )
 				.on( 'click', onClick( 'loadsave' ) )
 				;
@@ -142,6 +174,50 @@ var BAG_Controls = (function($){
 
 					manualControls[ key ].set( value );
 				}
+
+				if( 'script' in boiler ) {
+
+					storeScript( boiler.script );
+
+					enableButtons( boiler.script.actions );
+
+					// Info
+					if( boiler.script.current ) {
+						var current = boiler.script.current;
+						$('.runstopinfo').text( current.index + ". " +
+								current.desc + ": " + current.mode );
+					} else {
+						$('.runstopinfo').text( "no current" );
+					}
+				}
+			} 
+			
+			if( 'config' in data ) {
+
+				var config = data.config;
+
+				console.trace( "CONFIG", config );
+
+			} 
+			
+			if( 'scripts' in data ) {
+
+				var scripts = data.scripts;
+
+				console.trace( "SCRIPTS", scripts );
+
+				var $options = $.map( scripts, function( script ){
+					return $('<option/>')
+							.val( script.file )
+							.text( script.name )
+							;
+				} )
+
+				$ctrl.find( 'section.loadsave select' )
+						.empty()
+						.append( $("<option>--</option>" ) )
+						.append( $options );
+						;
 			}
 		}
 

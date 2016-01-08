@@ -3,6 +3,7 @@
 var ws = require( 'nodejs-websocket' );
 
 var log = require( './logging.js' );
+var E = require( './E.js' );
 
 var Assert = require( './assert.js' );
 
@@ -12,7 +13,7 @@ var _wsServer = false,
 	_sender = false
 	;
 
-var _config = false;
+var _hello = false;
 
 function gotText( conn, str ) {
 
@@ -20,10 +21,16 @@ function gotText( conn, str ) {
 
 	try {
 		var data = JSON.parse( str );
+	} catch( ex ) {
+		return log.ex( ex, 'Cannot decode: ', str );
+	}
+
+	try {
 		if( _onData ) _onData( data );
 	} catch( ex ) {
-		log.warn( 'Cannot decode', str );
+		return log.ex( ex, 'Processing Event: ', data );
 	}
+	
 }
 
 function gotClose( conn, code, reason ) {
@@ -44,11 +51,11 @@ function gotConnection( conn ) {
 	conn.on( 'close', function( code, reason ){ gotClose( conn, code, reason ); } );
 	conn.on( 'error', function( err ){ gotClose( conn, err ); } );
 
-	conn.sendText( JSON.stringify( {
+	setTimeout( function() {
 
-		config: _config.config
+		conn.sendText( JSON.stringify( _hello ) );
 
-	} ) );
+	}, 0 );
 
 }
 
@@ -75,7 +82,7 @@ function sendToAll( data ) {
 
 }
 
-module.exports = function( onData, config, done ) {
+module.exports = function( onData, hello, config, done ) {
 
 	Assert.present( 'onData', onData );
 	Assert.present( 'config', config );
@@ -83,7 +90,7 @@ module.exports = function( onData, config, done ) {
 
 	log.trace( "Websocket starting" );
 
-	_config = config;
+	_hello = hello;
 	_onData = onData;
 
 	_wsServer = ws.createServer( gotConnection );

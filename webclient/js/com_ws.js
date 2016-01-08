@@ -48,7 +48,8 @@ var BAG_Com = (function(){
 
 	function connect() {
 
-		_websocket = new WebSocket( BAG_Config.com.url );
+		//_websocket = new WebSocket( BAG_Config.com.url );
+		_websocket = new WebSocket( 'ws://' + location.host + ':8765/' );
 		_websocket.onmessage = gotData;
 		_websocket.onopen = gotOpen;
 		_websocket.gotclose = gotClose;

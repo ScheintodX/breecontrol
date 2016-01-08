@@ -1,35 +1,55 @@
 "use strict";
 
-var Assert = require( './assert.js' );
+var Assert = require( './assert.js' ),
+    E = require( './E.js' );
 
-module.exports = function( param ){
+module.exports = function( args, config, env ){
 
-	Assert.present( 'param.time', param.temp );
-	Assert.present( 'config.hysteresis', config.hysteresis );
+	Assert.present( 'args.heat', args.heat );
+	Assert.present( 'args.hold', args.hold );
 
-	var start = false;
+	var _pauseStart,
+	    _pauseTime = 0;
 
-	var Cmd = {
+	var self = {
 
-		start: function( param, boiler ) {
+		start: function( current, boiler ) {
 
-			start = param.now;
+			current.start = env.time();
+			current.desc = 'Hold ' + args.heat + '°C for ' + args.hold;
 
-			boiler.upper.power.set = config.upper.power;
-			boiler.upper.temp.set = config.temp.power;
-			boiler.lower.power.set = config.lower.power;
-			boiler.upper.temp.set = config.temp.power;
+			boiler.temp.set = args.heat;
+		},
+		pause: function( current, boiler ) {
+
+			_pauseStart = env.time();
+			boiler.temp.set = 0;
+		},
+		resume: function( current, boiler ) {
+			
+			_pauseTime += env.time() - _pauseStart;
+			boiler.temp.set = args.hold;
+		},
+		stop: function( current, boiler ) {
+
+			boiler.temp.set = 0;
+		},
+		run: function( current, boiler ) {
+
+			if( current.mode != 'run' ) return;
+
+			current.elapsed = env.time() - current.start - _pauseTime;
+			current.remaining = args.hold - current.elapsed;
+
+			if( current.remaining <= 0 ) {
+				E.rr( current.desc, "done", current.elapsed, current.remaining );
+				current.mode = 'done';
+			}
 		},
 
-		run: function( param, boiler ) {
-
-			if( param.now - start < param.time ) {
-
-				return { status: 'running' };
-			} else {
-				return { status: 'done' };
-			}
+		guessRuntime: function( current, boiler ) {
+			return args.hold;
 		}
 	}
-	return Cmd;
+	return self;
 };

@@ -100,67 +100,69 @@
 				<h2>Control</h2>
 
 				<div class="buttongroup">
-					<button class="start">Start</button>
-					<button class="pause">Pause</button>
-					<button class="stop">Stop</button>
+					<button name="start">Start</button>
+					<button name="pause">Pause</button>
+					<button name="resume">Resume</button>
+					<button name="stop">Stop</button>
 				</div>
 
 				<div class="buttongroup">
-					<button class="prev">Prev</button>
-					<button class="next">Next</button>
+					<button name="prev">Prev</button>
+					<button name="next">Next</button>
 				</div>
+
+				<label class="runstopinfo">XXX</label>
+
 			</section><!--/.runstop-->
 
 			<section class="loadsave">
+
+				<label class="load">Load
+					<select name="load">
+						<option>Grießer Böckchen</option>
+						<option>Weihnachtsbier</option>
+						<option>Craft Punk</option>
+						<option>Dunkle Brühe</option>
+					</select>
+					<button name="load">Load</button>
+				</label>
 
 				<h2>Programm</h2>
 
 				<div id="ctrl_program">
 
-					<label class="load">Load
-						<select name="load">
-							<option>Grießer Böckchen</option>
-							<option>Weihnachtsbier</option>
-							<option>Craft Punk</option>
-							<option>Dunkle Brühe</option>
-						</select>
-						<button class="load">Load</button>
-					</label>
-					
 					<label class="name">
 						Name
-						<input name="name" type="text" value="Grießer Böckchen" />
-						<button class="save">Save</button>
+						<input name="name" type="text" value="" />
 					</label>
 
-					<!--
 					<div class="step step0">
-						<label>Preheat1 <input class="temp" type="number" name="temp" value="123"/>°C</label>
+						<label>Preheat <input class="temp" type="number" name="heat" />°C</label>
 					</div>
-					-->
 
-					<div class="step step0">
-						<label>1. Step<input class="temp" type="number" name="temp" value="123"/>°C</label>
-						<label><input class="time" type="number" name="time" value="234"/>min</label>
-					</div>
-					
 					<div class="step step1">
-						<label>2. Step<input class="temp" type="number" name="temp" value="345"/>°C</label>
-						<label><input class="time" type="number" name="time" value="456"/>min</label>
+						<label>1. Step<input class="temp" type="number" name="heat" />°C</label>
+						<label><input class="time" type="number" name="hold" />min</label>
 					</div>
 					
 					<div class="step step2">
-						<label>3. Step<input class="temp" type="number" name="temp" value="567"/>°C</label>
-						<label><input class="time" type="number" name="time" value="678"/>min</label>
+						<label>2. Step<input class="temp" type="number" name="heat" />°C</label>
+						<label><input class="time" type="number" name="hold" />min</label>
+					</div>
+					
+					<div class="step step3">
+						<label>3. Step<input class="temp" type="number" name="heat" />°C</label>
+						<label><input class="time" type="number" name="hold" />min</label>
 					</div>
 
-					<!--
 					<div class="step step4">
-						<label>Postheat <input class="temp" type="number" name="temp" value="123"/>°C</label>
+						<label>Postheat <input class="temp" type="number" name="heat" />°C</label>
 					</div>
-					-->
 
-					<button class="set">Set</button>
+					<div class="buttongroup">
+						<button name="set">Set</button>
+						<button name="save">Save</button>
+					</div>
 
 				</div>
 			</section><!--/.loadsave-->

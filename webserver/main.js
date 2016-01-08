@@ -16,7 +16,8 @@ var Mqtt = require( './mqtt.js' ),
     mqtt = false;
 
 var Config = require( './config.js' ),
-    config = false;
+    config = false,
+	hello = false;
 
 var Boilers = require( './boiler.js' ),
     boilers = false,
@@ -39,7 +40,12 @@ function initConfig( done ) {
 		}
 
 		config = data;
-		repl.addContext( { config: config } );
+		hello = {
+			config: {
+				boilers: config.boilers,
+			}
+		}
+		repl.addContext( { config: config, hello: hello } );
 
 		log.startup( "config", "READY" );
 
@@ -116,7 +122,7 @@ function initBoilers( done ) {
 
 function startWebsocket( done ) {
 
-	Websocket( ctrl.gotWebData, config.ws, function( err, data ) {
+	Websocket( ctrl.gotWebData, hello, config.ws, function( err, data ) {
 
 		if( err ){
 			log.failure( "websockets" );
@@ -156,7 +162,7 @@ function stateReady( err ) {
 
 	if( err ) throw err;
 
-	ctrl = Ctrl( config, state, brewery );
+	ctrl = Ctrl( config, hello, state, brewery );
 
 	async.parallel( [ startWebsocket, startMqtt ], startupDone );
 }
