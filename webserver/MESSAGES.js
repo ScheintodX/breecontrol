@@ -4,33 +4,33 @@ var H = require( './helpers.js' ).mqtt;
 
 var MESSAGES = [
 
-	{ topic: "boiler1/upper/temp/status", type: "f", range: [ -50, 500 ], iv: 1000 },
-	{ topic: "boiler1/upper/temp/nominal", value: 150, type: "f", range: [ 0, 300 ], iv: 1000 },
-	{ topic: "boiler1/upper/temp/set" },
+	{ topic: "PREFIX/boiler1/upper/temp/status", type: "f", range: [ -50, 500 ], iv: 1000 },
+	{ topic: "PREFIX/boiler1/upper/temp/nominal", value: 150, type: "f", range: [ 0, 300 ], iv: 1000 },
+	{ topic: "PREFIX/boiler1/upper/temp/set" },
 
-	{ topic: "boiler1/upper/heater/status", type: "b", iv: 100 },
+	{ topic: "PREFIX/boiler1/upper/heater/status", type: "b", iv: 100 },
 
 	//............../lower/...........
 
-	{ topic: "boiler1/temp/status", type: "f", range: [ -50, 200 ], iv: 500 },
-	{ topic: "boiler1/temp/nominal", value: 66, type: "f", range: [ 0, 100 ], iv: 500 },
-	{ topic: "boiler1/temp/set" },
+	{ topic: "PREFIX/boiler1/temp/status", type: "f", range: [ -50, 200 ], iv: 500 },
+	{ topic: "PREFIX/boiler1/temp/nominal", value: 66, type: "f", range: [ 0, 100 ], iv: 500 },
+	{ topic: "PREFIX/boiler1/temp/set" },
 
-	{ topic: "boiler1/fill/status", type: "f", range: [ 0, 1 ], iv: 5000 },
-	//{ topic: "boiler1/fill/override" },
-	{ topic: "boiler1/lid/status", type: "b", iv: 300 },
-	//{ topic: "boiler1/lid/override" },
+	{ topic: "PREFIX/boiler1/fill/status", type: "f", range: [ 0, 1 ], iv: 5000 },
+	//{ topic: "PREFIX/boiler1/fill/override" },
+	{ topic: "PREFIX/boiler1/lid/status", type: "b", iv: 300 },
+	//{ topic: "PREFIX/boiler1/lid/override" },
 
-	{ topic: "boiler1/aggitator/status", type: "b", iv: 700 },
-	{ topic: "boiler1/aggitator/nominal", type: "b", iv: 700 },
-	{ topic: "boiler1/aggitator/set" },
+	{ topic: "PREFIX/boiler1/aggitator/status", type: "b", iv: 700 },
+	{ topic: "PREFIX/boiler1/aggitator/nominal", type: "b", iv: 700 },
+	{ topic: "PREFIX/boiler1/aggitator/set" },
 
-	{ topic: "boiler1/spare/status", type: "b", iv: 700 },
-	{ topic: "boiler1/spare/nominal", type: "b", iv: 700 },
-	{ topic: "boiler1/spare/set" },
+	{ topic: "PREFIX/boiler1/spare/status", type: "b", iv: 700 },
+	{ topic: "PREFIX/boiler1/spare/nominal", type: "b", iv: 700 },
+	{ topic: "PREFIX/boiler1/spare/set" },
 
-	{ topic: "boiler1/indicator/color/set" },  // 123456,abcdef,012912 ....
-	{ topic: "boiler1/indicator/mode/set" },   // off | on | rotate | alarm
+	{ topic: "PREFIX/boiler1/indicator/color/set" },  // 123456,abcdef,012912 ....
+	{ topic: "PREFIX/boiler1/indicator/mode/set" },   // off | on | rotate | alarm
 ];
 
 /*

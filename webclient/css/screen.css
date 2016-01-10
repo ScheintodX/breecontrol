@@ -67,6 +67,20 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block;
 }
 
+/*
+@mixin showOnDemand( $height ) {
+
+	max-height: 0;
+	overflow: hidden;
+
+	transition: max-height .5s;
+
+	&.visible {
+		max-height: $height;
+	}
+	
+}
+*/
 /* line 16, ../sass/screen.scss */
 html {
   font-family: "Droid Sans", "Roboto", sans-serif;
@@ -104,13 +118,7 @@ section.tab h2 {
   padding: 3px 6px;
 }
 
-/* line 49, ../sass/screen.scss */
-section.tab > section {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
-
-/* line 57, ../sass/screen.scss */
+/* line 55, ../sass/screen.scss */
 section.boiler header button {
   position: absolute;
   height: 28px;
@@ -119,8 +127,8 @@ section.boiler header button {
   background-color: white;
   border: none;
 }
-/* line 60, ../sass/screen.scss */
-section.boiler header button.chart {
+/* line 58, ../sass/screen.scss */
+section.boiler header button.script {
   width: 28px;
   height: 28px;
   text-indent: -9999px;
@@ -128,7 +136,7 @@ section.boiler header button.chart {
   left: 3px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.boiler header button.chart:before {
+section.boiler header button.script:before {
   content: "";
   position: absolute;
   top: 0;
@@ -137,8 +145,8 @@ section.boiler header button.chart:before {
   width: 28px;
   height: 28px;
 }
-/* line 64, ../sass/screen.scss */
-section.boiler header button.settings {
+/* line 62, ../sass/screen.scss */
+section.boiler header button.manual {
   width: 28px;
   height: 28px;
   text-indent: -9999px;
@@ -146,7 +154,7 @@ section.boiler header button.settings {
   right: 3px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.boiler header button.settings:before {
+section.boiler header button.manual:before {
   content: "";
   position: absolute;
   top: 0;
@@ -156,45 +164,45 @@ section.boiler header button.settings:before {
   height: 28px;
 }
 
-/* line 75, ../sass/screen.scss */
-section.chart {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .5s;
+/* line 73, ../sass/screen.scss */
+section.script {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  display: none;
   background-color: #1b3e73;
 }
-/* line 8, ../sass/_control.lib.scss */
-section.chart.visible {
-  max-height: 240px;
+/* line 19, ../sass/_control.lib.scss */
+section.script.visible {
+  display: block;
 }
 
-/* line 82, ../sass/screen.scss */
+/* line 81, ../sass/screen.scss */
 section.info {
   background-color: #eeff00;
   color: black !important;
   padding: 6px;
 }
-/* line 88, ../sass/screen.scss */
+/* line 87, ../sass/screen.scss */
 section.info.severe {
   color: #bb0022 !important;
   font-weight: bold;
 }
 
-/* line 94, ../sass/screen.scss */
-section.ctrl {
+/* line 93, ../sass/screen.scss */
+section.manual, section.script {
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.3);
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .5s;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  display: none;
   overflow: scroll;
   background-color: #204987;
 }
-/* line 8, ../sass/_control.lib.scss */
-section.ctrl.visible {
-  max-height: 1000px;
+/* line 19, ../sass/_control.lib.scss */
+section.manual.visible, section.script.visible {
+  display: block;
 }
 /* line 103, ../sass/screen.scss */
-section.ctrl label {
+section.manual label, section.script label {
   display: block;
   position: relative;
   margin: 3px;
@@ -203,39 +211,39 @@ section.ctrl label {
   border-radius: 4px;
 }
 /* line 114, ../sass/screen.scss */
-section.ctrl label input {
+section.manual label input, section.script label input {
   position: absolute;
   top: 4px;
   right: 4px;
 }
 /* line 120, ../sass/screen.scss */
-section.ctrl div.step {
+section.manual div.step, section.script div.step {
   display: flex;
 }
 /* line 122, ../sass/screen.scss */
-section.ctrl div.step label {
+section.manual div.step label, section.script div.step label {
   flex-grow: 1;
   display: inline-block;
 }
 /* line 129, ../sass/screen.scss */
-section.ctrl > section {
+section.manual > section, section.script > section {
   padding: 8px;
 }
 /* line 135, ../sass/screen.scss */
-section.ctrl > section h2 {
+section.manual > section h2, section.script > section h2 {
   margin: -8px -8px 0 -8px;
 }
 /* line 139, ../sass/screen.scss */
-section.ctrl > section h3 {
+section.manual > section h3, section.script > section h3 {
   margin: 12px 0 4px 0;
   font-weight: bold;
 }
 /* line 142, ../sass/screen.scss */
-section.ctrl > section h3:before {
+section.manual > section h3:before, section.script > section h3:before {
   content: "= ";
 }
 /* line 143, ../sass/screen.scss */
-section.ctrl > section h3:after {
+section.manual > section h3:after, section.script > section h3:after {
   content: " =";
 }
 
@@ -345,4 +353,11 @@ section.runstop button[name="set"]:before, section.loadsave button[name="set"]:b
   background: url(../images/sprites.svg) no-repeat -112px -32px;
   width: 16px;
   height: 16px;
+}
+
+/* line 194, ../sass/screen.scss */
+.runstopinfo {
+  display: block;
+  text-align: center;
+  margin: 0px 10px 20px 10px;
 }

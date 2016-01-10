@@ -31,7 +31,7 @@ module.exports = function( conf ) {
 				}
 			}
 
-			emit( conf.topic + '/nominal', HQ.toString( self.nominal, 'f', 1 ) );
+			if( ! conf.disabled ) emit( conf.topic + '/nominal', HQ.toString( self.nominal, 'f', 1 ) );
 			
 			parentRun( emit );
 

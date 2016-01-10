@@ -11,11 +11,11 @@
 var BAG_Boiler = (function($){
 
 	// Constructor function
-	return function( elem, boilerNo, passive ) {
+	return function( elem, device, passive ) {
 
 		passive = passive || true;
 
-		var $elem = $( elem ),
+		var $elem = $( elem ).expectOne(),
 		    _svg = false;
 
 		// Find svg element via dom
@@ -132,6 +132,15 @@ var BAG_Boiler = (function($){
 			} );
 		}
 
+		function oneOf( prefix, list ) {
+			return ifchanged( function( which ) {
+				$.each( list, function( i, it ) {
+					var svgE = svg( prefix + it );
+					if( svgE ) svgE.style.opacity = (which==it) ? 1 : 0;
+				} );
+			} )
+		}
+
 		function override( f ) {
 			return function( value ) {
 				var isOverride = (
@@ -160,6 +169,7 @@ var BAG_Boiler = (function($){
 			setLowerHeater: border( 'temp_lower_icon' ),
 			setLid: visible( 'lid' ),
 			setLidOverride: override( visible( 'lid_override' ) ),
+			setMode: oneOf( 'mode_', [ 'run', 'pause', 'stop' ] ),
 			setAggitator: ifchanged( function( on ) {
 
 				var aggi = svg('aggitator');
@@ -197,12 +207,16 @@ var BAG_Boiler = (function($){
 
 			gotData: function( data ) {
 
+				console.log( data );
+
 				if( !_svg ) return;
 
 				if( !( 'boilers' in data ) ) return;
 
-				var boiler = data.boilers[ 'boiler' + boilerNo ]
+				var boiler = data.boilers[ device ]
 					;
+
+				console.log( boiler );
 
 				Boiler.setAggitator( boiler.aggitator.status );
 				Boiler.setFill( boiler.fill.status );
@@ -224,11 +238,14 @@ var BAG_Boiler = (function($){
 				Boiler.setLowerHeater( boiler.lower.heater.status );
 
 				if( 'script' in boiler ) {
-					Boiler.setTimeRemaining( boiler.script.remaining );
-					Boiler.setTimeElapsed( boiler.script.elapsed );
+					var script = boiler.script;
+					Boiler.setTimeRemaining( script.remaining );
+					Boiler.setTimeElapsed( script.current.remaining );
+					Boiler.setMode( script.mode );
 				} else {
 					Boiler.setTimeRemaining( undefined );
 					Boiler.setTimeElapsed( undefined );
+					Boiler.setMode( 'unknown' );
 				}
 
 			},

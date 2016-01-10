@@ -20,7 +20,7 @@ function save( name, done ) {
 
 function load( name, done ) {
 
-	E.rr( "LOAD", name ); // log
+	log.trace( "LOAD", name ); // log
 
 	var json;
 
@@ -33,8 +33,6 @@ function load( name, done ) {
 
 			var Script = require( './' + _BASE_ + script.script );
 
-			//var TheScript = Script( script, "boiler", "config", "env" );
-
 			done( null, Script, script );
 
 		} catch( ex ) {
@@ -46,7 +44,7 @@ function load( name, done ) {
 
 function list( done ) {
 
-	E.rr( "LIST" ); // log
+	log.info( "LIST" ); // log
 
 	fs.readdir( _BASE_, function( err, data ) {
 
@@ -55,6 +53,7 @@ function list( done ) {
 		var result = _.map( data, function( file ) {
 
 			if( file.startsWith( '.' ) ) return undefined;
+			if( !file.endsWith( '.json' ) ) return undefined;
 
 			return { file: file,
 					name: file.replace( /\.json$/, '' ),
@@ -63,7 +62,6 @@ function list( done ) {
 
 		result = _.filter( result, function( entry ) { return (entry); } );
 
-		E.rr( "LIST done" );
 		return done( null, result );
 	} );
 }

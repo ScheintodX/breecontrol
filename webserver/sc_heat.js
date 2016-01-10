@@ -31,6 +31,8 @@ module.exports = function( args, config, env ){
 			current.desc = 'Heat to ' + args.heat + '°C';
 
 			boiler.temp.set = args.heat;
+
+			E.rr( "Start heat", current.desc );
 		},
 		pause: function( current, boiler ) {
 
@@ -48,7 +50,7 @@ module.exports = function( args, config, env ){
 
 			if( current.mode != 'run' ) return;
 
-			current.ellapsed = env.time() - current.start;
+			current.elapsed = env.time() - current.start;
 			current.remaining = calcTime(
 					boiler.temp.status,
 					args.heat,

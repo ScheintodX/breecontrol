@@ -10,16 +10,33 @@
  */
 var BAG_Chart = (function($){
 
-	return function( elem, boilerNo, passive ) {
+	//var BOUNDS = [ 30, 60, 140, 220, 300, 330 ];
+	var BOUNDS = [
+			[ 30, 30 ],		// notify (run)
+			[ 30, 60 ],		// PREHEAT
+			[ 60, 60 ],		// notify (pause)
+			[ 60, 60 ],		// pause
+			[ 60, 60 ],		// notify (run)
+			[ 60, 80 ],		// 1. HEAT
+			[ 80, 140 ],	// 1. HOLD
+			[ 140, 165 ],	// 2. HEAT
+			[ 165, 220 ],	// 2. HOLD
+			[ 220, 255 ],	// 3. HEAT
+			[ 255, 300 ],	// 3. HOLD
+			[ 300, 330 ],	// POSTHEAT
+			[ 330, 330 ]	// notify (done)
+	];
+
+	return function( elem, device, passive ) {
 
 		passive = passive || true;
 
-		var _elem = $( elem ),
+		var $elem = $( elem ).expectOne(),
 		    _svg = false;
 
-		_elem.on( 'load', function() {
+		$elem.on( 'load', function() {
 
-			_svg = _elem.get( 0 ).contentDocument;
+			_svg = $elem.get( 0 ).contentDocument;
 
 		} );
 
@@ -58,6 +75,7 @@ var BAG_Chart = (function($){
 			}
 		}
 
+		/*
 		function moveHor( id, inScale, outScale ) {
 
 			return function doMoveHor( percent ) {
@@ -66,6 +84,21 @@ var BAG_Chart = (function($){
 				if( !svgE ) return;
 
 				var x = scaleCalc( percent, inScale, outScale );
+
+				moveRel( svgE, x, 0 );
+			}
+		}
+		*/
+		function moveHor( id ) {
+
+			return function doMoveHor( step, percent ) {
+
+				var svgE = svg( id );
+				if( !svgE ) return;
+
+				var b = BOUNDS[ step ],
+				    diff = b[ 1 ] - b[ 0 ],
+					x = b[ 0 ] + diff * percent;
 
 				moveRel( svgE, x, 0 );
 			}
@@ -84,7 +117,8 @@ var BAG_Chart = (function($){
 			setTime1: text( 'time1' ),
 			setTime2: text( 'time2' ),
 			setTime3: text( 'time3' ),
-			setTimeBar: moveHor( 'time_bar', 1, 300 ),
+			//setTimeBar: moveHor( 'time_bar', 1, 300 ),
+			setTimeBar: moveHor( 'time_bar' ),
 			setTimeStatus: text( 'time_status' ),
 
 			gotData: function( data ) {
@@ -93,7 +127,7 @@ var BAG_Chart = (function($){
 
 				if( !( 'boilers' in data ) ) return;
 
-				var boiler = data.boilers[ 'boiler' + boilerNo ];
+				var boiler = data.boilers[ device ];
 
 				if( !( 'script' in boiler ) ) return;
 
@@ -113,12 +147,15 @@ var BAG_Chart = (function($){
 				Chart.setTime2( script.steps[ 2 ].hold.toMinSec() );
 				Chart.setTime3( script.steps[ 3 ].hold.toMinSec() );
 				if( script.current ) {
-					var elapsed = script.current.elapsed,
-						remaining = script.current.remaining,
+					
+					var current = script.current,
+						elapsed = current.elapsed,
+						remaining = current.remaining,
 						total = elapsed + remaining,
 						percent = total != 0 ? elapsed / total : 0
 						;
-					Chart.setTimeBar( script.current.index /6 + percent /6 ); 
+					//Chart.setTimeBar( script.current.index /6 + percent /6 ); 
+					Chart.setTimeBar( current.index, percent ); 
 					Chart.setTimeStatus( '‒ ' + remaining.toMinSec() );
 				} else {
 					Chart.setTimeBar( 0 );

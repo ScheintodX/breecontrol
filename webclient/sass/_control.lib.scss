@@ -1,3 +1,4 @@
+/*
 @mixin showOnDemand( $height ) {
 
 	max-height: 0;
@@ -7,6 +8,16 @@
 
 	&.visible {
 		max-height: $height;
+	}
+	
+}
+*/
+@mixin showOnDemand( $height ) {
+
+	display: none;
+
+	&.visible {
+		display: block;
 	}
 	
 }

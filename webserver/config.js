@@ -18,7 +18,8 @@ module.exports = function( done ) {
 		mqtt: {
 			url: 'mqtt://localhost:1883/',
 			username: 'braumeister',
-			password: 'dBPg09K6U34m'
+			password: 'dBPg09K6U34m',
+			prefix: 'griesbraeu'
 		},
 
 		boilers: [
@@ -41,7 +42,14 @@ module.exports = function( done ) {
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
 			}
-		]
+		],
+
+		script: {
+			time: function() {
+				// Fast
+				return (new Date().getTime()/10)<<0;
+			}
+		}
 
 	} );
 }

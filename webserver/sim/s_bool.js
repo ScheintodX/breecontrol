@@ -22,7 +22,7 @@ module.exports = function( conf ) {
 				self.status = self._genStatus( self.status );
 			}
 
-			emit( conf.topic + '/status', '' + HQ.toString( self.status, 'b' ) );
+			if( ! conf.disabled ) emit( conf.topic + '/status', '' + HQ.toString( self.status, 'b' ) );
 		}
 	}
 	return self;

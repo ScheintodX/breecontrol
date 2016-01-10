@@ -50,6 +50,7 @@ module.exports = function( boilers ) {
 		},
 
 		asJson: function() {
+
 			return JSON.stringify( { boilers: self.boilers }, function( key, val ) {
 			
 				return key.startsWith( '_' ) ? undefined : val;

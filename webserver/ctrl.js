@@ -11,6 +11,7 @@ var Scripts = require( './scripts.js' );
 
 var Boiler = require( './boiler.js' );
 
+
 module.exports = function( config, hello, state, brewery ) {
 
 	Assert.present( "config", config );
@@ -55,8 +56,6 @@ module.exports = function( config, hello, state, brewery ) {
 
 				case "set":
 
-					E.rr( "WEB", data );
-
 					var val = data.value,
 						topic = data.topic
 						;
@@ -69,9 +68,9 @@ module.exports = function( config, hello, state, brewery ) {
 
 					E.rr( 'loadsave' );
 
-					Assert.present( 'data.no', data.no );
+					Assert.present( 'data.device', data.device );
 
-					var boiler = brewery.boilers[ 'boiler' + data.no ];
+					var boiler = brewery.boilers[ data.device ];
 
 					if( ! boiler ) throw "No boiler found";
 
@@ -92,13 +91,10 @@ module.exports = function( config, hello, state, brewery ) {
 								var TheScript = Script( script, boiler, config, {
 
 									notify: function( boiler, what, message ){
-
-										E.rr( boiler.name, what, message );
+										log.info( boiler.name, what, message );
 									},
-									time: function() {
-										// Fast
-										return (new Date().getTime()/10)<<0;
-									}
+
+									time: config.script.time
 
 								} );
 
@@ -151,9 +147,9 @@ module.exports = function( config, hello, state, brewery ) {
 
 				case "runstop":
 
-					Assert.present( 'data.no', data.no );
+					Assert.present( 'data.device', data.device );
 
-					var boiler = brewery.boilers[ 'boiler' + data.no ];
+					var boiler = brewery.boilers[ data.device ];
 
 					Assert.present( 'boiler', boiler );
 

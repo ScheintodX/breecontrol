@@ -19,6 +19,8 @@ module.exports = function( args, config, env ){
 			current.desc = 'Hold ' + args.heat + '°C for ' + args.hold;
 
 			boiler.temp.set = args.heat;
+
+			E.rr( "Start hold", current.desc );
 		},
 		pause: function( current, boiler ) {
 

@@ -6,7 +6,8 @@ var SC = {
 	heat: require( '../sc_heat.js' ),
 	hold: require( '../sc_hold.js' ),
 	pause: require( '../sc_pause.js' ),
-	notify: require( '../sc_notify.js' )
+	notify: require( '../sc_notify.js' ),
+	stop: require( '../sc_stop.js' )
 };
 
 module.exports = function( script, boiler, config, env ) {
@@ -53,6 +54,8 @@ module.exports = function( script, boiler, config, env ) {
 		},
 
 		stepTo: function( index ) {
+
+			E.rr( "stepTo", index, self.hello.mode );
 
 			if( index < 0 || index >= _run.length ) return false;
 
@@ -103,7 +106,7 @@ module.exports = function( script, boiler, config, env ) {
 		prev: function() {
 			if( _idx-1 < 0 ) return false;
 			if( self.hello.mode == 'run' ) _exec( 'stop' );
-			self.stepTo( _idx+1 );
+			self.stepTo( _idx-1 );
 			if( self.hello.mode == 'run' ) _exec( 'start' );
 			return self.hello;
 		},
@@ -112,7 +115,8 @@ module.exports = function( script, boiler, config, env ) {
 
 			if( !_cur ) return;
 
-			if( self.hello.current.mode == 'done' ) {
+			if( self.hello.mode == 'done' ) {
+				self.hello.mode = 'run';
 				self.next();
 			}
 
@@ -136,7 +140,7 @@ module.exports = function( script, boiler, config, env ) {
 			var _actions = [];
 			switch( hello.mode ) {
 				case 'run': _actions.push( 'stop', 'pause' ); break;
-				case 'pause': _actions.push( 'resume' ); break;
+				case 'pause': _actions.push( 'stop', 'resume' ); break;
 				case 'stop': _actions.push( 'start' ); break;
 			}
 			if( _idx > 0 ) _actions.push( 'prev' );

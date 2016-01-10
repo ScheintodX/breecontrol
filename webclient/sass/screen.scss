@@ -47,8 +47,6 @@ section.tab {
 
 }
 section.tab > section {
-
-	@include speedupRendering();
 }
 
 section.boiler {
@@ -57,11 +55,11 @@ section.boiler {
 		button {
 			@include button( absolute );
 			@include buttonStyleFlat( white );
-			&.chart {
+			&.script {
 				@include isIcon( chart );
 				top: 3px; left: 3px;
 			}
-			&.settings {
+			&.manual {
 				@include isIcon( settings );
 				top: 3px; right: 3px;
 			}
@@ -69,12 +67,13 @@ section.boiler {
 	}
 }
 
-section.chart, section.ctrl {
+section.script, section.ctrl {
 }
 
-section.chart {
+section.script {
 
-	@include showOnDemand( 240px );
+	@include speedupRendering();
+	@include showOnDemand( 1000px );
 
 	background-color: $bg_chart;
 }
@@ -91,10 +90,11 @@ section.info {
 	}
 }
 
-section.ctrl {
+section.manual, section.script {
 
 	box-shadow: inset 0 4px 4px rgba( black, .3 );
 
+	@include speedupRendering();
 	@include showOnDemand( 1000px );
 	overflow: scroll;
 
@@ -189,4 +189,10 @@ section.runstop, section.loadsave {
 			@include hasIcon( set, 4px, 4px );
 		}
 	}
+}
+
+.runstopinfo {
+	display: block;
+	text-align: center;
+	margin: 0px 10px 20px 10px;
 }

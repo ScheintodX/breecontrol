@@ -1,5 +1,15 @@
 "use strict";
 
+function ex( up ) {
+
+	try {
+		throw new Error('');
+	} catch( ex ) {
+		return ex.stack.split( /\n/g )[ up ].trim();
+	}
+
+}
+
 (function($){
 
 	$.fn.peek = function() {
@@ -9,15 +19,17 @@
 
 	$.fn.expectFound = function() {
 
-		if( this.length != 0 ) 
-				console.warn( "NOT FOUND", this );
+		if( this.length != 0 ) {
+			throw new Error( "NOT FOUND: " + this.selector + " " + ex( 3 ) );
+		}
 
 		return this;
 	};
 	$.fn.expectOne = function() {
 
-		if( this.length != 1 ) 
-				console.warn( "NOT 1 FOUND", this );
+		if( this.length != 1 ) {
+			throw new Error( "NOT 1 FOUND: " + this.selector + " " + ex( 3 ) );
+		}
 
 		return this;
 	};

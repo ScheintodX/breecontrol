@@ -8,7 +8,7 @@ module.exports = function( args, config, env ){
 	var self = {
 
 		start: function( current, boiler ) {
-			current.desc = "Mach mal Pause";
+			current.desc = "Have a break";
 			E.rr( "mach mal Pause" );
 		},
 		resume: function( current, boiler ) {

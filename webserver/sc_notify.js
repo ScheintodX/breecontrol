@@ -9,7 +9,9 @@ module.exports = function( args, config, env ){
 	var self = {
 
 		start: function( current, boiler ) {
-			current.desc = "Notify " + args.what + " " + args.msg;
+			current.desc = "Notify " + args.what;
+			if( args.msg ) current.desc += " " + args.msg;
+			E.rr( "start notify", current.desc );
 		},
 		run: function( current, boiler ) {
 

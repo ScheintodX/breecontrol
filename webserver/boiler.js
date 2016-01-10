@@ -129,6 +129,7 @@ function createBoiler( index, config ) {
 			}
 		},
 
+		/*
 		script: {
 
 			name: 'Braumeister Böhmke',
@@ -153,6 +154,7 @@ function createBoiler( index, config ) {
 				remaining: 1400
 			}
 		},
+		*/
 
 		_publishable: [
 			"upper/temp/set",
@@ -201,7 +203,7 @@ function createBoiler( index, config ) {
 				self.warn.messages.push( { level: 'severe', text: val } );
 			}
 
-			if( self.temp.set ) {
+			if( 'set' in self.temp ) {
 				self.temp.nominal = self.temp.set;
 				delete( self.temp.set );
 			}

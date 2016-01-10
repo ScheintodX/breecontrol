@@ -2,6 +2,8 @@
 
 "use strict";
 
+var PREFIX = "griesbraeu/";
+
 var util = require( 'util' );
 
 var E = require( '../E.js' );
@@ -37,7 +39,7 @@ var Sensors = {
 			freq: .5,
 			mode: 'simulate'
 		},
-		speed: 5,
+		speed: 10,
 		jitter: 3,
 		iv: 1000,
 		mode: 'simulate'
@@ -58,7 +60,7 @@ var Sensors = {
 			req: .5,
 			mode: 'simulate'
 		},
-		speed: 5,
+		speed: 10,
 		jitter: 2,
 		iv: 1000,
 		mode: 'simulate'
@@ -69,7 +71,7 @@ var Sensors = {
 		status: { range: [ -20, 200 ], initial: 14 },
 		mode: 'simulate',
 		iv: 1000,
-		speed: 10,
+		speed: .3,
 		jitter: .5
 	} ),
 
@@ -104,10 +106,9 @@ function round( val ) {
 	return Math.round( val * 10 ) / 10;
 }
 
-
 function emit( topic, data ) {
 
-	mqttClient.publish( topic, data );
+	mqttClient.publish( PREFIX + topic, data );
 }
 
 function run( sensor ) {
@@ -147,9 +148,9 @@ var mqttClient = mqtt.connect( 'mqtt://localhost:1883/', {
 } )
 		.on( 'connect', function() {
 
-			mqttClient.subscribe( 'boiler1/+/set' );
-			mqttClient.subscribe( 'boiler1/upper/+/set' );
-			mqttClient.subscribe( 'boiler1/lower/+/set' );
+			mqttClient.subscribe( PREFIX + 'boiler1/+/set' );
+			mqttClient.subscribe( PREFIX + 'boiler1/upper/+/set' );
+			mqttClient.subscribe( PREFIX + 'boiler1/lower/+/set' );
 
 			E.cho( "MQTT STARTED" );
 
@@ -158,6 +159,12 @@ var mqttClient = mqtt.connect( 'mqtt://localhost:1883/', {
 		.on( 'message', function( topic, data ) {
 
 			var message = data.toString();
+
+			if( ! topic.startsWith( PREFIX ) ) {
+				E.rr( "wrong prefix in: " + topic );
+			}
+
+			topic = topic.slice( PREFIX.length );
 
 			for( var key in Sensors ) {
 
