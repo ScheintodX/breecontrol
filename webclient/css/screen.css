@@ -133,7 +133,7 @@ section.boiler header button.script {
   height: 28px;
   text-indent: -9999px;
   top: 3px;
-  left: 3px;
+  right: 3px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
 section.boiler header button.script:before {
@@ -151,7 +151,7 @@ section.boiler header button.manual {
   height: 28px;
   text-indent: -9999px;
   top: 3px;
-  right: 3px;
+  left: 3px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
 section.boiler header button.manual:before {
@@ -178,17 +178,36 @@ section.script.visible {
 
 /* line 81, ../sass/screen.scss */
 section.info {
+  position: relative;
   background-color: #eeff00;
   color: black !important;
   padding: 6px;
 }
-/* line 87, ../sass/screen.scss */
+/* line 89, ../sass/screen.scss */
+section.info:after {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  content: "";
+  width: 24px;
+  height: 24px;
+  background: url(../images/sprites.svg) no-repeat 0px -72px;
+}
+/* line 97, ../sass/screen.scss */
 section.info.severe {
+  background-color: #ffcc00;
+}
+/* line 99, ../sass/screen.scss */
+section.info.severe:after {
+  background-position: -24px -72px;
+}
+/* line 104, ../sass/screen.scss */
+section.info div.severe {
   color: #bb0022 !important;
   font-weight: bold;
 }
 
-/* line 93, ../sass/screen.scss */
+/* line 110, ../sass/screen.scss */
 section.manual, section.script {
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.3);
   -webkit-transform: translateZ(0);
@@ -201,7 +220,7 @@ section.manual, section.script {
 section.manual.visible, section.script.visible {
   display: block;
 }
-/* line 103, ../sass/screen.scss */
+/* line 120, ../sass/screen.scss */
 section.manual label, section.script label {
   display: block;
   position: relative;
@@ -210,44 +229,44 @@ section.manual label, section.script label {
   border: 1px solid white;
   border-radius: 4px;
 }
-/* line 114, ../sass/screen.scss */
+/* line 131, ../sass/screen.scss */
 section.manual label input, section.script label input {
   position: absolute;
   top: 4px;
   right: 4px;
 }
-/* line 120, ../sass/screen.scss */
+/* line 137, ../sass/screen.scss */
 section.manual div.step, section.script div.step {
   display: flex;
 }
-/* line 122, ../sass/screen.scss */
+/* line 139, ../sass/screen.scss */
 section.manual div.step label, section.script div.step label {
   flex-grow: 1;
   display: inline-block;
 }
-/* line 129, ../sass/screen.scss */
+/* line 146, ../sass/screen.scss */
 section.manual > section, section.script > section {
   padding: 8px;
 }
-/* line 135, ../sass/screen.scss */
+/* line 152, ../sass/screen.scss */
 section.manual > section h2, section.script > section h2 {
   margin: -8px -8px 0 -8px;
 }
-/* line 139, ../sass/screen.scss */
+/* line 156, ../sass/screen.scss */
 section.manual > section h3, section.script > section h3 {
   margin: 12px 0 4px 0;
   font-weight: bold;
 }
-/* line 142, ../sass/screen.scss */
+/* line 159, ../sass/screen.scss */
 section.manual > section h3:before, section.script > section h3:before {
   content: "= ";
 }
-/* line 143, ../sass/screen.scss */
+/* line 160, ../sass/screen.scss */
 section.manual > section h3:after, section.script > section h3:after {
   content: " =";
 }
 
-/* line 150, ../sass/screen.scss */
+/* line 167, ../sass/screen.scss */
 section.runstop button, section.loadsave button {
   position: relative;
   height: 28px;
@@ -255,12 +274,12 @@ section.runstop button, section.loadsave button {
   padding-left: 20px;
   margin: 6px;
 }
-/* line 154, ../sass/screen.scss */
+/* line 171, ../sass/screen.scss */
 section.runstop button.set, section.loadsave button.set {
   display: block;
   width: auto;
 }
-/* line 159, ../sass/screen.scss */
+/* line 176, ../sass/screen.scss */
 section.runstop button:disabled::before, section.loadsave button:disabled::before {
   opacity: .3;
 }
@@ -355,9 +374,12 @@ section.runstop button[name="set"]:before, section.loadsave button[name="set"]:b
   height: 16px;
 }
 
-/* line 194, ../sass/screen.scss */
+/* line 211, ../sass/screen.scss */
 .runstopinfo {
   display: block;
   text-align: center;
   margin: 0px 10px 20px 10px;
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 8px;
 }

@@ -1,7 +1,7 @@
 "use strict";
 
-var Assert = require( './assert.js' ),
-    E = require( './E.js' );
+var Assert = require( '../assert.js' ),
+    E = require( '../E.js' );
 
 module.exports = function( args, config, env ){
 

@@ -51,18 +51,18 @@ function setByAutotype( obj, topic, value, splitEx ){
 	var parts = topic.split( splitEx );
 
 	if( parts.length < 2 )
-			throw 'Wrong topic: ' + topic;
+			throw new Error( 'Wrong topic: ' + topic );
 
 	var key = parts.pop();
 	var that = getByParts( obj, parts );
 
-	if( !that ) throw "Obj not found for " + topic;
+	if( !that ) throw new Error( "Obj not found for " + topic );
 
 	if( value.length > 0 ) {
 		var meta = that._meta;
-		if( !meta ) throw "Meta missing in " + topic;
+		if( !meta ) throw new Error( "Meta missing in " + topic );
 		var type = meta.type;
-		if( !type ) throw "Type missing in " + topic;
+		if( !type ) throw new Error( "Type missing in " + topic );
 		value = fromString( value, type );
 
 		that[ key ] = value;
@@ -133,6 +133,9 @@ var Helpers = {
 		getByParts: getByParts,
 		getByMqtt: function( obj, topic ) {
 			return getBy( obj, topic, /\//g );
+		},
+		getByDot: function( obj, topic ) {
+			return getBy( obj, topic, /\./g );
 		}
 	},
 	mqtt: {

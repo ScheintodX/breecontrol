@@ -1,0 +1,4 @@
+** generalize boiler via sensor/actor ect.
+** cleanup load/save
+** improve signal time by sending out messages earlier (while maintaining security)
+** improve error handlying by inserting try-catch on all callback entry points

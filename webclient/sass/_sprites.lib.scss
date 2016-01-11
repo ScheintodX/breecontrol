@@ -82,6 +82,7 @@ $h: 28px;
 }
 
 $ctrl: 16px;
+$warn: 24px;
 
 $_positions: (
 	// name x y width height
@@ -92,20 +93,23 @@ $_positions: (
 	chart		0	0	$w	$h,
 	settings	$w	0	$w	$h,
 
-	prev		0*$ctrl	32px	$ctrl	$ctrl,
-	next		1*$ctrl	32px	$ctrl	$ctrl,
-	start		2*$ctrl	32px	$ctrl	$ctrl,
-	stop		3*$ctrl	32px	$ctrl	$ctrl,
-	pause		4*$ctrl	32px	$ctrl	$ctrl,
-	save		5*$ctrl	32px	$ctrl	$ctrl,
-	load		6*$ctrl	32px	$ctrl	$ctrl,
-	set			7*$ctrl	32px	$ctrl	$ctrl,
-	resume		8*$ctrl	32px	$ctrl	$ctrl,
+	prev		 0*$ctrl	32px	$ctrl	$ctrl,
+	next		 1*$ctrl	32px	$ctrl	$ctrl,
+	start		 2*$ctrl	32px	$ctrl	$ctrl,
+	stop		 3*$ctrl	32px	$ctrl	$ctrl,
+	pause		 4*$ctrl	32px	$ctrl	$ctrl,
+	save		 5*$ctrl	32px	$ctrl	$ctrl,
+	load		 6*$ctrl	32px	$ctrl	$ctrl,
+	set			 7*$ctrl	32px	$ctrl	$ctrl,
+	resume		 8*$ctrl	32px	$ctrl	$ctrl,
 
-	bUnknown	0*88px	48px	48px	24px,
-	bOn			1*88px	48px	48px	24px,
-	bOff		2*88px	48px	48px	24px,
-	bAuto		3*88px	48px	24px	24px,
+	warn		 0*$warn	72px	$warn	$warn,
+	severe		 1*$warn	72px	$warn	$warn,
+
+	bUnknown	 0*88px	48px	48px	24px,
+	bOn			 1*88px	48px	48px	24px,
+	bOff		 2*88px	48px	48px	24px,
+	bAuto		 3*88px	48px	24px	24px,
 
 	xxx 0 0 0 0
 );

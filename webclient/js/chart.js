@@ -23,8 +23,8 @@ var BAG_Chart = (function($){
 			[ 165, 220 ],	// 2. HOLD
 			[ 220, 255 ],	// 3. HEAT
 			[ 255, 300 ],	// 3. HOLD
-			[ 300, 330 ],	// POSTHEAT
-			[ 330, 330 ]	// notify (done)
+			[ 300, 326 ],	// POSTHEAT
+			[ 326, 326 ]	// notify (done)
 	];
 
 	return function( elem, device, passive ) {
@@ -104,6 +104,8 @@ var BAG_Chart = (function($){
 			}
 		}
 
+		var _lastData;
+
 		var Chart = {
 
 			setTemp0: text( 'temp0' ),
@@ -133,15 +135,15 @@ var BAG_Chart = (function($){
 
 				var script = boiler.script;
 
-				console.log( script );
+				var asJson = JSON.stringify( script );
+				if( asJson == _lastData ) return
+				_lastData = asJson;
 
 				Chart.setTemp0( script.steps[ 0 ].heat.toTemp() );
 				Chart.setTemp1( script.steps[ 1 ].heat.toTemp() );
 				Chart.setTemp2( script.steps[ 2 ].heat.toTemp() );
 				Chart.setTemp3( script.steps[ 3 ].heat.toTemp() );
 				Chart.setTemp4( script.steps[ 4 ].heat.toTemp() );
-				//Chart.setTempBar( boiler.temp.status / 100 );
-				//Chart.setTempStatus( boiler.temp.status );
 
 				Chart.setTime1( script.steps[ 1 ].hold.toMinSec() );
 				Chart.setTime2( script.steps[ 2 ].hold.toMinSec() );

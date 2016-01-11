@@ -1,7 +1,7 @@
 "use strict";
 
-var Assert = require( './assert.js' ),
-    E = require( './E.js' );
+var Assert = require( '../assert.js' ),
+    E = require( '../E.js' );
 
 function calcTime( t_src, t_dest, vol, kw, efficiency ) {
 
@@ -36,9 +36,13 @@ module.exports = function( args, config, env ){
 		},
 		pause: function( current, boiler ) {
 
+			E.rr( "PAUSE" );
+
 			boiler.temp.set = 0;
 		},
 		resume: function( current, boiler ) {
+
+			E.rr( "RESUME", args.heat );
 
 			boiler.temp.set = args.heat;
 		},

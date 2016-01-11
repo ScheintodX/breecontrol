@@ -62,7 +62,7 @@ function initState( done ) {
 
 		if( err ){
 			log.failure( "state", err );
-			throw err;
+			throw new Error( err );
 		}
 
 		state = data;
@@ -82,7 +82,7 @@ function initState( done ) {
 
 function stateSaved( err ) {
 
-	if( err ) throw err;
+	if( err ) throw new Error( err );
 
 	log.trace( "STATE saved" );
 }
@@ -141,21 +141,23 @@ function startWebsocket( done ) {
 
 function startMqtt( done ) {
 
-	Mqtt( ctrl.gotMqttData, config.mqtt, function( err, data ) {
+	Mqtt( ctrl.gotMqttData, config.mqtt,
+			[ 'infrastructure/#' ].concat( brewery.subscriptions() ),
+			function( err, data ) {
 
-		if( err ) {
-			log.failure( "mqtt", err );
-			return done( err );
-		}
+				if( err ) {
+					log.failure( "mqtt", err );
+					return done( err );
+				}
 
-		mqtt = data;
+				mqtt = data;
 
-		ctrl.onMqttMessage( mqtt.send );
+				ctrl.onMqttMessage( mqtt.send );
 
-		log.startup( "mqtt", "STARTED" );
+				log.startup( "mqtt", "STARTED" );
 
-		return done();
-	} );
+				return done();
+			} );
 }
 
 function stateReady( err ) {
@@ -163,6 +165,7 @@ function stateReady( err ) {
 	if( err ) throw err;
 
 	ctrl = Ctrl( config, hello, state, brewery );
+	repl.addContext( { ctrl: ctrl } );
 
 	async.parallel( [ startWebsocket, startMqtt ], startupDone );
 }

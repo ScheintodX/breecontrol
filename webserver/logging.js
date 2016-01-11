@@ -10,15 +10,16 @@ var FILE = null;
 var pause = false;
 
 var log = require( 'tracer' ).colorConsole( {
+	level: 'info',
 	inspectOpt: { depth: 3 },
 	transport : function( data ) {
 		if( pause ) return;
 		if( FILE ) {
 			fs.open( FILE, 'a', '0666', function( err, id ) {
-				if( err ) throw err; //fail fast!
+				if( err ) throw new Error( err ); //fail fast!
 				fs.write( id, data.output+"\n", null, 'utf8', function( err ) {
 					fs.close( id );
-					if( err ) throw err;
+					if( err ) throw new Error( err );
 				});
 			});
 		} else {

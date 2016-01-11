@@ -21,6 +21,26 @@ module.exports = function( config, hello, state, brewery ) {
 
 	var _mqtt, _web;
 
+	function _msg( boiler, level, text ) {
+
+		return _web( {
+			message: {
+				device: boiler, 
+				level: level,
+				messages: [
+					{ level: level, text: text }
+				]
+			}
+		} );
+	}
+
+	function _warn( boiler, text ) {
+		return _msg( boiler, 'warn', text );
+	}
+	function _info( boiler, text ) {
+		return _msg( 'info', text );
+	}
+
 	function sendStatusMqtt() {
 		
 		_mqtt( 'infrastructure/brewmaster/presence', "brewmaster" );
@@ -34,141 +54,155 @@ module.exports = function( config, hello, state, brewery ) {
 		_web( brewery.asJson() );
 	}
 
-	function notifyLoadSaveDone( err, data ) {
+	function gotWebDataSet( data ) {
 
-		E.rr( err, data );
+		var val = data.value,
+			topic = data.topic
+			;
+
+		brewery.setByWeb( topic, val );
+		/* more responsiv
+		brewery.watch();
+		_web( brewery.asJson() );
+		*/
 	}
 
-	var __ctrl = {
+	function gotWebDataLoadSave( data ) {
+
+		E.rr( 'loadsave' );
+
+		Assert.present( 'data.device', data.device );
+		Assert.present( 'data.topic', data.topic );
+
+		var boiler = brewery.boilers[ data.device ];
+
+		if( ! boiler ) throw new Error( "No boiler found" );
+
+		console.log( data.topic );
+
+		switch( data.topic ) {
+
+			case "load": 
+
+				log.trace( 'load', data.value.load );
+
+				Scripts.load( data.value.load, function( err, Script, script ) {
+
+					if( err ) return log.error( err );
+
+					var TheScript = Script( script, boiler, config, {
+
+						notify: function( boiler, what, message ){
+							log.info( boiler.name, what, message );
+						},
+
+						time: config.script.time
+
+					} );
+
+					boiler.script = TheScript.hello;
+					boiler._script = TheScript;
+
+					sendStatusWeb();
+
+					log.info( 'load done', data.value.load );
+				} );
+
+				break;
+
+			case "save":
+
+				log.trace( "SAVE", data.value.name );
+
+				if( !boiler.script ) {
+					_warn( data.device, 'No script available' );
+					return;
+				}
+
+				boiler._script.parse( data.value, function( err, TheScript ) {
+
+					if( err ) return _warn( data.device, err );
+					else _info( data.device, 'Set done' );
+
+					boiler.script = TheScript.hello;
+					boiler._script = TheScript;
+
+					var saveable = boiler._script.save();
+
+					Scripts.save( data.value.name, saveable, function( err ) {
+
+						_info( "Saved" );
+						log.trace( "SAVED", data.value.name );
+
+						delete( hello.scripts ); // force reload
+
+					} );
+
+				} );
+
+				break;
+
+			case "set":
+
+				log.trace( "SET" );
+
+				if( !boiler.script ) {
+					_warn( data.device, 'No script available' );
+					return;
+				}
+
+				boiler._script.parse( data.value, function( err, TheScript ) {
+
+					if( err ) return _warn( data.device, err );
+					else _info( data.device, 'Set done' );
+
+					boiler.script = TheScript.hello;
+					boiler._script = TheScript;
+
+					log.info( "SET done", boiler.script );
+				} );
+
+				break;
+
+			default: 
+				throw new Error( "Unknown action: " + data.topic );
+
+		}
+
+	}
+
+	function gotWebDataRunStop( data ) {
+
+		Assert.present( 'data.device', data.device );
+
+		var boiler = brewery.boilers[ data.device ];
+
+		Assert.present( 'boiler', boiler );
+
+		if( [ 'start', 'pause', 'resume', 'stop', 'next', 'prev' ].indexOf( data.topic ) >= 0 ){
+
+			var script = boiler._script;
+
+			Assert.present( 'script', script );
+
+			script[ data.topic ]();
+
+		} else {
+			throw new Error( "Unknown action: " + data.topic );
+		}
+	}
+
+	var self = {
 
 		gotWebData: function( data ) {
 
 			log.trace( "WebData", data );
 
-			// crude fix for placing load in the other section...
-			/*
-			if( data.on == 'runstop' && data.topic == 'load' ) {
-				data.on = 'loadsave';
-			}
-			*/
-
 			switch( data.on ) {
-
-				case "set":
-
-					var val = data.value,
-						topic = data.topic
-						;
-
-					brewery.setByWeb( topic, val );
-
-					break;
-
-				case "loadsave":
-
-					E.rr( 'loadsave' );
-
-					Assert.present( 'data.device', data.device );
-
-					var boiler = brewery.boilers[ data.device ];
-
-					if( ! boiler ) throw "No boiler found";
-
-					switch( data.topic ) {
-
-						case "load": 
-
-							E.rr( 'load', data.value.load );
-
-							Scripts.load( data.value.load, function( err, Script, script ) {
-
-								if( err ){
-									E.rr( err );
-									E.rr( err.stack );
-								}
-								if( err ) return log.error( err );
-
-								var TheScript = Script( script, boiler, config, {
-
-									notify: function( boiler, what, message ){
-										log.info( boiler.name, what, message );
-									},
-
-									time: config.script.time
-
-								} );
-
-								boiler.script = TheScript.hello;
-								boiler._script = TheScript;
-
-								E.rr( 'load done' );
-							} );
-
-							break;
-
-						case "save":
-
-							E.rr( "SAVE", data.value.name );
-
-							Scripts.parse( data.value, function( err, data ) {
-
-								if( err ) E.rr( err );
-								if( err ) return log.error( err );
-
-								boiler.script = data;
-								boiler.script.save();
-
-								E.rr( 'save done' );
-							} );
-
-							break;
-
-						case "set":
-
-							E.rr( "SET" );
-
-							Scripts.parse( data.value, function( err, data ) {
-
-								if( err ) E.rr( err );
-								if( err ) return log.error( err );
-
-								boiler.script = data;
-
-								E.rr( 'set done' );
-							} );
-
-							break;
-
-						default: 
-							throw "Unknown action: " + data.topic;
-
-					}
-					break;
-
-				case "runstop":
-
-					Assert.present( 'data.device', data.device );
-
-					var boiler = brewery.boilers[ data.device ];
-
-					Assert.present( 'boiler', boiler );
-
-					if( [ 'start', 'pause', 'resume', 'stop', 'next', 'prev' ].indexOf( data.topic ) >= 0 ){
-
-						var script = boiler._script;
-
-						Assert.present( 'script', script );
-
-						script[ data.topic ]();
-
-					} else {
-						throw "Unknown action: " + data.topic;
-					}
-					break;
-
-				default:
-					throw "Unknown action: " + data.on;
-
+				case "set": return gotWebDataSet( data ); break;
+				case "loadsave": gotWebDataLoadSave( data ); break;
+				case "runstop": gotWebDataRunStop( data ); break;
+				default: throw new Error( "Unknown action: " + data.on );
 			}
 
 		},
@@ -231,6 +265,6 @@ module.exports = function( config, hello, state, brewery ) {
 
 	};
 
-	return __ctrl;
+	return self;
 };
 

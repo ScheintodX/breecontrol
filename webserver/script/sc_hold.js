@@ -1,7 +1,7 @@
 "use strict";
 
-var Assert = require( './assert.js' ),
-    E = require( './E.js' );
+var Assert = require( '../assert.js' ),
+    E = require( '../E.js' );
 
 module.exports = function( args, config, env ){
 
@@ -16,7 +16,7 @@ module.exports = function( args, config, env ){
 		start: function( current, boiler ) {
 
 			current.start = env.time();
-			current.desc = 'Hold ' + args.heat + '°C for ' + args.hold;
+			current.desc = 'Hold ' + args.heat + '°C for ' + (args.hold/60) + 'min';
 
 			boiler.temp.set = args.heat;
 

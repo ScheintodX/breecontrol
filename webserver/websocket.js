@@ -74,9 +74,10 @@ function sendToAll( data ) {
 			break;
 	}
 
+	log.trace( "send (" + _wsServer.connections.length + ")", text );
+
 	_wsServer.connections.forEach( function( conn ){
 
-		log.trace( "send" );
 		conn.sendText( text );
 	} );
 

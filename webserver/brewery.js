@@ -1,5 +1,6 @@
 "use strict";
 
+var log = require( './logging.js' );
 var HM = require( './helpers.js' ).message;
 var Dot = require( 'dot-object' );
 var _ = require( 'underscore' );
@@ -51,6 +52,8 @@ module.exports = function( boilers ) {
 
 		asJson: function() {
 
+			var boilers = [];
+
 			return JSON.stringify( { boilers: self.boilers }, function( key, val ) {
 			
 				return key.startsWith( '_' ) ? undefined : val;
@@ -65,9 +68,10 @@ module.exports = function( boilers ) {
 
 			} else if( topic.match( /^boiler[12]\// ) ) {
 
-				if( topic.match( /override/ ) ) E.rr( topic, value );
-
 				HM.setByMqttAutotype( self.boilers, topic, value );
+
+				var topicTime = topic.replace( /\/[^\/]+$/, '/_meta/time' );
+				HM.setByMqtt( self.boilers, topicTime, new Date() );
 
 			} else {
 				log.warn( "Unknown topic: " + topic );
@@ -78,7 +82,7 @@ module.exports = function( boilers ) {
 
 			if( topic.match( /^boiler[12]\./ ) ){
 
-				E.rr( "SET " + topic + " " + value, typeof value );
+				log.info( "SET " + topic + " " + value, typeof value );
 
 				HM.setByDot( self.boilers, topic, value );
 			}
@@ -101,6 +105,22 @@ module.exports = function( boilers ) {
 
 				self.boilers[ boiler ].publish( emit );
 			}
+		},
+
+		subscriptions: function() {
+
+			var result = [];
+
+			for( var boiler in self.boilers ) {
+
+				var subs = self.boilers[ boiler ].subscriptions;
+
+				for( var i = 0; i<subs.length; i++ ) {
+
+					result.push( boiler + '/' + subs[ i ] );
+				}
+			}
+			return result;
 		}
 
 	};

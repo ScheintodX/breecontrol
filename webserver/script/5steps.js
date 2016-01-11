@@ -1,20 +1,22 @@
 "use strict";
 
-var E = require( '../E.js' );
+var E = require( '../E.js' ),
+	Assert = require( '../assert.js' )
+	;
 
 var SC = {
-	heat: require( '../sc_heat.js' ),
-	hold: require( '../sc_hold.js' ),
-	pause: require( '../sc_pause.js' ),
-	notify: require( '../sc_notify.js' ),
-	stop: require( '../sc_stop.js' )
+	heat: require( './sc_heat.js' ),
+	hold: require( './sc_hold.js' ),
+	pause: require( './sc_pause.js' ),
+	notify: require( './sc_notify.js' ),
+	stop: require( './sc_stop.js' )
 };
 
 module.exports = function( script, boiler, config, env ) {
 
-	var _run = [],
-		_idx = null,
-	    _cur = null
+	var _run,
+		_idx,
+	    _cur
 		;
 
 	function _exec( command ) {
@@ -39,14 +41,14 @@ module.exports = function( script, boiler, config, env ) {
 		_cur: function(){ return _cur },
 
 		hello: {
-			name: script.name,
+			name: null,
 
 			mode: "stop",
 			start: 0,
 			elapsed: 0,
 			remaining: 0,
 
-			steps: script.steps,
+			steps: null,
 
 			current: null,
 
@@ -93,7 +95,9 @@ module.exports = function( script, boiler, config, env ) {
 		},
 		stop: function() {
 			self.hello.mode = 'stop';
-			return _exec( 'stop' );
+			_exec( 'stop' );
+			stepTo( 0 );
+			return self.hello;
 		},
 
 		next: function() {
@@ -150,46 +154,73 @@ module.exports = function( script, boiler, config, env ) {
 
 			return hello;
 		},
+
+		parse: function( script, done ) {
+
+			Assert.present( 'script.name', script.name );
+			Assert.present( 'script.steps', script.steps );
+
+			console.log( script );
+
+			var steps = script.steps;
+
+			self.hello.name = script.name;
+			self.hello.steps = steps;
+
+			// for time calculation
+			steps[ 0 ].from = 15;
+			for( var i=1; i<5; i++ ){
+				steps[ i ].from = steps[ i-1 ].heat;
+			}
+
+			_run = [];
+
+			// preheat
+			_run.push( SC[ 'notify' ]( { what: 'run' }, config, env ) );
+			_run.push( SC[ 'heat' ]( steps[ 0 ], config, env ) );
+
+			// pause after preheat
+			_run.push( SC[ 'notify' ]( { what: 'ready', msg: 'preheat done' }, config, env ) );
+			_run.push( SC[ 'pause' ]( null, config, env ) );
+
+			_run.push( SC[ 'notify' ]( { what: 'run' }, config, env ) );
+			for( var i=1; i < 4; i++ ) {
+
+				var step = script.steps[ i ];
+
+				var sc_heat = SC[ 'heat' ]( step, config, env );
+				_run.push( sc_heat );
+
+				var sc_hold = SC[ 'hold' ]( step, config, env );
+				_run.push( sc_hold );
+			}
+
+			// postheat
+			_run.push( SC[ 'heat' ]( steps[ 4 ], config, env ) );
+
+			_run.push( SC[ 'notify' ]( { what: 'done' }, config, env ) );
+
+			// go to first step but don't start
+			self.stepTo( 0 );
+			self.hello.current.desc = 'Insert Coin';
+
+			if( done ) {
+				return done( null, self );
+			} else {
+				return self;
+			}
+		},
+
+		save: function() {
+			return {
+				name: self.hello.name,
+				script: '5steps.js',
+				steps: self.hello.steps
+			}
+		}
 	};
 
-	var steps = script.steps;
-
-	// for time calculation
-	steps[ 0 ].from = 15;
-	for( var i=1; i<5; i++ ){
-		steps[ i ].from = steps[ i-1 ].heat;
-	}
-
-	// preheat
-	_run.push( SC[ 'notify' ]( { what: 'run' }, config, env ) );
-	_run.push( SC[ 'heat' ]( steps[ 0 ], config, env ) );
-
-	// pause after preheat
-	_run.push( SC[ 'notify' ]( { what: 'ready', msg: 'preheat done' }, config, env ) );
-	_run.push( SC[ 'pause' ]( null, config, env ) );
-
-	_run.push( SC[ 'notify' ]( { what: 'run' }, config, env ) );
-	for( var i=1; i < 4; i++ ) {
-
-		var step = script.steps[ i ];
-
-		var sc_heat = SC[ 'heat' ]( step, config, env );
-		_run.push( sc_heat );
-
-		var sc_hold = SC[ 'hold' ]( step, config, env );
-		_run.push( sc_hold );
-	}
-
-	// postheat
-	_run.push( SC[ 'heat' ]( steps[ 4 ], config, env ) );
-
-	_run.push( SC[ 'notify' ]( { what: 'done' }, config, env ) );
-
-	// go to first step but don't start
-	self.stepTo( 0 );
-	self.hello.current.desc = 'Insert Coin';
-
-	return self;
+	return self.parse( script );
 };
 
 module.exports.version = 1;

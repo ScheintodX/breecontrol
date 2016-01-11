@@ -96,7 +96,7 @@ var BAG_Controls = (function($){
 
 				steps.push( {
 					heat: valFF( i, 'heat' ),
-					hold: valFF( i, 'hold' )
+					hold: valFF( i, 'hold' ) * 60
 				} )
 			}
 			steps.push( { heat: valFF( 4, 'heat' ) } )
@@ -129,10 +129,29 @@ var BAG_Controls = (function($){
 			for( var i=1; i<4; i++ ) {
 				var step = prog.steps[ i ];
 				valF( i, 'heat', step.heat );
-				valF( i, 'hold', step.hold );
+				valF( i, 'hold', step.hold/60 );
 			}
 
 			valF( 4, 'heat', prog.steps[ 4 ].heat );
+		}
+
+		function clearScript() {
+
+			function val( $s, name, value ){
+				return $s.find( '[name="' + name + '"]' )
+						.val( value );
+			}
+
+			function clear( $s, name ) {
+				val( $s, name, null );
+			}
+
+			clear( $secLoadSave, 'name' );
+			for( var i=0; i<5; i++ ) {
+				var $step = $secLoadSave.find( 'div.step' + i );
+				clear( $step, 'heat' );
+				clear( $step, 'hold' );
+			}
 		}
 
 		function enableButtons( actions ) {
@@ -164,6 +183,8 @@ var BAG_Controls = (function($){
 				;
 
 		// Callback for received data from Ctrl
+		
+		var oldSteps, oldCurrent;
 
 		function gotData( data ) {
 
@@ -189,18 +210,35 @@ var BAG_Controls = (function($){
 
 					$e.find( 'header h2' ).text( script.name );
 
-					storeScript( script );
-
+					var asJson = JSON.stringify( script.steps );
+					if( asJson != oldSteps ) {
+						storeScript( script );
+						oldSteps = asJson;
+					}
 					enableButtons( script.actions );
 
 					// Info
 					if( script.current ) {
 						var current = script.current;
-						$('.runstopinfo').text( (current.index+1) + ". " +
-								current.desc + " [" + current.mode + ']' );
+
+						asJson = JSON.stringify( current );
+						if( oldCurrent != asJson ) {
+
+							oldCurrent = asJson;
+
+							$('.runstopinfo').text( (current.index+1) + ". " +
+									current.desc + " [" + current.mode + ']' );
+						}
 					} else {
 						$('.runstopinfo').text( " - no script - " );
 					}
+
+				} else {
+
+					$e.find( 'header h2' ).text( '' );
+					clearScript();
+					enableButtons( [] );
+					$('.runstopinfo').text( '' );
 				}
 			} 
 			

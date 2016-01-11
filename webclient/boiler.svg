@@ -150,9 +150,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="271.58355"
-     inkscape:cy="193.95366"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="109.41645"
+     inkscape:cy="177.23337"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -377,7 +377,7 @@
     </g>
     <g
        id="icon_heating"
-       transform="matrix(0.89144737,0,0,0.89144737,13.113032,89.568229)">
+       transform="matrix(0.89144737,0,0,0.89144737,13.113032,9.568229)">
       <path
          transform="translate(3.25,864.61218)"
          d="m 131.25,12.5 c 0,9.664983 -7.83502,17.5 -17.5,17.5 -9.66498,0 -17.5,-7.835017 -17.5,-17.5 0,-9.6649831 7.83502,-17.5 17.5,-17.5 9.66498,0 17.5,7.8350169 17.5,17.5 z"
@@ -591,7 +591,7 @@
          id="tspan3997"
          sodipodi:role="line">/</tspan></text>
     <g
-       transform="matrix(0.64423074,0,0,0.64458787,271.74626,305.96061)"
+       transform="matrix(0.89104493,0,0,0.89153888,12.869,89.356871)"
        id="mode_run">
       <path
          sodipodi:type="arc"
@@ -613,7 +613,7 @@
     </g>
     <g
        id="mode_pause"
-       transform="matrix(0.64423074,0,0,0.64458787,271.74626,305.96061)">
+       transform="matrix(0.89104493,0,0,0.89153888,12.869,89.356871)">
       <path
          transform="translate(3.25,864.61218)"
          d="m 131.25,12.5 c 0,9.664983 -7.83502,17.5 -17.5,17.5 -9.66498,0 -17.5,-7.835017 -17.5,-17.5 0,-9.6649831 7.83502,-17.5 17.5,-17.5 9.66498,0 17.5,7.8350169 17.5,17.5 z"
@@ -644,7 +644,7 @@
       </g>
     </g>
     <g
-       transform="matrix(0.64423074,0,0,0.64458787,271.74626,305.96061)"
+       transform="matrix(0.89104493,0,0,0.89153888,12.869,89.356871)"
        id="mode_stop">
       <path
          sodipodi:type="arc"

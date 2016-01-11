@@ -6,15 +6,18 @@ var log = require( './logging.js' );
 
 var E = require( './E.js' );
 
-var _BASE_ = "scripts/";
+var _CONFIG_ = 'scriptconfig/',
+	_SCRIPT_ = 'script/';
 
-function save( name, done ) {
+function save( name, data, done ) {
 
-	E.rr( "SAVE", name );
+	var file = _CONFIG_ + name + '.json',
+	    data = JSON.stringify( data );
 
-	var data = JSON.stringify( this.script );
+	log.trace( "SAVE", file );
 
-	//fs.writeFile( _BASE_ + name, data, "utf-8", done );
+	fs.writeFile( file, data, "utf-8", done );
+	
 	done();
 }
 
@@ -22,22 +25,22 @@ function load( name, done ) {
 
 	log.trace( "LOAD", name ); // log
 
-	var json;
+	var file = _CONFIG_ + name;
 
-	fs.readFile( _BASE_ + name, "utf-8", function( err, data ) {
+	fs.readFile( file, "utf-8", function( err, data ) {
 
 		if( err ) return done( err );
 
 		try {
-			var script = JSON.parse( data );
+			var scriptconfig = JSON.parse( data );
 
-			var Script = require( './' + _BASE_ + script.script );
-
-			done( null, Script, script );
+			var Script = require( './' + _SCRIPT_ + scriptconfig.script );
 
 		} catch( ex ) {
 			return done( ex );
 		}
+
+		done( null, Script, scriptconfig );
 
 	} );
 }
@@ -46,7 +49,7 @@ function list( done ) {
 
 	log.info( "LIST" ); // log
 
-	fs.readdir( _BASE_, function( err, data ) {
+	fs.readdir( _CONFIG_, function( err, data ) {
 
 		if( err ) return done( err );
 
@@ -69,5 +72,5 @@ function list( done ) {
 module.exports = {
 	list: list,
 	load: load,
-	parse: function(){ E.rr( "not implemented" ); }
+	save: save
 };

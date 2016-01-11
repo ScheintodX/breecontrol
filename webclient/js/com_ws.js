@@ -32,7 +32,7 @@ var BAG_Com = (function(){
 
 		var data = JSON.parse( what.data );
 
-		console.log( data );
+		//console.trace( data );
 
 		_callback( data );
 	}
@@ -64,7 +64,7 @@ var BAG_Com = (function(){
 		connect();
 	}
 
-	function monitor() {
+	function watchdog() {
 
 		if( _websocket.readyState > 1 ){
 			reconnect();
@@ -84,7 +84,7 @@ var BAG_Com = (function(){
 
 			connect();
 
-			setInterval( monitor, 1000 );
+			setInterval( watchdog, 500 );
 
 			return Com;
 		},

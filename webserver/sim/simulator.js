@@ -97,6 +97,16 @@ var Sensors = {
 		freq: .1,
 		iv: 700,
 		mode: 'simple'
+	} ),
+	spare: ABool( {
+		topic: 'boiler1/spare',
+		status: { initial: false },
+		nominal: { initial: false },
+		initial: false,
+		timeout: 1000,
+		freq: .1,
+		iv: 700,
+		mode: 'random'
 	} )
 }
 

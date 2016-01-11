@@ -57,11 +57,11 @@ section.boiler {
 			@include buttonStyleFlat( white );
 			&.script {
 				@include isIcon( chart );
-				top: 3px; left: 3px;
+				top: 3px; right: 3px;
 			}
 			&.manual {
 				@include isIcon( settings );
-				top: 3px; right: 3px;
+				top: 3px; left: 3px;
 			}
 		}
 	}
@@ -80,11 +80,28 @@ section.script {
 
 section.info {
 
+	position: relative;
+
 	background-color: #eeff00;
 	color: black !important;
 	padding: 6px;
 
+	&:after {
+		position: absolute;
+		top:2px; right: 3px;
+		content: "";
+		@include spriteSize( warn );
+		@include sprite( warn );
+	}
+
 	&.severe {
+		background-color: #ffcc00;
+		&:after {
+			@include spritePos( severe );
+		}
+	}
+
+	div.severe {
 		color: #bb0022 !important;
 		font-weight: bold;
 	}
@@ -195,4 +212,7 @@ section.runstop, section.loadsave {
 	display: block;
 	text-align: center;
 	margin: 0px 10px 20px 10px;
+	border: 1px solid white;
+	border-radius: 4px;
+	padding: 8px;
 }

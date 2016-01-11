@@ -207,16 +207,12 @@ var BAG_Boiler = (function($){
 
 			gotData: function( data ) {
 
-				console.log( data );
-
 				if( !_svg ) return;
 
 				if( !( 'boilers' in data ) ) return;
 
 				var boiler = data.boilers[ device ]
 					;
-
-				console.log( boiler );
 
 				Boiler.setAggitator( boiler.aggitator.status );
 				Boiler.setFill( boiler.fill.status );

@@ -19,7 +19,7 @@ module.exports = function( done ) {
 			url: 'mqtt://localhost:1883/',
 			username: 'braumeister',
 			password: 'dBPg09K6U34m',
-			prefix: 'griesbraeu'
+			prefix: 'griesbraeu/'
 		},
 
 		boilers: [
