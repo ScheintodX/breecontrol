@@ -33,8 +33,6 @@ var BAG_Info = (function($){
 
 					if( 'warn' in boiler && boiler.warn.messages.length > 0 ) {
 
-						console.trace( boiler.warn );
-
 						var level = boiler.warn.level;
 						var messages = boiler.warn.messages;
 
