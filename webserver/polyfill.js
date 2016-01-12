@@ -2,6 +2,7 @@
 
 /*Source: MDN*/
 if (!String.prototype.startsWith) {
+	console.log( 'POLY: String..startsWith' );
 	String.prototype.startsWith = function(searchString, position) {
 		position = position || 0;
 		return this.indexOf( searchString, position ) === position;
@@ -10,6 +11,7 @@ if (!String.prototype.startsWith) {
 
 /*Source: MDN*/
 if (!String.prototype.endsWith) {
+	console.log( 'POLY: String..endsWith' );
 	String.prototype.endsWith = function(searchString, position) {
 		var subjectString = this.toString();
 		if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
@@ -23,6 +25,7 @@ if (!String.prototype.endsWith) {
 
 /*Source: MDN*/
 if (!String.prototype.repeat) {
+	console.log( "POLY: String..repeat" );
   String.prototype.repeat = function(count) {
     'use strict';
     if (this == null) {
@@ -62,4 +65,29 @@ if (!String.prototype.repeat) {
     }
     return rpt;
   }
+}
+
+if (typeof Object.assign != 'function') {
+	console.log( "POLY: Object.assign" );
+  (function () {
+    Object.assign = function (target) {
+      'use strict';
+      if (target === undefined || target === null) {
+        throw new TypeError('Cannot convert undefined or null to object');
+      }
+
+      var output = Object(target);
+      for (var index = 1; index < arguments.length; index++) {
+        var source = arguments[index];
+        if (source !== undefined && source !== null) {
+          for (var nextKey in source) {
+            if (source.hasOwnProperty(nextKey)) {
+              output[nextKey] = source[nextKey];
+            }
+          }
+        }
+      }
+      return output;
+    };
+  })();
 }

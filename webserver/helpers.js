@@ -71,6 +71,35 @@ function setByAutotype( obj, topic, value, splitEx ){
 	}
 }
 
+function setByMqttMethod( obj, topic, value ) {
+
+	var parts = topic.split( /\//g );
+
+	return setByMethod( obj, parts, value, 'setByMqtt' );
+
+}
+
+function setByWebMethod( obj, topic, value ) {
+
+	var parts = topic.split( /\./g );
+
+	return setByMethod( obj, parts, value, 'setByWeb' );
+
+}
+
+function setByMethod( obj, parts, value, setter ) {
+
+	if( parts.length < 2 )
+			throw new Error( 'Wrong topic: ' + topic );
+
+	var key = parts.pop();
+	var that = getByParts( obj, parts );
+
+	if( !that ) throw new Error( "Obj not found for: " + topic );
+
+	that[ setter ]( key, value );
+}
+
 function fromString( val, type ) {
 
 	switch( type ) {
@@ -130,6 +159,8 @@ var Helpers = {
 		setByMqttAutotype: function( obj, topic, value ){
 			return setByAutotype( obj, topic, value, /\//g );
 		},
+		setByMqttMethod: setByMqttMethod,
+		setByWebMethod: setByWebMethod,
 		getByParts: getByParts,
 		getByMqtt: function( obj, topic ) {
 			return getBy( obj, topic, /\//g );
@@ -142,6 +173,26 @@ var Helpers = {
 		toString: toString,
 		toStringAutotype: toStringAutotype,
 		fromString: fromString
+	},
+	func: {
+		augment: function( obj, before, after ) {
+
+			for( var key in obj ) {
+
+				if( !( typeof key == 'function' ) ) return;
+
+				var f = obj[ key ];
+
+				obj[ key ] = function() {
+
+					if( before ) before.apply( null, arguments );
+					f.apply( obj, arguments );
+					if( after ) after.apply( null, arguments );
+				}
+
+			}
+			return obj;
+		}
 	}
 };
 

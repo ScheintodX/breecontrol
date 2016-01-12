@@ -30,7 +30,7 @@ module.exports = function( args, config, env ){
 			current.start = env.time();
 			current.desc = 'Heat to ' + args.heat + '°C';
 
-			boiler.temp.set = args.heat;
+			boiler.temp.setTo( args.heat );
 
 			E.rr( "Start heat", current.desc );
 		},
@@ -38,17 +38,17 @@ module.exports = function( args, config, env ){
 
 			E.rr( "PAUSE" );
 
-			boiler.temp.set = 0;
+			boiler.temp.setTo( 0 );
 		},
 		resume: function( current, boiler ) {
 
 			E.rr( "RESUME", args.heat );
 
-			boiler.temp.set = args.heat;
+			boiler.temp.setTo( args.heat );
 		},
 		stop: function( current, boiler ) {
 
-			boiler.temp.set = 0;
+			boiler.temp.setTo( 0 );
 		},
 		run: function( current, boiler ) {
 

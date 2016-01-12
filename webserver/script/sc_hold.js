@@ -18,23 +18,21 @@ module.exports = function( args, config, env ){
 			current.start = env.time();
 			current.desc = 'Hold ' + args.heat + '°C for ' + (args.hold/60) + 'min';
 
-			boiler.temp.set = args.heat;
-
-			E.rr( "Start hold", current.desc );
+			boiler.temp.setTo( args.heat );
 		},
 		pause: function( current, boiler ) {
 
 			_pauseStart = env.time();
-			boiler.temp.set = 0;
+			boiler.temp.setTo( 0 );
 		},
 		resume: function( current, boiler ) {
 			
 			_pauseTime += env.time() - _pauseStart;
-			boiler.temp.set = args.hold;
+			boiler.temp.setTo( args.hold );
 		},
 		stop: function( current, boiler ) {
 
-			boiler.temp.set = 0;
+			boiler.temp.setTo( 0 );
 		},
 		run: function( current, boiler ) {
 

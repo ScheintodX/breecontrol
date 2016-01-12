@@ -60,6 +60,7 @@ module.exports = function( boilers ) {
 			} );
 		},
 
+		// Direct access to sub fields via setByMqttMethod
 		setByMqtt: function( topic, value ) {
 
 			if( topic.match( /^infrastructure\// ) ){
@@ -68,59 +69,58 @@ module.exports = function( boilers ) {
 
 			} else if( topic.match( /^boiler[12]\// ) ) {
 
-				HM.setByMqttAutotype( self.boilers, topic, value );
-
-				var topicTime = topic.replace( /\/[^\/]+$/, '/_time' );
-				HM.setByMqtt( self.boilers, topicTime, new Date() );
+				HM.setByMqttMethod( self.boilers, topic, value );
 
 			} else {
 				log.warn( "Unknown topic: " + topic );
 			}
 		},
 
+		// Direct access to sub fields via setByMqttMethod
 		setByWeb: function( topic, value ) {
 
 			if( topic.match( /^boiler[12]\./ ) ){
 
 				log.info( "SET " + topic + " " + value, typeof value );
 
-				HM.setByDot( self.boilers, topic, value );
+				HM.setByWebMethod( self.boilers, topic, value );
 			}
 		},
 
 		watch: function() {
 
-			return doSupervised( function() {
+			for( var boiler in self.boilers ) {
 
-				for( var boiler in self.boilers ) {
-
-					self.boilers[ boiler ].watch();
-				}
-			} );
+				self.boilers[ boiler ].watch();
+			}
 		},
 
+		// Recursive access to fields via publish/emit
 		publish: function( emit ) {
 
 			for( var boiler in self.boilers ) {
 
-				self.boilers[ boiler ].publish( emit );
+				self.boilers[ boiler ].publish( function( topic, data ) {
+
+					//E.rr( 'emit', boiler + '/' + topic, data );
+					emit( boiler + '/' + topic, data );
+				} );
 			}
 		},
 
-		subscriptions: function() {
+		// Recursive access to fields via subscribe/emit
+		subscribe: function( emit ) {
 
-			var result = [];
+			emit( 'infrastructure/#' );
 
 			for( var boiler in self.boilers ) {
 
-				var subs = self.boilers[ boiler ].subscriptions;
+				self.boilers[ boiler ].subscribe( function( topic ) {
 
-				for( var i = 0; i<subs.length; i++ ) {
-
-					result.push( boiler + '/' + subs[ i ] );
-				}
+					//E.rr( 'emit', boiler + '/' + topic );
+					emit( boiler + '/' + topic );
+				} );
 			}
-			return result;
 		}
 
 	};

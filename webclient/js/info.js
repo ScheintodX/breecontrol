@@ -37,10 +37,6 @@ var BAG_Info = (function($){
 						var messages = boiler.warn.messages;
 
 						setInfo( level, messages );
-
-						$e.show();
-					} else {
-						$e.hide();
 					}
 				}
 
@@ -51,11 +47,15 @@ var BAG_Info = (function($){
 					if( message.device != device ) return;
 
 					setInfo( message.level, message.messages );
+				}
+
+				if( $content.children().length > 0 ) {
 
 					$e.show();
+				} else {
+					$e.hide();
 				}
 			}
-
 		};
 		return Info;
 	};

@@ -13,7 +13,7 @@ var Dot = require( 'dot-object' ),
 
 // Scream server example: "hi" -> "HI!!!" 
 
-module.exports = function( onData, config, subscriptions, done ) {
+module.exports = function( onData, config, subscribe, done ) {
 
 	Assert.present( 'onData', onData );
 	Assert.present( 'config', config );
@@ -32,10 +32,10 @@ module.exports = function( onData, config, subscriptions, done ) {
 
 	mqttClient.on( 'connect', function () {
 		log.trace( "MQTT Connect" );
-		for( var i=0; i<subscriptions.length; i++ ) {
-			var topic = config.prefix + subscriptions[ i ];
-			mqttClient.subscribe( topic );
-		}
+		subscribe( function( topic ) {
+			log.trace( "SUBSCRIBE: " + topic );
+			mqttClient.subscribe( config.prefix + topic ) }
+		);
 		log.trace( "MQTT STARTED" );
 		return done( null, __mqtt );
 	});

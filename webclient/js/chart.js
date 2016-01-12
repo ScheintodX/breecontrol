@@ -8,7 +8,7 @@
  *   var c = BAG_Chart( id );
  * </pre>
  */
-var BAG_Chart = (function($){
+var BAG_Chart = (function($,Ψ){
 
 	//var BOUNDS = [ 30, 60, 140, 220, 300, 330 ];
 	var BOUNDS = [
@@ -44,12 +44,7 @@ var BAG_Chart = (function($){
 			return _svg ? _svg.getElementById( id ) : false;
 		}
 
-		function text( id ) {
-			return function( text ) {
-				var svgE = svg( id );
-				if( svgE ) svgE.children[ 0 ].textContent = text;
-			}
-		}
+		var ψ = Ψ( svg );
 
 		function moveRel( svgE, x, y ) {
 
@@ -75,20 +70,6 @@ var BAG_Chart = (function($){
 			}
 		}
 
-		/*
-		function moveHor( id, inScale, outScale ) {
-
-			return function doMoveHor( percent ) {
-
-				var svgE = svg( id );
-				if( !svgE ) return;
-
-				var x = scaleCalc( percent, inScale, outScale );
-
-				moveRel( svgE, x, 0 );
-			}
-		}
-		*/
 		function moveHor( id ) {
 
 			return function doMoveHor( step, percent ) {
@@ -108,20 +89,20 @@ var BAG_Chart = (function($){
 
 		var Chart = {
 
-			setTemp0: text( 'temp0' ),
-			setTemp1: text( 'temp1' ),
-			setTemp2: text( 'temp2' ),
-			setTemp3: text( 'temp3' ),
-			setTemp4: text( 'temp4' ),
+			setTemp0: ψ.asDegree( ψ.text( 'temp0' ), true ),
+			setTemp1: ψ.asDegree( ψ.text( 'temp1' ), true ),
+			setTemp2: ψ.asDegree( ψ.text( 'temp2' ), true ),
+			setTemp3: ψ.asDegree( ψ.text( 'temp3' ), true ),
+			setTemp4: ψ.asDegree( ψ.text( 'temp4' ), true ),
 			//setTempBar: moveVert( 'temp_bar', 1, 130 ),
 			//setTempStatus: text( 'temp_status' ),
 
-			setTime1: text( 'time1' ),
-			setTime2: text( 'time2' ),
-			setTime3: text( 'time3' ),
+			setTime1: ψ.asMinSec( ψ.text( 'time1' ) ),
+			setTime2: ψ.asMinSec( ψ.text( 'time2' ) ),
+			setTime3: ψ.asMinSec( ψ.text( 'time3' ) ),
 			//setTimeBar: moveHor( 'time_bar', 1, 300 ),
 			setTimeBar: moveHor( 'time_bar' ),
-			setTimeStatus: text( 'time_status' ),
+			setTimeStatus: ψ.asHourMinSec( ψ.text( 'time_status' ) ),
 
 			gotData: function( data ) {
 
@@ -139,16 +120,17 @@ var BAG_Chart = (function($){
 				if( asJson == _lastData ) return
 				_lastData = asJson;
 
-				Chart.setTemp0( script.steps[ 0 ].heat.toTemp() );
-				Chart.setTemp1( script.steps[ 1 ].heat.toTemp() );
-				Chart.setTemp2( script.steps[ 2 ].heat.toTemp() );
-				Chart.setTemp3( script.steps[ 3 ].heat.toTemp() );
-				Chart.setTemp4( script.steps[ 4 ].heat.toTemp() );
+				Chart.setTemp0( script.steps[ 0 ].heat );
+				Chart.setTemp1( script.steps[ 1 ].heat );
+				Chart.setTemp2( script.steps[ 2 ].heat );
+				Chart.setTemp3( script.steps[ 3 ].heat );
+				Chart.setTemp4( script.steps[ 4 ].heat );
 
-				Chart.setTime1( script.steps[ 1 ].hold.toMinSec() );
-				Chart.setTime2( script.steps[ 2 ].hold.toMinSec() );
-				Chart.setTime3( script.steps[ 3 ].hold.toMinSec() );
-				if( script.current ) {
+				Chart.setTime1( script.steps[ 1 ].hold );
+				Chart.setTime2( script.steps[ 2 ].hold );
+				Chart.setTime3( script.steps[ 3 ].hold );
+
+				if( 'current' in script ) {
 					
 					var current = script.current,
 						elapsed = current.elapsed,
@@ -158,7 +140,7 @@ var BAG_Chart = (function($){
 						;
 					//Chart.setTimeBar( script.current.index /6 + percent /6 ); 
 					Chart.setTimeBar( current.index, percent ); 
-					Chart.setTimeStatus( '‒ ' + remaining.toMinSec() );
+					Chart.setTimeStatus( remaining.toMinSec() );
 				} else {
 					Chart.setTimeBar( 0 );
 					Chart.setTimeStatus( '??' );
@@ -173,4 +155,4 @@ var BAG_Chart = (function($){
 		return Chart;
 	};
 
-})($);
+})($,BAG_Function);

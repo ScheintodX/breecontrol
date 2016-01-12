@@ -4,9 +4,9 @@
 	"version": 1,
 	"steps": [
 		{ "heat": 65.0 },
-		{ "heat": 60.0, "hold": 3600 },
-		{ "heat": 82.0, "hold": 3600 },
-		{ "heat": 90, "hold": 1800 },
+		{ "heat": 60.0, "hold": 1800 },
+		{ "heat": 82.0, "hold": 1800 },
+		{ "heat": 90, "hold": 900 },
 		{ "heat": 100.0 }
 	]
 }

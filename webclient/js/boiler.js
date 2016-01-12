@@ -8,7 +8,7 @@
  *   var b = BAG_Boiler( id );
  * </pre>
  */
-var BAG_Boiler = (function($){
+var BAG_Boiler = (function($,Ψ){
 
 	// Constructor function
 	return function( elem, device, passive ) {
@@ -28,149 +28,27 @@ var BAG_Boiler = (function($){
 			return $(svg(id));
 		}
 
-		function ifchanged( f ) {
-			var _old;
-			return function( val ) {
-				if( _old == val ) return;
-				_old = val;
-				f( val );
-			}
-		}
+		var ψ = Ψ( svg );
 
-		function text( id ) {
-			return ifchanged( function( text ) {
-				var svgE = svg( id );
-				if( svgE ) svgE.children[ 0 ].textContent = text;
-			} );
-		}
-		/*
-		function degree( id ) {
-			return ifchanged( function( val ) {
-				var text;
-				if( val !== 0 && !val ) text = '??';
-				else text = val.toTemp();
-				var svgE = svg( id );
-				if( svgE ) svgE.children[ 0 ].textContent = text;
-			} );
-		}
-		*/
-		function asDegree( f, inclC, scale ) {
-
-			if( !scale ) scale = 1;
-
-			return function( val ) {
-				var text;
-				if( val !== 0 && !val ) text = '??';
-				else {
-					text = val.toTemp( scale );
-					if( inclC ) text += 'C';
-				}
-				return f( text );
-			}
-		}
-		function asHourMinSec( f ) {
-
-			return function( val ) {
-				var text;
-				if( ! val ) text = '--:--:--';
-				else {
-					text = val.toHourMinSec()
-				}
-				return f( text );
-			}
-		}
-
-		function asColor( f ) {
-
-			function d2h(c) {
-				var hex = (c<<0).toString(16);
-				return hex.length == 1 ? "0" + hex : hex;
-			}
-			function col( r,g,b ){
-				return '#' + d2h(r) + d2h(g) + d2h(b);
-			}
-
-			return function( heat ) {
-
-				var color = '#000000';
-				if( heat !== 0 && !heat ) color='#77ff00';
-				else {
-					if( heat < 300 ){
-						var perc = (heat/300);
-						color = col( perc*255, perc*127, 0 );
-					} else color = '#ffdd88';
-				}
-				f( color );
-			}
-		}
-
-		function fill( id ) {
-			return ifchanged( function( color ) {
-				var svgE = svg( id );
-				if( svgE ) svgE.style.fill = color;
-			} );
-		}
-
-		function border( id ) {
-			return ifchanged( function( on ) {
-				var svgE = svg( id );
-				if( svgE ) svgE.style.stroke = on ? '#ef2929' : '#2e3436';
-			} );
-		}
-
-		function opacity( id ) {
-			return ifchanged( function( value ) {
-				var svgE = svg( id );
-				if( svgE ) svgE.style.opacity = value;
-			} );
-		}
-
-		function visible( id ) {
-			return ifchanged( function( visible ) {
-				var svgE = svg( id );
-				if( svgE ) svgE.style.opacity = visible ? 1 : 0;
-			} );
-		}
-
-		function oneOf( prefix, list ) {
-			return ifchanged( function( which ) {
-				$.each( list, function( i, it ) {
-					var svgE = svg( prefix + it );
-					if( svgE ) svgE.style.opacity = (which==it) ? 1 : 0;
-				} );
-			} )
-		}
-
-		function override( f ) {
-			return function( value ) {
-				var isOverride = (
-						typeof value != 'undefined' 
-						&& value !== null
-						&& value != 'off'
-				);
-				return f( isOverride );
-			};
-		}
-
-		
 		var Boiler = {
 
-			setTempInnerStatus: asDegree( text( 'temp_inner_status' ), true ),
-			setTempInnerNominal: asDegree( text( 'temp_inner_nominal' ) ),
-			setTimeRemaining: asHourMinSec( text( 'time_remaining' ) ),
-			setTimeElapsed: asHourMinSec( text( 'time_elapsed' ) ),
-			setUpperTempStatus: asDegree( text( 'upper_temp_status' ) ),
-			setUpperTempNominal: asDegree( text( 'upper_temp_nominal' ) ),
-			setUpperTempIcon: asColor( fill( 'temp_upper_icon' ) ),
-			setUpperHeater: border( 'temp_upper_icon' ),
-			setLowerTempStatus: asDegree( text( 'lower_temp_status' ) ),
-			setLowerTempNominal: asDegree( text( 'lower_temp_nominal' ) ),
-			setLowerTempIcon: asColor( fill( 'temp_lower_icon' ) ),
-			setLowerHeater: border( 'temp_lower_icon' ),
-			setLid: visible( 'lid' ),
-			setLidOverride: override( visible( 'lid_override' ) ),
-			setMode: oneOf( 'mode_', [ 'run', 'pause', 'stop' ] ),
-			setAggitator: ifchanged( function( on ) {
+			setTempInnerStatus: ψ.asDegree( ψ.text( 'temp_inner_status' ), true ),
+			setTempInnerNominal: ψ.asDegree( ψ.text( 'temp_inner_nominal' ) ),
+			setTimeRemaining: ψ.asHourMinSec( ψ.text( 'time_remaining' ) ),
+			setTimeElapsed: ψ.asHourMinSec( ψ.text( 'time_elapsed' ) ),
+			setUpperTempStatus: ψ.asDegree( ψ.text( 'upper_temp_status' ) ),
+			setUpperTempNominal: ψ.asDegree( ψ.text( 'upper_temp_nominal' ) ),
+			setUpperTempIcon: ψ.asColor( ψ.fill( 'temp_upper_icon' ) ),
+			setUpperHeater: ψ.border( 'temp_upper_icon' ),
+			setLowerTempStatus: ψ.asDegree( ψ.text( 'lower_temp_status' ) ),
+			setLowerTempNominal: ψ.asDegree( ψ.text( 'lower_temp_nominal' ) ),
+			setLowerTempIcon: ψ.asColor( ψ.fill( 'temp_lower_icon' ) ),
+			setLowerHeater: ψ.border( 'temp_lower_icon' ),
+			setLid: ψ.visible( 'lid' ),
+			setLidOverride: ψ.override( ψ.visible( 'lid_override' ) ),
+			setMode: ψ.oneOf( 'mode_', [ 'run', 'pause', 'stop' ] ),
+
+			setAggitator: ψ.ifchanged( function( on ) {
 
 				var aggi = svg('aggitator');
 
@@ -186,7 +64,8 @@ var BAG_Boiler = (function($){
 				}
 
 			} ),
-			setFill: ifchanged( function( value ) {
+
+			setFill: ψ.ifchanged( function( value ) {
 
 				var move = 100-value*100.0;
 
@@ -203,7 +82,8 @@ var BAG_Boiler = (function($){
 						;
 					
 			} ),
-			setFillOverride: override( visible( 'fill_override' ) ),
+
+			setFillOverride: ψ.override( ψ.visible( 'fill_override' ) ),
 
 			gotData: function( data ) {
 
@@ -211,27 +91,48 @@ var BAG_Boiler = (function($){
 
 				if( !( 'boilers' in data ) ) return;
 
-				var boiler = data.boilers[ device ]
-					;
+				var boiler = data.boilers[ device ];
 
-				Boiler.setAggitator( boiler.aggitator.status );
-				Boiler.setFill( boiler.fill.status );
-				Boiler.setFillOverride( boiler.fill.override );
-				Boiler.setLid( boiler.lid.status );
-				Boiler.setLidOverride( boiler.lid.override );
+				if( 'aggitator' in boiler ) {
+					Boiler.setAggitator( boiler.aggitator.status );
+				}
 
-				Boiler.setTempInnerStatus( boiler.temp.status );
-				Boiler.setTempInnerNominal( boiler.temp.nominal );
+				if( 'fill' in boiler ) {
+					Boiler.setFill( boiler.fill.status );
+					Boiler.setFillOverride( boiler.fill.override );
+				}
 
-				Boiler.setUpperTempStatus( boiler.upper.temp.status );
-				Boiler.setUpperTempNominal( boiler.upper.temp.nominal );
-				Boiler.setUpperTempIcon( boiler.upper.temp.status );
-				Boiler.setUpperHeater( boiler.upper.heater.status );
+				if( 'lid' in boiler ) {
+					Boiler.setLid( boiler.lid.status );
+					Boiler.setLidOverride( boiler.lid.override );
+				}
 
-				Boiler.setLowerTempStatus( boiler.lower.temp.status );
-				Boiler.setLowerTempNominal( boiler.lower.temp.nominal );
-				Boiler.setLowerTempIcon( boiler.lower.temp.status );
-				Boiler.setLowerHeater( boiler.lower.heater.status );
+				if( 'temp' in boiler ) {
+					Boiler.setTempInnerStatus( boiler.temp.status );
+					Boiler.setTempInnerNominal( boiler.temp.nominal );
+				}
+
+				if( 'upper' in boiler ) {
+					if( 'temp' in boiler.upper ) {
+						Boiler.setUpperTempStatus( boiler.upper.temp.status );
+						Boiler.setUpperTempNominal( boiler.upper.temp.nominal );
+						Boiler.setUpperTempIcon( boiler.upper.temp.status );
+					}
+					if( 'heater' in boiler.upper ) {
+						Boiler.setUpperHeater( boiler.upper.heater.status );
+					}
+				}
+
+				if( 'lower' in boiler ) {
+					if( 'temp' in boiler.lower ) {
+						Boiler.setLowerTempStatus( boiler.lower.temp.status );
+						Boiler.setLowerTempNominal( boiler.lower.temp.nominal );
+						Boiler.setLowerTempIcon( boiler.lower.temp.status );
+					}
+					if( 'heater' in boiler.lower ) {
+						Boiler.setLowerHeater( boiler.lower.heater.status );
+					}
+				}
 
 				if( 'script' in boiler ) {
 					var script = boiler.script;
@@ -273,4 +174,4 @@ var BAG_Boiler = (function($){
 		return Boiler;
 	};
 
-})($);
+})($, BAG_Function);

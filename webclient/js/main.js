@@ -24,7 +24,6 @@
 			//info2: BAG_Info( '#info2', 'boiler2' )
 		} );
 
-
 		var com = BAG_Com
 			.onData( ctrl.gotData )
 			.start()

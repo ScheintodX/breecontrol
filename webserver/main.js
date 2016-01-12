@@ -142,7 +142,7 @@ function startWebsocket( done ) {
 function startMqtt( done ) {
 
 	Mqtt( ctrl.gotMqttData, config.mqtt,
-			[ 'infrastructure/#' ].concat( brewery.subscriptions() ),
+			brewery.subscribe,
 			function( err, data ) {
 
 				if( err ) {
