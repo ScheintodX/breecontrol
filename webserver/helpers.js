@@ -59,9 +59,9 @@ function setByAutotype( obj, topic, value, splitEx ){
 	if( !that ) throw new Error( "Obj not found for " + topic );
 
 	if( value.length > 0 ) {
-		var meta = that._meta;
-		if( !meta ) throw new Error( "Meta missing in " + topic );
-		var type = meta.type;
+		var conf = that._conf;
+		if( !conf ) throw new Error( "conf missing in " + topic );
+		var type = conf.type;
 		if( !type ) throw new Error( "Type missing in " + topic );
 		value = fromString( value, type );
 

@@ -1,4 +1,5 @@
 *.swp
+*.swo
 *.bak
 *-bak
 node_modules

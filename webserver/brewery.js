@@ -70,7 +70,7 @@ module.exports = function( boilers ) {
 
 				HM.setByMqttAutotype( self.boilers, topic, value );
 
-				var topicTime = topic.replace( /\/[^\/]+$/, '/_meta/time' );
+				var topicTime = topic.replace( /\/[^\/]+$/, '/_time' );
 				HM.setByMqtt( self.boilers, topicTime, new Date() );
 
 			} else {

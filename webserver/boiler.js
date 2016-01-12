@@ -24,10 +24,8 @@ function createBoiler( index, config ) {
 				boost: 15
 			},
 			temp: {
-				_meta: {
-					type: 'f'
-				},
 				_conf: {
+					type: 'f',
 					timeout: 5000
 				},
 				status: 0,
@@ -36,10 +34,8 @@ function createBoiler( index, config ) {
 				set: 0
 			},
 			heater: {
-				_meta: {
-					type: 'b'
-				},
 				_conf: {
+					type: 'b',
 					timeout: 5000
 				},
 				status: false
@@ -52,10 +48,8 @@ function createBoiler( index, config ) {
 				boost: 50
 			},
 			temp: {
-				_meta: {
-					type: 'f'
-				},
 				_conf: {
+					type: 'f',
 					timeout: 5000
 				},
 				status: 0,
@@ -64,10 +58,8 @@ function createBoiler( index, config ) {
 				set: 0
 			},
 			heater: {
-				_meta: {
-					type: 'b'
-				},
 				_conf: {
+					type: 'b',
 					timeout: 5000
 				},
 				status: false
@@ -76,11 +68,9 @@ function createBoiler( index, config ) {
 
 		temp: {
 			_conf: {
+				type: 'f',
 				mine: true,
 				timeout: 5000
-			},
-			_meta: {
-				type: 'f',
 			},
 			status: 0,
 			nominal: 0,
@@ -89,10 +79,8 @@ function createBoiler( index, config ) {
 
 		aggitator: {
 			_conf: {
-				timeout: 1000
-			},
-			_meta: {
 				type: 'b',
+				timeout: 1000
 			},
 			status: false,
 			nominal: false,
@@ -101,10 +89,8 @@ function createBoiler( index, config ) {
 
 		fill: {
 			_conf: {
-				timeout: 2000,
-			},
-			_meta: {
-				type: 'f'
+				type: 'f',
+				timeout: 2000
 			},
 			status: 0,
 			override: null,
@@ -112,10 +98,8 @@ function createBoiler( index, config ) {
 
 		lid: {
 			_conf: {
-				timeout: 1000,
-			},
-			_meta: {
-				type: 'b'
+				type: 'b',
+				timeout: 1000
 			},
 			status: false,
 			override: null,
@@ -123,10 +107,8 @@ function createBoiler( index, config ) {
 
 		spare: {
 			_conf: {
-				timeout: 1000,
-			},
-			_meta: {
-				type: 'b'
+				type: 'b',
+				timeout: 1000
 			},
 			status: 0,
 			nominal: 0
@@ -206,7 +188,7 @@ function createBoiler( index, config ) {
 
 				if( typeof val == 'undefined' ) return;
 
-				var tType = topic.replace( /\/[^\/]+$/, '/_meta/type' ),
+				var tType = topic.replace( /\/[^\/]+$/, '/_conf/type' ),
 					type = H.message.getByMqtt( self, tType );
 
 				emit( boilerN + '/' + topic, H.mqtt.toString( val, type, 1 ) );
@@ -265,9 +247,9 @@ function createBoiler( index, config ) {
 				var w = H.message.getByDot( self, name );
 				//var w = self._watchTime[ i ];
 
-				var age = now - w._meta.time;
+				var age = now - w._time;
 
-				if( ! w._meta.time || age > w._conf.timeout ) {
+				if( ! w._time || age > w._conf.timeout ) {
 					w.status = undefined;
 					if( ! w._conf.mine ) w.nominal = undefined;
 				}
