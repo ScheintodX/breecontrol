@@ -52,16 +52,7 @@ var BAG_Boiler = (function($,Ψ){
 
 				var aggi = svg('aggitator');
 
-				if( on ) {
-					aggi.style.opacity = .8;
-					$(aggi).velocity(
-							{ opacity: [ .8, .9 ] },
-							{ duration: 317, loop: true }
-					);
-				} else {
-					$(aggi).velocity( "stop" );
-					aggi.style.opacity = .2;
-				}
+				aggi.style.opacity = on ? .8 : .2;
 
 			} ),
 

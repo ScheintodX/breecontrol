@@ -137,6 +137,10 @@ function createBoiler( index, config ) {
 			'temp', 'upper.temp', 'lower.temp', 'lid', 'spare'
 		],
 
+		exportCopy: function() {
+			return JSON.decode( JSON.stringify( self ) );
+		},
+
 		watch: function() {
 
 			self.warn = {

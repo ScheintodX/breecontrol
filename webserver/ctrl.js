@@ -60,11 +60,11 @@ module.exports = function( config, hello, state, brewery ) {
 			topic = data.topic
 			;
 
-		brewery.setByWeb( topic, val );
-		/* more responsiv
-		brewery.watch();
-		_web( brewery.asJson() );
-		*/
+		var diff = brewery.setByWeb( topic, val );
+
+		E.rr( JSON.stringify( diff ) );
+
+		if( diff ) brewery.publish( _mqtt );
 	}
 
 	function gotWebDataLoadSave( data ) {
@@ -209,7 +209,11 @@ module.exports = function( config, hello, state, brewery ) {
 
 		gotMqttData: function( topic, data ) {
 
-			brewery.setByMqtt( topic, data );
+			var diff = brewery.setByMqtt( topic, data );
+
+			if( diff ) {
+				_web( { diff: diff } );
+			}
 		},
 
 		onMqttMessage: function( mqtt ) {

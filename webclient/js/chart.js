@@ -58,7 +58,7 @@ var BAG_Chart = (function($,Ψ){
 
 		function moveVert( id, inScale, outScale ) {
 
-			return function doMoveVert( percent ) {
+			return ψ.ifchanged( function( percent ) {
 
 				var svgE = svg( id );
 				if( !svgE ) return;
@@ -67,12 +67,18 @@ var BAG_Chart = (function($,Ψ){
 
 				moveRel( svgE, 0, y );
 
-			}
+			} );
 		}
 
 		function moveHor( id ) {
 
-			return function doMoveHor( step, percent ) {
+			var _step, _percent;
+
+			return function( step, percent ) {
+
+				if( step === _step && percent === _percent ) return;
+				_step = step;
+				_percent = percent;
 
 				var svgE = svg( id );
 				if( !svgE ) return;
@@ -102,7 +108,7 @@ var BAG_Chart = (function($,Ψ){
 			setTime3: ψ.asMinSec( ψ.text( 'time3' ) ),
 			//setTimeBar: moveHor( 'time_bar', 1, 300 ),
 			setTimeBar: moveHor( 'time_bar' ),
-			setTimeStatus: ψ.asHourMinSec( ψ.text( 'time_status' ) ),
+			setTimeStatus: ψ.asMinSec( ψ.text( 'time_status' ) ),
 
 			gotData: function( data ) {
 
@@ -138,9 +144,10 @@ var BAG_Chart = (function($,Ψ){
 						total = elapsed + remaining,
 						percent = total != 0 ? elapsed / total : 0
 						;
+					percent = ((percent*360)<<0)/360;
 					//Chart.setTimeBar( script.current.index /6 + percent /6 ); 
 					Chart.setTimeBar( current.index, percent ); 
-					Chart.setTimeStatus( remaining.toMinSec() );
+					Chart.setTimeStatus( remaining );
 				} else {
 					Chart.setTimeBar( 0 );
 					Chart.setTimeStatus( '??' );

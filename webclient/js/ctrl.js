@@ -10,6 +10,7 @@ var BAG_Ctrl = (function($){
 	return function( controls ) {
 
 		var _com = false;
+		var _last;
 
 		function gotManual( ev ) {
 
@@ -29,6 +30,18 @@ var BAG_Ctrl = (function($){
 		function gotData( data ) {
 
 			if( !controls ) return Ctrl;
+
+			//console.log( data );
+
+			if( 'boilers' in data ) {
+				_last = data;
+			}
+			if( 'diff' in data && 'boilers' in data.diff && _last ) {
+				_last = jsondiffpatch.patch( _last, data.diff );
+				data = _last;
+			}
+
+			//console.log( data );
 
 			$.each( controls, function( name, control ) {
 

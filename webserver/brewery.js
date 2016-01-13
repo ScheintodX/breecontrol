@@ -5,6 +5,7 @@ var HM = require( './helpers.js' ).message;
 var Dot = require( 'dot-object' );
 var _ = require( 'underscore' );
 var E = require( './E.js' );
+var jdp = require( 'jsondiffpatch' );
 
 module.exports = function( boilers ) {
 
@@ -29,15 +30,13 @@ module.exports = function( boilers ) {
 
 	function doSupervised( f ) {
 
-		var original = Dot.dot( self.boilers );
+		var original = JSON.parse( self.asJson() );
 
 		f();
 
-		var changed = Dot.dot( self.boilers );
+		var changed = JSON.parse( self.asJson() );
 
-		var d = diff( original, changed );
-
-		return d;
+		return jdp.diff( original, changed );
 	}
 
 	var self = {
@@ -69,7 +68,13 @@ module.exports = function( boilers ) {
 
 			} else if( topic.match( /^boiler[12]\// ) ) {
 
-				HM.setByMqttMethod( self.boilers, topic, value );
+				return doSupervised( function() {
+
+					HM.setByMqttMethod( self.boilers, topic, value );
+
+					self.watch();
+				} );
+
 
 			} else {
 				log.warn( "Unknown topic: " + topic );
@@ -83,7 +88,12 @@ module.exports = function( boilers ) {
 
 				log.info( "SET " + topic + " " + value, typeof value );
 
-				HM.setByWebMethod( self.boilers, topic, value );
+				return doSupervised( function() {
+
+					HM.setByWebMethod( self.boilers, topic, value );
+
+					self.watch();
+				} );
 			}
 		},
 
