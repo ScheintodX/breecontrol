@@ -43,6 +43,12 @@ module.exports = function( script, boiler, config, env ) {
 		hello: {
 			name: null,
 
+			version: 1,
+
+			controller: '5steps',
+			chart: '5steps.js',
+			view: '5steps.js',
+
 			mode: "stop",
 			start: 0,
 			elapsed: 0,

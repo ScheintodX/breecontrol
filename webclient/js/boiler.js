@@ -50,10 +50,7 @@ var BAG_Boiler = (function($,Ψ){
 
 			setAggitator: ψ.ifchanged( function( on ) {
 
-				var aggi = svg('aggitator');
-
-				aggi.style.opacity = on ? .8 : .2;
-
+				svg('aggitator').style.opacity = on ? .8 : .2;
 			} ),
 
 			setFill: ψ.ifchanged( function( value ) {
