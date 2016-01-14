@@ -1,15 +1,16 @@
 "use strict";
 
 var Assert = require( '../assert.js' ),
-    E = require( '../E.js' );
+    E = require( '../E.js' ),
+	log = require( '../logging.js' );
 
 module.exports = function( args, config, env ){
 
 	var self = {
 
 		start: function( current, boiler ) {
-			current.desc = "Have a break";
-			E.rr( "mach mal Pause" );
+			current.desc = "Waiting...";
+			log.info( "Have a break" );
 		},
 		resume: function( current, boiler ) {
 			current.mode = 'done';

@@ -1,6 +1,7 @@
 "use strict";
 
 var E = require( '../E.js' ),
+	log = require( '../logging.js' ),
 	Assert = require( '../assert.js' )
 	;
 
@@ -21,11 +22,13 @@ module.exports = function( script, boiler, config, env ) {
 
 	function _exec( command ) {
 
-		if( !_cur ) return E.rr( 'no _cur' );
+		if( !_cur ) return log.error( 'no _cur' );
 
 		if( !_cur[ command ] ) return self.hello;
 
 		var current = self.hello.current;
+
+		log.trace( command, current.desc );
 
 		current.mode = self.hello.mode;
 		_cur[ command ]( current, boiler );
@@ -63,7 +66,7 @@ module.exports = function( script, boiler, config, env ) {
 
 		stepTo: function( index ) {
 
-			E.rr( "stepTo", index, self.hello.mode );
+			log.info( "Step To", index, self.hello.mode );
 
 			if( index < 0 || index >= _run.length ) return false;
 
@@ -166,7 +169,7 @@ module.exports = function( script, boiler, config, env ) {
 			Assert.present( 'script.name', script.name );
 			Assert.present( 'script.steps', script.steps );
 
-			console.log( script );
+			log.trace( script );
 
 			var steps = script.steps;
 

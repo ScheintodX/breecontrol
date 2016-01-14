@@ -1,7 +1,7 @@
 "use strict";
 
-var E = require( './E.js' );
-var MQTT = require( './helpers.js' ).mqtt;
+var E = require( '../E.js' );
+var MQTT = require( '../helpers.js' ).mqtt;
 var _ = require( 'underscore' );
 
 module.exports = function( conf, defaults ) {

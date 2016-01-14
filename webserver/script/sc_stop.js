@@ -11,8 +11,6 @@ module.exports = function( args, config, env ){
 		start: function( current, boiler ) {
 
 			current.desc = "Stop";
-
-			E.rr( "start stop", current.desc );
 		},
 
 		run: function( current, boiler ) {

@@ -14,7 +14,7 @@ module.exports = function( context, port ) {
 	if( port ) {
 
 		net.createServer( function( socket ) {
-			console.log( "start" );
+			console.log( "start repl server on " + port );
 			r = repl.start( {
 				prompt: '[' + process.pid + '] ' +socket.remoteAddress+':'+socket.remotePort+'> ',
 				input: socket,
@@ -36,7 +36,6 @@ module.exports = function( context, port ) {
 		} );
 
 		addContext( context );
-		
 	}
 
 	r.addContext = addContext;

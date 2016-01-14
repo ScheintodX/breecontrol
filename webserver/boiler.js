@@ -9,13 +9,13 @@ var E = require( './E.js' ),
 	Assert = require( './assert.js' );
 var H = require( './helpers.js' );
 var log = require( './logging.js' );
-var InProxy = require( './sensor_in_proxy.js' ),
-	OutProxy = require( './sensor_out_proxy.js' ),
-	InOutProxy = require( './sensor_inout_proxy.js' ),
-	TempController = require( './sensor_temp_controller.js' ),
-	Combined = require( './sensor_combined.js' ),
-	Heater = require( './sensor_heater.js' ),
-	Aggitator = require( './sensor_aggitator.js' )
+var InProxy = require( './sensor/in_proxy.js' ),
+	OutProxy = require( './sensor/out_proxy.js' ),
+	InOutProxy = require( './sensor/inout_proxy.js' ),
+	TempController = require( './sensor/temp_controller.js' ),
+	Combined = require( './sensor/combined.js' ),
+	Heater = require( './sensor/heater.js' ),
+	Aggitator = require( './sensor/aggitator.js' )
 	;
 
 

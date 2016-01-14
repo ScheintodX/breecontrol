@@ -62,14 +62,12 @@ module.exports = function( config, hello, state, brewery ) {
 
 		var diff = brewery.setByWeb( topic, val );
 
-		E.rr( JSON.stringify( diff ) );
+		log.trace( JSON.stringify( diff ) );
 
 		if( diff ) brewery.publish( _mqtt );
 	}
 
 	function gotWebDataLoadSave( data ) {
-
-		E.rr( 'loadsave' );
 
 		Assert.present( 'data.device', data.device );
 		Assert.present( 'data.topic', data.topic );
@@ -77,8 +75,6 @@ module.exports = function( config, hello, state, brewery ) {
 		var boiler = brewery.boilers[ data.device ];
 
 		if( ! boiler ) throw new Error( "No boiler found" );
-
-		console.log( data.topic );
 
 		switch( data.topic ) {
 

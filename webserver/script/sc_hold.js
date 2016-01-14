@@ -1,7 +1,8 @@
 "use strict";
 
 var Assert = require( '../assert.js' ),
-    E = require( '../E.js' );
+    E = require( '../E.js' ),
+	log = require( '../logging.js' );
 
 module.exports = function( args, config, env ){
 
@@ -19,6 +20,8 @@ module.exports = function( args, config, env ){
 			current.desc = 'Hold ' + args.heat + '°C for ' + (args.hold/60) + 'min';
 
 			boiler.temp.setTo( args.heat );
+
+			log.info( "Start", current.desc );
 		},
 		pause: function( current, boiler ) {
 
@@ -42,7 +45,6 @@ module.exports = function( args, config, env ){
 			current.remaining = args.hold - current.elapsed;
 
 			if( current.remaining <= 0 ) {
-				E.rr( current.desc, "done", current.elapsed, current.remaining );
 				current.mode = 'done';
 			}
 		},

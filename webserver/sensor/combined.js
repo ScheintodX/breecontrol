@@ -1,5 +1,5 @@
 "use strict";
-var E = require( './E.js' );
+var E = require( '../E.js' );
 var _ = require( 'underscore' );
 
 module.exports = function( conf, sensors ) {

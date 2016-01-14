@@ -5,7 +5,7 @@ module.exports = function( done ) {
 	return done( null, {
 
 		state: {
-			file: '.STATE.json'
+			file: 'save/.STATE.json'
 		},
 
 		ws: {
