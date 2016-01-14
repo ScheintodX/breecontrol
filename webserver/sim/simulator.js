@@ -2,13 +2,14 @@
 
 "use strict";
 
-var PREFIX = "griesbraeu/";
-
 var util = require( 'util' );
 
 var E = require( '../E.js' );
 require( '../polyfill.js' );
 require( './patch.js' );
+
+var config = require( '../config.js' )( function( err, data ){ return data; } );
+E.rr( config );
 
 var SFloat = require( './s_float.js' ),
 	SBool = require( './s_bool.js' ),
@@ -20,7 +21,7 @@ var SFloat = require( './s_float.js' ),
 var mqtt = require( 'mqtt' );
 
 var log = require( '../logging.js' )
-		.file( '/var/log/brauerei.test' );
+		.file( '/var/log/braumeister.test' );
 
 var Sensors = {
 
@@ -118,7 +119,7 @@ function round( val ) {
 
 function emit( topic, data ) {
 
-	mqttClient.publish( PREFIX + topic, data );
+	mqttClient.publish( config.mqtt.prefix + topic, data );
 }
 
 function run( sensor ) {
@@ -152,15 +153,15 @@ process.on( 'uncaughtException', function( ex ) {
 
 log.info( "start mqtt test" );
 
-var mqttClient = mqtt.connect( 'mqtt://localhost:1883/', {
-	username: 'test',
-	password: 'test'
+var mqttClient = mqtt.connect( config.mqtt.url, {
+	username: config.mqtt.username,
+	password: config.mqtt.password
 } )
 		.on( 'connect', function() {
 
-			mqttClient.subscribe( PREFIX + 'boiler1/+/set' );
-			mqttClient.subscribe( PREFIX + 'boiler1/upper/+/set' );
-			mqttClient.subscribe( PREFIX + 'boiler1/lower/+/set' );
+			mqttClient.subscribe( config.mqtt.prefix + 'boiler1/+/set' );
+			mqttClient.subscribe( config.mqtt.prefix + 'boiler1/upper/+/set' );
+			mqttClient.subscribe( config.mqtt.prefix + 'boiler1/lower/+/set' );
 
 			E.cho( "MQTT STARTED" );
 
@@ -170,11 +171,11 @@ var mqttClient = mqtt.connect( 'mqtt://localhost:1883/', {
 
 			var message = data.toString();
 
-			if( ! topic.startsWith( PREFIX ) ) {
+			if( ! topic.startsWith( config.mqtt.prefix ) ) {
 				E.rr( "wrong prefix in: " + topic );
 			}
 
-			topic = topic.slice( PREFIX.length );
+			topic = topic.slice( config.mqtt.prefix.length );
 
 			for( var key in Sensors ) {
 
