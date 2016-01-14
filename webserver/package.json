@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "controlling the brewery talking mqtt and websocket",
   "engine": "node >= 0.10.25",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ScheintodX/braumeister.git"
+  },
   "dependencies": {
     "mqtt": "~1.6.3",
     "nodejs-websocket": "~1.4.1",
