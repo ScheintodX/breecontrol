@@ -7,6 +7,7 @@ var async = require( 'async' );
 
 var E = require( './E.js' );
 var log = require( './logging.js' ).file( '/var/log/brauerei.log' );
+var Catch = require( './catch.js' ).log( log );
 
 var repl = require( './repl.js' )( {} );
 
@@ -30,14 +31,10 @@ var State = require( './state.js' ),
 var Ctrl = require( './ctrl.js' ),
     ctrl = false;
 
+
 function initConfig( done ) {
 
-	Config( function( err, data ) {
-
-		if( err ) {
-			log.failure( "config", err );
-			return done( err );
-		}
+	Config( Catch.ExitOn( "Config", function( err, data ) {
 
 		config = data;
 		hello = {
@@ -51,40 +48,22 @@ function initConfig( done ) {
 
 		return done();
 
-	} );
+	} ) );
 }
 
 function initState( done ) {
 
-	State( config.state, function( err, data ) {
-
-		log.trace( "state", err, data );
-
-		if( err ){
-			log.failure( "state", err );
-			throw new Error( err );
-		}
+	State( config.state, Catch.ExitOn( "State", function( err, data ) {
 
 		state = data;
 		repl.addContext( { state: state } );
 
-		setInterval( function() {
-
-			State.save( stateSaved );
-
-		}, 5000 );
+		State.start( config.saveStateInterval );
 
 		log.startup( "state", "READY" );
 
 		return done();
-	} );
-}
-
-function stateSaved( err ) {
-
-	if( err ) throw new Error( err );
-
-	log.trace( "STATE saved" );
+	} ) );
 }
 
 function initBoilers( done ) {
@@ -95,13 +74,8 @@ function initBoilers( done ) {
 		state.boilers = {};
 	}
 
-	Boilers.createAll( config.boilers, state.boilers, function( err, data ) {
+	Boilers.createAll( config.boilers, state.boilers, Catch.ExitOn( "Boilers", function( err, data ) {
 	
-		if( err ) {
-			log.failure( "boilers" );
-			return done( err );
-		}
-
 		boilers = data;
 
 		brewery = Brewery( boilers );
@@ -117,17 +91,12 @@ function initBoilers( done ) {
 
 		return done();
 	
-	} );
+	} ) );
 }
 
 function startWebsocket( done ) {
 
-	Websocket( ctrl.gotWebData, hello, config.ws, function( err, data ) {
-
-		if( err ){
-			log.failure( "websockets" );
-			return done( err );
-		}
+	Websocket( ctrl.gotWebData, hello, config.ws, Catch.ExitOn( "Websockets", function( err, data ) {
 
 		websocket = data;
 
@@ -136,28 +105,22 @@ function startWebsocket( done ) {
 		log.startup( "websockets", "STARTED" );
 
 		return done();
-	} );
+	} ) );
 }
 
 function startMqtt( done ) {
 
-	Mqtt( ctrl.gotMqttData, config.mqtt,
-			brewery.subscribe,
-			function( err, data ) {
+	Mqtt( ctrl.gotMqttData, config.mqtt, brewery.subscribe,
+			Catch.ExitOn( "Mqtt", function( err, data ) {
 
-				if( err ) {
-					log.failure( "mqtt", err );
-					return done( err );
-				}
+		mqtt = data;
 
-				mqtt = data;
+		ctrl.onMqttMessage( mqtt.send );
 
-				ctrl.onMqttMessage( mqtt.send );
+		log.startup( "mqtt", "STARTED" );
 
-				log.startup( "mqtt", "STARTED" );
-
-				return done();
-			} );
+		return done();
+	} ) );
 }
 
 function stateReady( err ) {
@@ -177,43 +140,13 @@ function startupDone( err ) {
 		throw err;
 	}
 
-	setInterval( ctrl.run, 500 );
+	ctrl.start();
 
 	log.startup( "Startup", "DONE" );
 }
 
 E.cho( "Startup" );
 log.startup( "Startup...", "" );
-
-/*
-// Make cleaner exit handling:
-process.stdin.resume();
-
-function gotExit( opt, err ) {
-
-	E.rr( arguments );
-
-	if (opt.cleanup) E.cho( 'clean' );
-	if (err) E.cho( err.stack );
-	if (opt.exit) process.exit();
-}
-
-//do something when app is closing
-process.on( 'exit', gotExit.bind( null, { cleanup: true } ) );
-
-//catches ctrl+c event
-process.on( 'SIGINT', gotExit.bind( null, { exit: true } ) );
-
-//catches uncaught exceptions
-process.on( 'uncaughtException', gotExit.bind( null, { exit: true } ) );
-*/
-process.on( 'uncaughtException', function( ex ) {
-
-	console.log( "SOME ERROR".red );
-	if( ex ) console.log( ex.orange );
-	console.log( util.inspect( brewery.boilers, {showHidden:false, depth: null} ) );
-	if( ex && ex.stack ) console.log( ex.stack.yellow );
-} );
 
 // === Start Startup ===
 async.series( [ initConfig, initState, initBoilers ], stateReady );

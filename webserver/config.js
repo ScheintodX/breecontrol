@@ -12,8 +12,10 @@ module.exports = function( done ) {
 			port: 8765,
 		},
 
+		updateIntervalCtrl: 500,
 		updateIntervalWeb: 500,
 		updateIntervalMqtt: 1000,
+		saveStateInterval: 5000,
 
 		mqtt: {
 			url: 'mqtt://localhost:1883/',

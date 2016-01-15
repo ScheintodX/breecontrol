@@ -1,6 +1,7 @@
 "use strict";
 
 var E = require( './E.js' );
+var Catch = require( './catch.js' );
 var Dot = require( 'dot-object' ),
 	Dash = new Dot( '/' );
 
@@ -46,6 +47,7 @@ module.exports = function( config, hello, state, brewery ) {
 		_mqtt( 'infrastructure/brewmaster/presence', "brewmaster" );
 
 		brewery.watch();
+
 		brewery.publish( _mqtt );
 	}
 
@@ -190,7 +192,7 @@ module.exports = function( config, hello, state, brewery ) {
 
 	var self = {
 
-		gotWebData: function( data ) {
+		gotWebData: Catch.fatal( "Ctrl/gotWeb", function( data ) {
 
 			log.trace( "WebData", data );
 
@@ -201,39 +203,37 @@ module.exports = function( config, hello, state, brewery ) {
 				default: throw new Error( "Unknown action: " + data.on );
 			}
 
-		},
+		} ),
 
-		gotMqttData: function( topic, data ) {
+		gotMqttData: Catch.fatal( "Ctrl/GotMqtt", function( topic, data ) {
 
 			var diff = brewery.setByMqtt( topic, data );
 
 			if( diff ) {
 				_web( { diff: diff } );
 			}
-		},
+		} ),
 
 		onMqttMessage: function( mqtt ) {
 
-			_mqtt = mqtt;
+			_mqtt = Catch.fatal( "Ctrl/Mqtt", mqtt );
 
 			Assert.present( "config.updateIntervalMqtt", config.updateIntervalMqtt );
 
-			setInterval( sendStatusMqtt, config.updateIntervalMqtt );
+			setInterval( Catch.fatal( "Ctrl/SendStatusMqtt", sendStatusMqtt ), config.updateIntervalMqtt );
 		},
 
 		onWebMessage: function( web ) {
 
-			_web = web;
+			_web = Catch.fatal( "Ctrl/WS", web );
 
 			Assert.present( "config.updateIntervalWeb", config.updateIntervalWeb );
 
-			setInterval( sendStatusWeb, config.updateIntervalWeb );
+			setInterval( Catch.fatal( "Ctrl/SendStatusWeb", sendStatusWeb ), config.updateIntervalWeb );
 		},
 
 		run: function() {
 
-			//var diff = brewery.watch();
-			
 			if( !( 'scripts' in hello ) ) {
 
 				log.trace( "NOSCRIPT" );
@@ -261,8 +261,12 @@ module.exports = function( config, hello, state, brewery ) {
 					boiler._script.run();
 				}
 			}
-		}
+		},
 
+		start: function() {
+
+			setInterval( Catch.fatal( "Ctrl/Run", self.run ), config.updateIntervalCtrl );
+		}
 	};
 
 	return self;

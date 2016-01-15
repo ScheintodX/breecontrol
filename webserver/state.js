@@ -4,6 +4,8 @@ var fs = require( 'fs' );
 var log = require( './logging.js' );
 var assert = require( './assert.js' );
 
+var Catch = require( './catch.js' );
+
 var _data;
 
 var _file;
@@ -51,3 +53,18 @@ module.exports.save = function( done ) {
 	} );
 
 };
+
+function stateSaved( err ) {
+
+	log.trace( "STATE saved" );
+}
+
+module.exports.start = function( interval ) {
+
+	setInterval( function() {
+
+		module.exports.save( Catch.ContinueOn( "State save", stateSaved ) );
+
+	}, interval );
+
+}
