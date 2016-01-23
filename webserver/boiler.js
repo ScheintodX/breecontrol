@@ -3,12 +3,17 @@
 require( './polyfill.js' );
 
 var _ = require( 'underscore' );
+
 var Dot = require( 'dot-object' ),
 	dash = new Dot( '/' );
+
 var E = require( './E.js' ),
 	Assert = require( './assert.js' );
+
 var H = require( './helpers.js' );
+
 var log = require( './logging.js' );
+
 var InProxy = require( './sensor/in_proxy.js' ),
 	OutProxy = require( './sensor/out_proxy.js' ),
 	InOutProxy = require( './sensor/inout_proxy.js' ),
@@ -31,9 +36,7 @@ function Debug( sensor ) {
 	);
 }
 
-function createBoiler( index, config, state ) {
-
-	console.log( state );
+function createBoiler( index, config ) {
 
 	var self = Object.assign( {
 
@@ -204,25 +207,15 @@ function createBoiler( index, config, state ) {
 
 module.exports = {};
 
-module.exports.createAll = function( config, state, done ) {
+module.exports.createAll = function( config, done ) {
 
 	Assert.present( "config", config );
-	Assert.present( "state", state );
 
 	var result = {};
 
 	for( var i=0; i < config.length; i++ ) {
 
-		if( state.length <= i ) {
-			state.push( {
-				mode: 'stopped',
-				start: 0,
-				index: 0,
-				elapsed: 0
-			} );
-		}
-
-		result[ 'boiler' + (i+1) ] = createBoiler( i, config[ i ], state[ i ] );
+		result[ 'boiler' + (i+1) ] = createBoiler( i, config[ i ] );
 	}
 
 	return done( null, result );

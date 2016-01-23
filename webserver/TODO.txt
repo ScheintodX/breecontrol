@@ -2,4 +2,4 @@ OK generalize boiler via sensor/actor ect.
 ** cleanup load/save
 OK improve signal time by sending out messages earlier (while maintaining security)
 OK improve error handlying by inserting try-catch on all callback entry points
-** save script state over server restart
+NO save script state over server restart

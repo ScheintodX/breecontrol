@@ -13,12 +13,11 @@ var Scripts = require( './scripts.js' );
 var Boiler = require( './boiler.js' );
 
 
-module.exports = function( config, hello, state, brewery ) {
+module.exports = function( config, hello, brewery ) {
 
 	Assert.present( "config", config );
 	Assert.present( "hello", hello );
 	Assert.present( "brewery", brewery );
-	Assert.present( "state", state );
 
 	var _mqtt, _web;
 

@@ -25,9 +25,6 @@ var Boilers = require( './boiler.js' ),
 	Brewery = require( './brewery.js' ),
 	brewery = false;
 
-var State = require( './state.js' ),
-    state = false;
-
 var Ctrl = require( './ctrl.js' ),
     ctrl = false;
 
@@ -51,30 +48,9 @@ function initConfig( done ) {
 	} ) );
 }
 
-function initState( done ) {
-
-	State( config.state, Catch.ExitOn( "State", function( err, data ) {
-
-		state = data;
-		repl.addContext( { state: state } );
-
-		State.start( config.saveStateInterval );
-
-		log.startup( "state", "READY" );
-
-		return done();
-	} ) );
-}
-
 function initBoilers( done ) {
 
-	// Create something to store state in
-	if( !( 'boilers' in state ) ) {
-		log.trace( "create boiler state" );
-		state.boilers = [];
-	}
-
-	Boilers.createAll( config.boilers, state.boilers, Catch.ExitOn( "Boilers", function( err, data ) {
+	Boilers.createAll( config.boilers, Catch.ExitOn( "Boilers", function( err, data ) {
 	
 		boilers = data;
 
@@ -127,7 +103,7 @@ function stateReady( err ) {
 
 	if( err ) throw err;
 
-	ctrl = Ctrl( config, hello, state, brewery );
+	ctrl = Ctrl( config, hello, brewery );
 	repl.addContext( { ctrl: ctrl } );
 
 	async.parallel( [ startWebsocket, startMqtt ], startupDone );
@@ -149,5 +125,5 @@ E.cho( "Startup" );
 log.startup( "Startup...", "" );
 
 // === Start Startup ===
-async.series( [ initConfig, initState, initBoilers ], stateReady );
+async.series( [ initConfig, initBoilers ], stateReady );
 
