@@ -14,7 +14,7 @@ function gotError( done, err, mod ) {
 		if( err.stack ) _log.error( err.stack );
 	}
 
-	if( done ) done( err );
+	if( done ) return done( err );
 }
 
 var self = {

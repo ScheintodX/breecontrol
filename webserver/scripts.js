@@ -18,7 +18,7 @@ function save( name, data, done ) {
 
 	fs.writeFile( file, data, "utf-8", done );
 	
-	done();
+	return done();
 }
 
 function load( name, done ) {
@@ -40,7 +40,7 @@ function load( name, done ) {
 			return done( ex );
 		}
 
-		done( null, Script, scriptconfig );
+		return done( null, Script, scriptconfig );
 
 	} );
 }

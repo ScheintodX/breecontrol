@@ -6,7 +6,7 @@ var util = require( 'util' );
 var async = require( 'async' );
 
 var E = require( './E.js' );
-var log = require( './logging.js' ).file( '/var/log/brauerei.log' );
+var log = require( './logging.js' ).file( '/var/log/braumeister.log' );
 var Catch = require( './catch.js' ).log( log );
 
 var repl = require( './repl.js' )( {} );
@@ -71,7 +71,7 @@ function initBoilers( done ) {
 	// Create something to store state in
 	if( !( 'boilers' in state ) ) {
 		log.trace( "create boiler state" );
-		state.boilers = {};
+		state.boilers = [];
 	}
 
 	Boilers.createAll( config.boilers, state.boilers, Catch.ExitOn( "Boilers", function( err, data ) {

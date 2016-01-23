@@ -2,7 +2,7 @@
 
 var fs = require( 'fs' );
 var log = require( './logging.js' );
-var assert = require( './assert.js' );
+var Assert = require( './assert.js' );
 
 var Catch = require( './catch.js' );
 
@@ -12,7 +12,7 @@ var _file;
 
 module.exports = function( config, done ) {
 
-	assert.present( 'config.state.file', config.file );
+	Assert.present( 'config.state.file', config.file );
 
 	_file = config.file;
 

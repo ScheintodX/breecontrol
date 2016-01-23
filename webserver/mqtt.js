@@ -33,7 +33,7 @@ module.exports = function( onData, config, subscribe, done ) {
 	mqttClient.on( 'connect', function () {
 		log.trace( "MQTT Connect" );
 		subscribe( function( topic ) {
-			log.trace( "SUBSCRIBE: " + topic );
+			log.info( "SUBSCRIBE: " + topic );
 			mqttClient.subscribe( config.prefix + topic ) }
 		);
 		log.trace( "MQTT STARTED" );

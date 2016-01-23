@@ -31,9 +31,9 @@ function Debug( sensor ) {
 	);
 }
 
-function createBoiler( index, config ) {
+function createBoiler( index, config, state ) {
 
-	var JACKET_MAX = 300;
+	console.log( state );
 
 	var self = Object.assign( {
 

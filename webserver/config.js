@@ -20,13 +20,13 @@ module.exports = function( done ) {
 		mqtt: {
 			url: 'mqtt://localhost:1883/',
 			username: 'braumeister',
-			password: 'dBPg09K6U34m',
+			password: 'braumeister',
 			prefix: 'griesbraeu/'
 		},
 
 		boilers: [
 			{
-				name: "Bernd der Bottich",
+				name: "boiler1",
 				minTemp:   0, //°C
 				maxTemp: 100, //°C
 				capacity: 80, // L
