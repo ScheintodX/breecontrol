@@ -16,6 +16,12 @@ module.exports = function( conf, defaults ) {
 			overheat = jacket._conf.overheat,
 			boost = jacket._conf.boost
 			;
+		
+		// console.log( max, actual, nominal, overheat, boost );
+
+		// If no temp set send 0 to heater
+		if( typeof nominal == 'undefined' )
+				return 0;
 
 		// Fallback in case we can't measure temperature
 		if( typeof actual == 'undefined' )
@@ -24,11 +30,12 @@ module.exports = function( conf, defaults ) {
 		// Do something for "boiling mode"
 		// if( nominal == 100 )
 				
-
 		var opti = nominal
 				+ overheat
 				+ (nominal - actual) * boost
 				;
+
+		// console.log( "===", opti );
 
 		return Math.min( opti, max );
 	}

@@ -22,7 +22,7 @@ function calcTime( t_src, t_dest, vol, kw, efficiency ) {
 module.exports = function( args, config, env ){
 
 	Assert.present( 'args.heat', args.heat );
-	Assert.present( 'args.from', args.from );
+	Assert.present( 'args._from', args._from );
 	
 	var self = {
 
@@ -68,7 +68,7 @@ module.exports = function( args, config, env ){
 		guessRuntime: function( boiler ) {
 
 			return calcTime( 
-					args.from,
+					args._from,
 					args.heat,
 					boiler.conf.capacity,
 					boiler.conf.power,

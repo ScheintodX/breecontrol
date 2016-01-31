@@ -55,7 +55,8 @@ var BAG_Boiler = (function($,Ψ){
 
 			setFill: ψ.ifchanged( function( value ) {
 
-				var move = 100-value*100.0;
+				var move = 100 - value * 100.0,
+				    round = ( value * 100 )<<0;
 
 				// Using plain js and attribute in svg
 				/*
@@ -68,7 +69,10 @@ var BAG_Boiler = (function($,Ψ){
 				$svg('fill_content')
 						.velocity( { translateY: move }, { duration: 500 } )
 						;
-					
+
+				svg( 'fill' )
+						.children[ 0 ].textContent = round + '%';
+						;
 			} ),
 
 			setFillOverride: ψ.override( ψ.visible( 'fill_override' ) ),

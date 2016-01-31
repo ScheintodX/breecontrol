@@ -116,24 +116,24 @@ module.exports = function( config, hello, brewery ) {
 					return;
 				}
 
-				boiler._script.parse( data.value, function( err, TheScript ) {
+				var TheScript = boiler._script.parse( data.value );
 
-					if( err ) return _warn( data.device, err );
-					else _info( data.device, 'Set done' );
+				boiler.script = TheScript.hello;
+				boiler._script = TheScript;
 
-					boiler.script = TheScript.hello;
-					boiler._script = TheScript;
+				var saveable = boiler._script.save();
 
-					var saveable = boiler._script.save();
+				Scripts.save( data.value.name, saveable, function( err ) {
 
-					Scripts.save( data.value.name, saveable, function( err ) {
+					if( err ) {
+						_warn( data.device, err );
+						return;
+					}
 
-						_info( "Saved" );
-						log.trace( "SAVED", data.value.name );
+					_info( "Saved" );
+					log.trace( "SAVED", data.value.name );
 
-						delete( hello.scripts ); // force reload
-
-					} );
+					delete( hello.scripts ); // force reload
 
 				} );
 
@@ -148,16 +148,12 @@ module.exports = function( config, hello, brewery ) {
 					return;
 				}
 
-				boiler._script.parse( data.value, function( err, TheScript ) {
+				var TheScript = boiler._script.parse( data.value );
 
-					if( err ) return _warn( data.device, err );
-					else _info( data.device, 'Set done' );
+				boiler.script = TheScript.hello;
+				boiler._script = TheScript;
 
-					boiler.script = TheScript.hello;
-					boiler._script = TheScript;
-
-					log.info( "SET done", boiler.script );
-				} );
+				log.info( "SET done", boiler.script );
 
 				break;
 
@@ -233,6 +229,7 @@ module.exports = function( config, hello, brewery ) {
 
 		run: function() {
 
+			// Load script directory listing
 			if( !( 'scripts' in hello ) ) {
 
 				log.trace( "NOSCRIPT" );
@@ -252,6 +249,7 @@ module.exports = function( config, hello, brewery ) {
 				} );
 			}
 
+			// Run available scripts from boilers
 			for( var key in brewery.boilers ) {
 
 				var boiler = brewery.boilers[ key ];

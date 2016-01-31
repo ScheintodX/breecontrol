@@ -1,7 +1,8 @@
 "use strict";
 
 var log = require( './logging.js' );
-var HM = require( './helpers.js' ).message;
+var HM = require( './helpers.js' ).message,
+    JS = require( './helpers.js' ).json;;
 var Dot = require( 'dot-object' );
 var _ = require( 'underscore' );
 var E = require( './E.js' );
@@ -53,10 +54,7 @@ module.exports = function( boilers ) {
 
 			var boilers = [];
 
-			return JSON.stringify( { boilers: self.boilers }, function( key, val ) {
-			
-				return key.startsWith( '_' ) ? undefined : val;
-			} );
+			return JS.stringifyPublic( { boilers: self.boilers } );
 		},
 
 		// Direct access to sub fields via setByMqttMethod

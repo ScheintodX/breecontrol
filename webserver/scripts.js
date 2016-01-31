@@ -1,26 +1,37 @@
 "use strict";
 
+/**
+ * Load / Save scripts
+ * List available scripts
+ */
+
 var fs = require( 'fs' );
 var _ = require( 'underscore' );
 var log = require( './logging.js' );
+var JS = require( './helpers.js' ).json;
 
 var E = require( './E.js' );
 
 var _CONFIG_ = 'scriptconfig/',
 	_SCRIPT_ = 'script/';
 
+/**
+ * Save script (config) to filesystem
+ */
 function save( name, data, done ) {
 
 	var file = _CONFIG_ + name + '.json',
-	    data = JSON.stringify( data );
+	    data = JS.stringifyPublic( data, true );
 
 	log.trace( "SAVE", file );
 
-	fs.writeFile( file, data, "utf-8", done );
-	
-	return done();
+	return fs.writeFile( file, data, "utf-8", done ); // chain done
 }
 
+/**
+ * Load script (config) from filesystem
+ * Then load master-script via require and return both to callback
+ */
 function load( name, done ) {
 
 	log.trace( "LOAD", name ); // log
@@ -45,6 +56,9 @@ function load( name, done ) {
 	} );
 }
 
+/**
+ * List scripts (files) in script directory
+ */
 function list( done ) {
 
 	log.info( "LIST" ); // log

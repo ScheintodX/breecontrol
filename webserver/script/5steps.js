@@ -164,7 +164,7 @@ module.exports = function( script, boiler, config, env ) {
 			return hello;
 		},
 
-		parse: function( script, done ) {
+		parse: function( script ) {
 
 			Assert.present( 'script.name', script.name );
 			Assert.present( 'script.steps', script.steps );
@@ -177,9 +177,9 @@ module.exports = function( script, boiler, config, env ) {
 			self.hello.steps = steps;
 
 			// for time calculation
-			steps[ 0 ].from = 15;
+			steps[ 0 ]._from = 15;
 			for( var i=1; i<5; i++ ){
-				steps[ i ].from = steps[ i-1 ].heat;
+				steps[ i ]._from = steps[ i-1 ].heat;
 			}
 
 			_run = [];
@@ -213,11 +213,7 @@ module.exports = function( script, boiler, config, env ) {
 			self.stepTo( 0 );
 			self.hello.current.desc = 'Insert Coin';
 
-			if( done ) {
-				return done( null, self );
-			} else {
-				return self;
-			}
+			return self;
 		},
 
 		save: function() {
