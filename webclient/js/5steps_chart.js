@@ -8,7 +8,7 @@
  *   var c = BAG_Chart( id );
  * </pre>
  */
-var BAG_5steps = (function($,Ψ){
+var BAG_5Steps_Chart = (function($,Ψ){
 
 	//var BOUNDS = [ 30, 60, 140, 220, 300, 330 ];
 	var BOUNDS = [
@@ -35,12 +35,13 @@ var BAG_5steps = (function($,Ψ){
 				.expectOne(),
 		    _svg = false;
 
-		$elem
-			.attr( 'data', '5steps.svg' )
-			.on( 'load', function() {
-				console.log( 'chart loaded' );
-				_svg = $elem.get( 0 ).contentDocument;
-			} );
+		var $chart = $('<object class="chart" data="5steps.svg" />' )
+				.prependTo( $elem )
+				.on( 'load', function() {
+					console.log( 'chart loaded' );
+					_svg = $chart.get( 0 ).contentDocument;
+				} );
+				;
 
 		function svg( id ) {
 			return _svg ? _svg.getElementById( id ) : false;

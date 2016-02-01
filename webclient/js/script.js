@@ -6,11 +6,21 @@ var BAG_Script = (function($){
 
 		var _onControl = false;
 
+		var oldSteps,
+		    oldCurrent;
+
+		var curChart = false,
+			curControls = false
+			;
+
 		var $elem = ( elem instanceof jQuery ? elem : $( elem ) ).expectOne(),
+
 			$secScript = $elem.find( 'section.script' ).expectOne(),
 			$secLoadSave = $elem.find( 'section.loadsave' ).expectOne(),
 			$secProgram = $elem.find( 'section.program' ).expectOne(),
-			$secRunStop = $elem.find( 'section.runstop' ).expectOne()
+			$secRunStop = $elem.find( 'section.runstop' ).expectOne(),
+
+			$selectLoad = $secLoadSave.find( 'select[name="load"]' ).expectOne()
 			;
 
 		// Comm
@@ -21,13 +31,27 @@ var BAG_Script = (function($){
 			_onControl( { on: on, topic: topic, value: value, device: device } );
 		}
 
-		// Manual
+		function readScript() {
 
-		function onClickCheckbox( on ) {
+			var script = curControls ? curControls.readScript() : {};
 
-			return function( ev ) {
-				var $this = $(this);
-			}
+			script.load = $selectLoad.val();
+
+			return script;
+		}
+
+		var storeScript = (function( data ) {
+
+			console.trace( data );
+
+			if( curControls ) curControls.storeScript( data );
+
+			// TODO: 
+			//$selectLoad.val( data.name );
+		}).onlyIfChanged();
+
+		function clearScript() {
+			if( curControls ) curControls.clearScript();
 		}
 
 		// runstop / loadsave
@@ -38,84 +62,15 @@ var BAG_Script = (function($){
 				notify( on, $this.attr('name'), readScript() );
 			}
 		}
+		function onLoadClick() {
+			return function() {
+				var $select = $secLoadSave.find( 'select[name="load"]' ).expectOne(),
+					val = $select.val()
+					;
+				notify( 'loadsave', 'load', { load: val } );
+			}
+		}
 		
-		function readScript() {
-
-			function val( $s, name ) {
-				return $s.find( '[name="' + name + '"]' ).val();
-			}
-			function valF( $s, name ) {
-				return parseFloat( val( $s, name ) );
-			}
-			function valFF( i, name ) {
-				return valF( $secProgram.find( 'div.step' + i ), name );
-			}
-
-			var steps = []
-			steps.push( { heat: valFF( 0, 'heat' ) } )
-			for( var i=1; i<4; i++ ) {
-
-				steps.push( {
-					heat: valFF( i, 'heat' ),
-					hold: valFF( i, 'hold' ) * 60
-				} )
-			}
-			steps.push( { heat: valFF( 4, 'heat' ) } )
-
-			var prog = {
-				name: val( $secProgram, 'name' ),
-				load: val( $secLoadSave, 'load' ),
-				steps: steps
-			}
-
-			return prog;
-		}
-
-		function storeScript( prog ) {
-
-			function val( $s, name, value ){
-				return $s.find( '[name="' + name + '"]' )
-						.expectOne()
-						.val( value );
-			}
-			function valF( idx, name, value ) {
-				var $step = $secProgram.find( "div.step" + idx )
-						.expectOne();
-				val( $step, name, value );
-			}
-
-			val( $secProgram, 'name', prog.name );
-
-			valF( 0, 'heat', prog.steps[ 0 ].heat );
-
-			for( var i=1; i<4; i++ ) {
-				var step = prog.steps[ i ];
-				valF( i, 'heat', step.heat );
-				valF( i, 'hold', step.hold/60 );
-			}
-
-			valF( 4, 'heat', prog.steps[ 4 ].heat );
-		}
-
-		function clearScript() {
-
-			function val( $s, name, value ){
-				return $s.find( '[name="' + name + '"]' )
-						.val( value );
-			}
-
-			function clear( $s, name ) {
-				val( $s, name, null );
-			}
-
-			clear( $secProgram, 'name' );
-			for( var i=0; i<5; i++ ) {
-				var $step = $secProgram.find( 'div.step' + i );
-				clear( $step, 'heat' );
-				clear( $step, 'hold' );
-			}
-		}
-
 		function enableButtons( actions ) {
 
 			function $button( name ) {
@@ -136,59 +91,68 @@ var BAG_Script = (function($){
 
 		enableButtons( [] );
 
+		// Run / Stop / Pause / ...
 		$secRunStop.find( 'button' )
 				.on( 'click', onClick( 'runstop' ) )
 				;
 
+		// Load
 		$secLoadSave.find( 'button' )
 				.on( 'click', onClick( 'loadsave' ) )
 				;
 
+		// Save / Set
 		$secProgram.find( 'button' )
 				.on( 'click', onClick( 'loadsave' ) )
 				;
 
-		// Callback for received data from Ctrl
-		
-		var oldSteps, oldCurrent;
+		var setRunstopInfo = function( val ) {
+			console.log( val );
 
-		var curCtrl = false;
+			console.log( $elem.find( '.runstopinfo' ) );
+
+			$elem.find( '.runstopinfo' )
+					.expectOne()
+					.text( val )
+					;
+
+		}.onlyIfChanged();
 
 		function updateElements( script ) {
 
 			$elem.find( 'header h2' ).text( script.name );
 
-			var asJson = JSON.stringify( script.steps );
-			if( asJson != oldSteps ) {
+			if( curControls ){
 				storeScript( script );
-				oldSteps = asJson;
 			}
+
 			enableButtons( script.actions );
 
 			// Info
 			if( script.current ) {
+
 				var current = script.current;
 
-				asJson = JSON.stringify( current );
-				if( oldCurrent != asJson ) {
+				setRunstopInfo( (current.index+1) + ". " +
+						current.desc + " [" + current.mode + ']' );
 
-					oldCurrent = asJson;
-
-					$('.runstopinfo').text( (current.index+1) + ". " +
-							current.desc + " [" + current.mode + ']' );
-				}
 			} else {
-				$('.runstopinfo').text( " - no script - " );
+				setRunstopInfo( " - no script - " );
 			}
 		}
 
 		function clearElements() {
+
 			$elem.find( 'header h2' ).text( '' );
-			clearScript();
+
+			if( curControls ) clearScript();
+
 			enableButtons( [] );
-			$('.runstopinfo').text( '' );
+
+			setRunstopInfo( '' );
 		}
 
+		// Callback for received data from Ctrl
 		function gotData( data ) {
 
 			if( 'boilers' in data ) {
@@ -199,31 +163,22 @@ var BAG_Script = (function($){
 
 					var script = boiler.script;
 
-					if( ! curCtrl ) {
+					if( ! curChart ) {
 
-						$elem.find( '.ctrl_program' )
+						$secScript.find( '.ctrl_program' )
 								.expectOne()
+								.empty()
 								.load( '5steps.html', function() {
-
 									updateElements( script );
 								} )
 								;
 
-						curCtrl = BAG_5steps( $secScript.find( 'object.chart' ), device );
-
-						/*
-						$secScript.find( 'object' )
-								.attr( 'data', '5steps.svg' )
-								;
-						*/
+						curChart = BAG_5Steps_Chart( $secScript, device );
+						curControls = BAG_5Steps_Controls( $secScript, device );
 
 					} else {
 						updateElements( script );
 					}
-
-				} else {
-
-					clearElements();
 				}
 			} 
 			
@@ -245,8 +200,9 @@ var BAG_Script = (function($){
 						;
 			}
 
-			if( curCtrl ){
-				curCtrl.gotData( data );
+			if( curChart ){
+				curChart.gotData( data );
+				curControls.gotData( data );
 			}
 		}
 
