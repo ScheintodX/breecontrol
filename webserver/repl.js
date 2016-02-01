@@ -5,10 +5,16 @@ module.exports = function( context, port ) {
 
 	var r;
 
-	function addContext( context ) {
-		for( key in context ) {
-			r.context[ key ] = context[ key ];
-		}
+	function addContext( context, value ) {
+		if( arguments.length == 1 ) {
+			for( key in context ) {
+				r.context[ key ] = context[ key ];
+			}
+		} else if( arguments.length == 2 ) {
+
+			r.context[ context ] = value;
+
+		} else throw new Error( "Illegal Argument Exception" );
 	}
 
 	if( port ) {

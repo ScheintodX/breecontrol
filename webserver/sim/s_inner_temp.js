@@ -19,9 +19,19 @@ module.exports = function( conf ) {
 
 			if( conf.mode == 'simulate' ) {
 
-				var avgHeater = (Sensors.upper.temp.status + Sensors.lower.temp.status)/2;
+				var avgHeaters = 0,
+					numHeaters = 0;
+				if( Sensors.upper ){
+					avgHeaters += Sensors.upper.temp.status;
+					numHeaters++;
+				}
+				if( Sensors.lower ){
+					avgHeaters += Sensors.lower.temp.status;
+					numHeaters++;
+				}
+				avgHeaters /= numHeaters;
 
-				var diff = avgHeater - self.status;
+				var diff = avgHeaters - self.status;
 
 				if( diff > 0 ) {
 					self.status += .02*diff*conf.speed;

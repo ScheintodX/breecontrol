@@ -40,7 +40,7 @@ section.tab {
 section.tab > section {
 }
 
-section.boiler {
+section.device {
 
 	header {
 		button {
@@ -60,17 +60,6 @@ section.boiler {
 	object {
 		width: 100%;
 	}
-}
-
-section.script, section.ctrl {
-}
-
-section.script {
-
-	@include speedupRendering();
-	@include showOnDemand( 1000px );
-
-	background-color: $bg_chart;
 }
 
 section.info {
@@ -108,7 +97,6 @@ section.manual, section.script {
 
 	@include speedupRendering();
 	@include showOnDemand( 1000px );
-	overflow: scroll;
 
 	background-color: $bg_ctrl;
 

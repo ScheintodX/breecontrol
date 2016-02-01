@@ -113,7 +113,7 @@ section.tab h2 {
 }
 
 /* line 46, ../sass/screen.scss */
-section.boiler header button {
+section.device header button {
   position: absolute;
   height: 28px;
   cursor: pointer;
@@ -122,7 +122,7 @@ section.boiler header button {
   border: none;
 }
 /* line 49, ../sass/screen.scss */
-section.boiler header button.script {
+section.device header button.script {
   width: 28px;
   height: 28px;
   text-indent: -9999px;
@@ -130,7 +130,7 @@ section.boiler header button.script {
   right: 3px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.boiler header button.script:before {
+section.device header button.script:before {
   content: "";
   position: absolute;
   top: 0;
@@ -140,7 +140,7 @@ section.boiler header button.script:before {
   height: 28px;
 }
 /* line 53, ../sass/screen.scss */
-section.boiler header button.manual {
+section.device header button.manual {
   width: 28px;
   height: 28px;
   text-indent: -9999px;
@@ -148,7 +148,7 @@ section.boiler header button.manual {
   left: 3px;
 }
 /* line 22, ../sass/_sprites.lib.scss */
-section.boiler header button.manual:before {
+section.device header button.manual:before {
   content: "";
   position: absolute;
   top: 0;
@@ -158,30 +158,18 @@ section.boiler header button.manual:before {
   height: 28px;
 }
 /* line 60, ../sass/screen.scss */
-section.boiler object {
+section.device object {
   width: 100%;
 }
 
-/* line 68, ../sass/screen.scss */
-section.script {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  display: none;
-  background-color: #1b3e73;
-}
-/* line 19, ../sass/_control.lib.scss */
-section.script.visible {
-  display: block;
-}
-
-/* line 76, ../sass/screen.scss */
+/* line 65, ../sass/screen.scss */
 section.info {
   position: relative;
   background-color: #eeff00;
   color: black !important;
   padding: 6px;
 }
-/* line 84, ../sass/screen.scss */
+/* line 73, ../sass/screen.scss */
 section.info:after {
   position: absolute;
   top: 2px;
@@ -191,34 +179,33 @@ section.info:after {
   height: 24px;
   background: url(../images/sprites.svg) no-repeat 0px -72px;
 }
-/* line 92, ../sass/screen.scss */
+/* line 81, ../sass/screen.scss */
 section.info.severe {
   background-color: #ffcc00;
 }
-/* line 94, ../sass/screen.scss */
+/* line 83, ../sass/screen.scss */
 section.info.severe:after {
   background-position: -24px -72px;
 }
-/* line 99, ../sass/screen.scss */
+/* line 88, ../sass/screen.scss */
 section.info div.severe {
   color: #bb0022 !important;
   font-weight: bold;
 }
 
-/* line 105, ../sass/screen.scss */
+/* line 94, ../sass/screen.scss */
 section.manual, section.script {
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.3);
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   display: none;
-  overflow: scroll;
   background-color: #204987;
 }
 /* line 19, ../sass/_control.lib.scss */
 section.manual.visible, section.script.visible {
   display: block;
 }
-/* line 115, ../sass/screen.scss */
+/* line 103, ../sass/screen.scss */
 section.manual label, section.script label {
   display: block;
   position: relative;
@@ -227,44 +214,44 @@ section.manual label, section.script label {
   border: 1px solid white;
   border-radius: 4px;
 }
-/* line 126, ../sass/screen.scss */
+/* line 114, ../sass/screen.scss */
 section.manual label input, section.script label input {
   position: absolute;
   top: 4px;
   right: 4px;
 }
-/* line 132, ../sass/screen.scss */
+/* line 120, ../sass/screen.scss */
 section.manual div.step, section.script div.step {
   display: flex;
 }
-/* line 134, ../sass/screen.scss */
+/* line 122, ../sass/screen.scss */
 section.manual div.step label, section.script div.step label {
   flex-grow: 1;
   display: inline-block;
 }
-/* line 141, ../sass/screen.scss */
+/* line 129, ../sass/screen.scss */
 section.manual > section, section.script > section {
   padding: 8px;
 }
-/* line 147, ../sass/screen.scss */
+/* line 135, ../sass/screen.scss */
 section.manual > section h2, section.script > section h2 {
   margin: -8px -8px 0 -8px;
 }
-/* line 151, ../sass/screen.scss */
+/* line 139, ../sass/screen.scss */
 section.manual > section h3, section.script > section h3 {
   margin: 12px 0 4px 0;
   font-weight: bold;
 }
-/* line 154, ../sass/screen.scss */
+/* line 142, ../sass/screen.scss */
 section.manual > section h3:before, section.script > section h3:before {
   content: "= ";
 }
-/* line 155, ../sass/screen.scss */
+/* line 143, ../sass/screen.scss */
 section.manual > section h3:after, section.script > section h3:after {
   content: " =";
 }
 
-/* line 162, ../sass/screen.scss */
+/* line 150, ../sass/screen.scss */
 section.runstop button, section.loadsave button {
   position: relative;
   height: 28px;
@@ -272,12 +259,12 @@ section.runstop button, section.loadsave button {
   padding-left: 20px;
   margin: 6px;
 }
-/* line 166, ../sass/screen.scss */
+/* line 154, ../sass/screen.scss */
 section.runstop button.set, section.loadsave button.set {
   display: block;
   width: auto;
 }
-/* line 171, ../sass/screen.scss */
+/* line 159, ../sass/screen.scss */
 section.runstop button:disabled::before, section.loadsave button:disabled::before {
   opacity: .3;
 }
@@ -372,7 +359,7 @@ section.runstop button[name="set"]:before, section.loadsave button[name="set"]:b
   height: 16px;
 }
 
-/* line 206, ../sass/screen.scss */
+/* line 194, ../sass/screen.scss */
 .runstopinfo {
   display: block;
   text-align: center;

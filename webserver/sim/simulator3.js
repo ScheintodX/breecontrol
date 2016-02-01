@@ -2,7 +2,7 @@
 
 "use strict";
 
-var DEVICE = "boiler1";
+var DEVICE = "boiler3";
 
 var util = require( 'util' );
 
@@ -25,27 +25,6 @@ var log = require( '../logging.js' )
 		.file( '/var/log/braumeister.test' );
 
 var Sensors = {
-
-	upper: AJacket( {
-		topic: DEVICE + '/upper',
-		temp: {
-			topic: DEVICE + '/upper/temp',
-			status: { range: [ -20, 600 ], initial: 20 },
-			nominal: { range: [ 0, 400 ], initial: 0 },
-			timeout: 5000,
-			mode: 'simulate'
-		},
-		heater: {
-			topic: DEVICE + '/upper/heater',
-			status: { initial: false },
-			freq: .5,
-			mode: 'simulate'
-		},
-		speed: 10,
-		jitter: 3,
-		iv: 1000,
-		mode: 'simulate'
-	} ),
 
 	lower: AJacket( {
 		topic: DEVICE + '/lower',

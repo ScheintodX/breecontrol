@@ -46,27 +46,6 @@ function createBoiler( index, config ) {
 
 	}, Combined( {
 
-		upper: Combined( {
-				overheat: 20,
-				boost: 15
-			}, {
-				temp: Heater( {
-						name: 'Upper Heater',
-						type: 'f',
-						timeout: 5000,
-						minfill: .7
-					}, {
-						status: 0,
-						nominal: 0,
-						max: 300,
-						set: 0
-				} ),
-				heater: InProxy( {
-						type: 'b',
-						timeout: 5000
-				} )
-		} ),
-
 		lower: Combined( {
 				overheat: 50,
 				boost: 50
@@ -137,7 +116,7 @@ function createBoiler( index, config ) {
 	} ), {
 
 		_watchTime: [
-			'temp', 'upper.temp', 'lower.temp', 'lid', 'spare'
+			'temp', 'lower.temp', 'lid', 'spare'
 		],
 
 		watch: function() {
@@ -190,7 +169,6 @@ function createBoiler( index, config ) {
 			// Check for things which shouldn't happen and
 			// correct the values. Send warnings.
 			
-			self.upper.temp.watch( self, self.warn );
 			self.lower.temp.watch( self, self.warn );
 
 			self.aggitator.watch( self, self.warn );

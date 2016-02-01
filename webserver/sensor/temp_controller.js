@@ -68,11 +68,11 @@ module.exports = function( conf, defaults ) {
 
 			if( self.status >= self.nominal ) {
 
-				boiler.upper.temp.setTo( 0 );
-				boiler.lower.temp.setTo( 0 );
+				if( boiler.upper) boiler.upper.temp.setTo( 0 );
+				if( boiler.lower) boiler.lower.temp.setTo( 0 );
 			} else {
-				boiler.upper.temp.setTo( optiTemp( boiler.upper ) );
-				boiler.lower.temp.setTo( optiTemp( boiler.lower ) );
+				if( boiler.upper ) boiler.upper.temp.setTo( optiTemp( boiler.upper ) );
+				if( boiler.lower ) boiler.lower.temp.setTo( optiTemp( boiler.lower ) );
 			}
 		}
 

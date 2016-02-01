@@ -19,7 +19,10 @@ BAG.Boiler_Controls = (function($){
 
 		function Control( sel, scale ) {
 
-			var $c = $secManual.find( sel );
+			var $c = $secManual.find( sel )
+					;
+
+			if( !$c.isOne() ) return undefined;
 
 			// topic (for notify) is taken from button name.
 			var topic = $c.attr('name');
@@ -56,6 +59,12 @@ BAG.Boiler_Controls = (function($){
 
 				var name = boiler.name;
 
+				/*
+				if( name == "Pete the Preserver" ){
+					console.log( boiler );
+				}
+				*/
+
 				$e.find( 'header h1' )
 						.text( 'Boiler ' + (boiler.index+1) + ": " + boiler.name )
 						;
@@ -63,10 +72,12 @@ BAG.Boiler_Controls = (function($){
 				for( var key in manualControls ) {
 
 					var value = key.getFrom( boiler );
-
 					if( typeof( value ) == 'undefined' ) continue;
 
-					manualControls[ key ].set( value );
+					var control = manualControls[ key ];
+					if( typeof( control ) == 'undefined' ) continue;
+
+					control.set( value );
 				}
 
 			}

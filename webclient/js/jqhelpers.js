@@ -17,6 +17,10 @@ function ex( up ) {
 		return this;
 	};
 
+	$.fn.isOne = function() {
+		return this.length == 1;
+	}
+
 	$.fn.expectFound = function() {
 
 		if( this.length != 0 ) {

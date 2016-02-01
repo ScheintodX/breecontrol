@@ -8,10 +8,14 @@ BAG.Load = (function($){
 
 		load: function( name, done ) {
 
+			console.trace( "LOAD", name );
+
 			if( name in BAG ) return done( null, BAG[name] );
 
-			$.getScript( name.toLowerCase() + ".js" )
-				.done( function(){ done( null, BAG[name] ); } )
+			var file = "js/" + name.toLowerCase() + ".js";
+
+			$.getScript( file )
+				.done( function(){ return done( null, BAG[name] ); } )
 				.fail( done )
 				;
 		},
@@ -22,12 +26,38 @@ BAG.Load = (function($){
 			}
 		},
 
-		loadScript: function( name, done ) {
+		loadHtml: function( name, done ) {
+
+			var file = name.toLowerCase() + ".html";
+
+			console.trace( "LOAD", file );
+			
+			$.get( file )
+				.done( function( data ){ return done( null, data ); } )
+				.fail( done )
+				;
+		},
+
+		loaderHtml: function( name ) {
+			return function( done ) {
+				self.loadHtml( name, done );
+			}
+		},
+
+		loadModule: function( name, done ) {
 
 			async.parallel( [
-					self.loader( name + "_controls.js" ),
-					self.loader( name + "_chart.js" )
-			], done );
+					self.loaderHtml( name ),
+					self.loader( 'Script_' + name + "_Controls" ),
+					self.loader( 'Script_' + name + "_Chart" )
+			], function( err, result ){
+
+				return done( err, {
+					html: result[ 0 ],
+					Controls: result[ 1 ],
+					Chart: result[ 2 ]
+				} );
+			} );
 		}
 	};
 

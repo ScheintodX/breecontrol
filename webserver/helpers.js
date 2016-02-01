@@ -2,11 +2,11 @@
 
 var Assert = require( "./assert.js" );
 
-function getBy( obj, topic, splitEx ) {
-
-	var parts = topic.split( splitEx );
-
-	return getByParts( obj, parts );
+function splitByMqtt( topic ) {
+	return topic.split( "/" );
+}
+function splitByWeb( topic ) {
+	return topic.split( "." );
 }
 
 function getByParts( obj, parts ) {
@@ -23,15 +23,6 @@ function getByParts( obj, parts ) {
 	return obj;
 }
 
-function setBy( obj, topic, value, splitEx ) {
-
-	Assert.present( "OBJ", obj );
-
-	var parts = topic.split( splitEx );
-
-	return setByParts( obj, parts, value );
-}
-
 function setByParts( obj, parts, value ) {
 
 	for( var i=0; i<parts.length-1; i++ ) {
@@ -46,9 +37,7 @@ function setByParts( obj, parts, value ) {
 	obj[ parts[ parts.length-1 ] ] = value;
 }
 
-function setByAutotype( obj, topic, value, splitEx ){
-
-	var parts = topic.split( splitEx );
+function setByAutotype( obj, parts, value ){
 
 	if( parts.length < 2 )
 			throw new Error( 'Wrong topic: ' + topic );
@@ -73,7 +62,7 @@ function setByAutotype( obj, topic, value, splitEx ){
 
 function setByMqttMethod( obj, topic, value ) {
 
-	var parts = topic.split( /\//g );
+	var parts = splitByMqtt( topic );
 
 	return setByMethod( obj, parts, value, 'setByMqtt' );
 
@@ -81,7 +70,7 @@ function setByMqttMethod( obj, topic, value ) {
 
 function setByWebMethod( obj, topic, value ) {
 
-	var parts = topic.split( /\./g );
+	var parts = splitByWeb( topic );
 
 	return setByMethod( obj, parts, value, 'setByWeb' );
 
@@ -151,28 +140,31 @@ var Helpers = {
 	message: {
 		setByParts: setByParts,
 		setByMqtt: function( obj, topic, value ) {
-			return setBy( obj, topic, value, /\//g );
+			return setByParts( obj, splitByMqtt( topic ), value );
 		},
 		setByDot: function( obj, topic, value ) {
-			return setBy( obj, topic, value, /\./g );
+			return setByParts( obj, splitByWeb( topic ), value );
 		},
+		setByAutotype: setByAutotype,
 		setByMqttAutotype: function( obj, topic, value ){
-			return setByAutotype( obj, topic, value, /\//g );
+			return setByAutotype( obj, splitByMqtt( topic ), value );
 		},
 		setByMqttMethod: setByMqttMethod,
 		setByWebMethod: setByWebMethod,
 		getByParts: getByParts,
 		getByMqtt: function( obj, topic ) {
-			return getBy( obj, topic, /\//g );
+			return getByParts( obj, splitByMqtt( topic ) );
 		},
 		getByDot: function( obj, topic ) {
-			return getBy( obj, topic, /\./g );
-		}
+			return getByParts( obj, splitByWeb( topic ) );
+		},
+		splitByMqtt: splitByMqtt,
+		splitByWeb: splitByWeb
 	},
 	mqtt: {
 		toString: toString,
 		toStringAutotype: toStringAutotype,
-		fromString: fromString
+		fromString: fromString,
 	},
 	func: {
 		augment: function( obj, before, after ) {

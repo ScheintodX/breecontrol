@@ -64,7 +64,7 @@ module.exports = function( boilers ) {
 
 				HM.setByMqtt( self, topic, value );
 
-			} else if( topic.match( /^boiler[12]\// ) ) {
+			} else if( topic.match( /^boiler[0-9]+\// ) ) {
 
 				return doSupervised( function() {
 
@@ -82,7 +82,7 @@ module.exports = function( boilers ) {
 		// Direct access to sub fields via setByMqttMethod
 		setByWeb: function( topic, value ) {
 
-			if( topic.match( /^boiler[12]\./ ) ){
+			if( topic.match( /^boiler[0-9]+\./ ) ){
 
 				log.info( "SET " + topic + " " + value, typeof value );
 

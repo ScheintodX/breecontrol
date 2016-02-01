@@ -2,7 +2,7 @@
 
 "use strict";
 
-var DEVICE = "boiler1";
+var DEVICE = "boiler2";
 
 var util = require( 'util' );
 

@@ -9,7 +9,7 @@
 	function loadDevice( $parent, device, idx ) {
 
 		var id = 'boiler' + idx,
-			$device = $( '<section class="tab ' + device.type + '"/>' )
+			$device = $( '<section class="tab device ' + device.type + '"/>' )
 					.attr( 'id', id )
 					.appendTo( $parent )
 					.load( device.type + ".html", function() {

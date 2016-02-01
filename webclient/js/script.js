@@ -42,12 +42,8 @@ BAG.Script = (function($,BAG){
 
 		var storeScript = (function( data ) {
 
-			console.trace( data );
-
 			if( curControls ) curControls.storeScript( data );
 
-			// TODO: 
-			//$selectLoad.val( data.name );
 		}).onlyIfChanged();
 
 		function clearScript() {
@@ -165,16 +161,25 @@ BAG.Script = (function($,BAG){
 
 					if( ! curChart ) {
 
-						$secScript.find( '.ctrl_program' )
-								.expectOne()
-								.empty()
-								.load( '5steps.html', function() {
-									updateElements( script );
-								} )
-								;
+						// prevent double loading but must be checked for if used
+						curChart = true;
 
-						curChart = BAG.Script_5Steps_Chart( $secScript, device );
-						curControls = BAG.Script_5Steps_Controls( $secScript, device );
+						BAG.Load.loadModule( "5Steps", function( err, data ){
+
+							if( err ) throw new Error( err );
+
+							$secScript.find( '.ctrl_program' )
+									.expectOne()
+									.empty()
+									.append( $( data.html ) )
+									;
+
+							curControls = data.Controls( $secScript, device );
+							curChart = data.Chart( $secScript, device );
+
+							console.trace( "LOADED", curControls.name );
+
+						} );
 
 					} else {
 						updateElements( script );
@@ -200,7 +205,7 @@ BAG.Script = (function($,BAG){
 						;
 			}
 
-			if( curChart ){
+			if( curChart && curChart !== true ){
 				curChart.gotData( data );
 				curControls.gotData( data );
 			}
