@@ -6,7 +6,7 @@
  * Does only a little layout
  */
 
-var BAG_Tab = (function($){
+BAG.Tab = (function($){
 
 	return function( elem, device ) {
 

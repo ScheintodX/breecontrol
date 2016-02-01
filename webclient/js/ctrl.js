@@ -5,7 +5,7 @@
  *
  * Only single instance
  */
-var BAG_Ctrl = (function($){
+BAG.Ctrl = (function($){
 
 	return function( controls ) {
 

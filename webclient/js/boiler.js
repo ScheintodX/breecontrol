@@ -5,10 +5,10 @@
  *
  * Multiple instances. Create with
  * <pre>
- *   var b = BAG_Boiler( id );
+ *   var b = BAG.Boiler( id );
  * </pre>
  */
-var BAG_Boiler = (function($,Ψ){
+BAG.Boiler = (function($,Ψ){
 
 	// Constructor function
 	return function( elem, device, passive ) {
@@ -166,4 +166,4 @@ var BAG_Boiler = (function($,Ψ){
 		return Boiler;
 	};
 
-})($, BAG_Function);
+})($, BAG.Function);

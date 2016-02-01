@@ -5,7 +5,7 @@
  *
  * Only single instance
  */
-var BAG_Com = (function($){
+BAG.Com = (function($){
 
 	var _callback = false;
 

@@ -1,6 +1,6 @@
 "use strict";
 
-var BAG_Script = (function($){
+BAG.Script = (function($,BAG){
 
 	return function( elem, device ) {
 
@@ -173,8 +173,8 @@ var BAG_Script = (function($){
 								} )
 								;
 
-						curChart = BAG_5Steps_Chart( $secScript, device );
-						curControls = BAG_5Steps_Controls( $secScript, device );
+						curChart = BAG.Script_5Steps_Chart( $secScript, device );
+						curControls = BAG.Script_5Steps_Controls( $secScript, device );
 
 					} else {
 						updateElements( script );
@@ -219,4 +219,4 @@ var BAG_Script = (function($){
 		return Controls;
 	}
 
-})($);
+})($,BAG);

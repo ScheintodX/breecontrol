@@ -1,6 +1,6 @@
 "use strict";
 
-var BAG_5Steps_Controls = (function($){
+BAG.Script_5Steps_Controls = (function($){
 
 	return function( elem, device ) {
 

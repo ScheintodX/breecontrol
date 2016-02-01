@@ -5,10 +5,10 @@
  *
  * Multiple instances. Create with
  * <pre>
- *   var c = BAG_Chart( id );
+ *   var c = BAG.Xxx_Chart( id );
  * </pre>
  */
-var BAG_5Steps_Chart = (function($,Ψ){
+BAG.Script_5Steps_Chart = (function($,Ψ){
 
 	//var BOUNDS = [ 30, 60, 140, 220, 300, 330 ];
 	var BOUNDS = [
@@ -166,4 +166,4 @@ var BAG_5Steps_Chart = (function($,Ψ){
 		return Chart;
 	};
 
-})($,BAG_Function);
+})($,BAG.Function);

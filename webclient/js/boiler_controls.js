@@ -1,6 +1,6 @@
 "use strict";
 
-var BAG_Boiler_Controls = (function($){
+BAG.Boiler_Controls = (function($){
 
 	return function( elem, device ) {
 
@@ -24,7 +24,7 @@ var BAG_Boiler_Controls = (function($){
 			// topic (for notify) is taken from button name.
 			var topic = $c.attr('name');
 
-			var control = BAG_Button( $c.attr( 'type' ), $c, topic, scale )
+			var control = BAG.Button( $c.attr( 'type' ), $c, topic, scale )
 					.onNotify( notify )
 					;
 

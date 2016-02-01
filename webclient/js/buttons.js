@@ -1,6 +1,6 @@
 "use strict";
 
-var BAG_Button = function($){
+BAG.Button = function($){
 
 	function InputCheckbox( $e, topic ) {
 

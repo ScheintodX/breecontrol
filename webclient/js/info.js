@@ -1,6 +1,6 @@
 "use strict";
 
-var BAG_Info = (function($){
+BAG.Info = (function($){
 
 	return function( elem, device ) {
 

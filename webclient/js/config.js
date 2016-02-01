@@ -1,4 +1,4 @@
-var BAG_Config = function(){
+BAG.Config = function(){
 
 	var self = {
 		ws: {

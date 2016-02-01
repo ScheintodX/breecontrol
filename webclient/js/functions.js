@@ -1,6 +1,6 @@
 "use strict";
 
-var BAG_Function = ( function(){
+BAG.Function = ( function(){
 
 	return function( svg ){
 	
