@@ -33,6 +33,14 @@ function ex( up ) {
 
 		return this;
 	};
+	$.fn.expectN = function( n ) {
+
+		if( this.length != n ) {
+			throw new Error( "NOT " + n + " FOUND: " + this.selector + " " + ex( 3 ) );
+		}
+
+		return this;
+	};
 
 	$.fn.isOn = function() {
 		return this.val() == 'on';

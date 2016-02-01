@@ -2,9 +2,10 @@
 
 var BAG_Info = (function($){
 
-	return function( sel, device ) {
+	return function( elem, device ) {
 
-		var $e = $(sel)
+		var $e = ( elem instanceof jQuery ? elem : $( elem ) )
+				.expectOne()
 				.hide(),
 			$content = $('<div/>')
 				.appendTo( $e );

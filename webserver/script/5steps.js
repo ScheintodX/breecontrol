@@ -50,7 +50,7 @@ module.exports = function( script, boiler, config, env ) {
 
 			controller: '5steps',
 			chart: '5steps.js',
-			view: '5steps.js',
+			view: '5steps.html',
 
 			mode: "stop",
 			start: 0,
@@ -105,7 +105,7 @@ module.exports = function( script, boiler, config, env ) {
 		stop: function() {
 			self.hello.mode = 'stop';
 			_exec( 'stop' );
-			stepTo( 0 );
+			self.stepTo( 0 );
 			return self.hello;
 		},
 

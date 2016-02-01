@@ -21,7 +21,8 @@ module.exports = function( done ) {
 
 		boilers: [
 			{
-				name: "boiler1",
+				type: "boiler",
+				name: "Bernd der Bottich",
 				minTemp:   0, //°C
 				maxTemp: 100, //°C
 				capacity: 80, // L
@@ -30,6 +31,7 @@ module.exports = function( done ) {
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
 			}, {
+				type: "boiler",
 				name: "Kurt von Kessel",
 				minTemp:   0, //°C
 				maxTemp: 100, //°C

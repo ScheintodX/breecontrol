@@ -1,32 +1,21 @@
 "use strict";
 
-var BAG_Controls = (function($){
+var BAG_Script = (function($){
 
 	return function( elem, device ) {
 
 		var _onControl = false;
 
-		var $e = $( elem ),
-			$header = $e.find( 'header' ).expectOne(),
-			$secScript = $e.find( 'section.script' ).expectOne(),
-			$secManual = $e.find( 'section.manual' ).expectOne(),
-			$secLoadSave = $e.find( 'section.loadsave' ).expectOne(),
-			$secRunStop = $e.find( 'section.runstop' ).expectOne()
+		var $elem = ( elem instanceof jQuery ? elem : $( elem ) ).expectOne(),
+			$secLoadSave = $elem.find( 'section.loadsave' ).expectOne(),
+			$secProgram = $elem.find( 'section.program' ).expectOne(),
+			$secRunStop = $elem.find( 'section.runstop' ).expectOne()
 			;
-
-		// Visual Controls
-		$header.find( 'button.script' )
-				.expectOne()
-				.on( 'click', function(){ $secScript.toggleClass( 'visible' ); } )
-				;
-		$header.find( 'button.manual' )
-				.expectOne()
-				.on( 'click', function(){ $secManual.toggleClass( 'visible' ); } )
-				;
 
 		// Comm
 
 		function notify( on, topic, value ) {
+
 			console.trace( "NOTIFY", on, topic, value );
 			_onControl( { on: on, topic: topic, value: value, device: device } );
 		}
@@ -34,44 +23,15 @@ var BAG_Controls = (function($){
 		// Manual
 
 		function onClickCheckbox( on ) {
+
 			return function( ev ) {
 				var $this = $(this);
 			}
 		}
 
-		function Control( sel, scale ) {
-
-			var $c = $e.find( sel );
-
-			// topic (for notify) is taken from button name.
-			var topic = $c.attr('name');
-
-			var control = BAG_Button( $c.attr( 'type' ), $c, topic, scale )
-					.onNotify( notify )
-					;
-
-			if( topic.match( /\.override$/ ) )
-					control = control.override();
-
-			return control;
-		}
-
-		var manualControls = {
-		// Set
-			'temp.nominal': Control( 'input[name=".temp.set" ]' ),
-			'aggitator.nominal': Control( 'input[name=".aggitator.set" ]' ),
-
-		// Tunde
-		 	'upper.temp.max': Control( 'input[name=".upper.temp.max"]' ),
-		 	'lower.temp.max': Control( 'input[name=".lower.temp.max"]' ),
-
-		// Override
-			'fill.override': Control( 'input[name=".fill.override"] ', 100 ),
-			'lid.override': Control( 'input[name=".lid.override"] ' )
-		};
-
 		// runstop / loadsave
 		function onClick( on ) {
+
 			return function() {
 				var $this = $(this);
 				notify( on, $this.attr('name'), readScript() );
@@ -87,7 +47,7 @@ var BAG_Controls = (function($){
 				return parseFloat( val( $s, name ) );
 			}
 			function valFF( i, name ) {
-				return valF( $secLoadSave.find( 'div.step' + i ), name );
+				return valF( $secProgram.find( 'div.step' + i ), name );
 			}
 
 			var steps = []
@@ -102,10 +62,11 @@ var BAG_Controls = (function($){
 			steps.push( { heat: valFF( 4, 'heat' ) } )
 
 			var prog = {
-				name: val( $secLoadSave, 'name' ),
+				name: val( $secProgram, 'name' ),
 				load: val( $secLoadSave, 'load' ),
 				steps: steps
 			}
+
 			return prog;
 		}
 
@@ -117,12 +78,12 @@ var BAG_Controls = (function($){
 						.val( value );
 			}
 			function valF( idx, name, value ) {
-				var $step = $secLoadSave.find( "div.step" + idx )
+				var $step = $secProgram.find( "div.step" + idx )
 						.expectOne();
 				val( $step, name, value );
 			}
 
-			val( $secLoadSave, 'name', prog.name );
+			val( $secProgram, 'name', prog.name );
 
 			valF( 0, 'heat', prog.steps[ 0 ].heat );
 
@@ -146,9 +107,9 @@ var BAG_Controls = (function($){
 				val( $s, name, null );
 			}
 
-			clear( $secLoadSave, 'name' );
+			clear( $secProgram, 'name' );
 			for( var i=0; i<5; i++ ) {
-				var $step = $secLoadSave.find( 'div.step' + i );
+				var $step = $secProgram.find( 'div.step' + i );
 				clear( $step, 'heat' );
 				clear( $step, 'hold' );
 			}
@@ -182,9 +143,50 @@ var BAG_Controls = (function($){
 				.on( 'click', onClick( 'loadsave' ) )
 				;
 
+		$secProgram.find( 'button' )
+				.on( 'click', onClick( 'loadsave' ) )
+				;
+
 		// Callback for received data from Ctrl
 		
 		var oldSteps, oldCurrent;
+
+		var curCtrl = false;
+
+		function updateElements( script ) {
+
+			$elem.find( 'header h2' ).text( script.name );
+
+			var asJson = JSON.stringify( script.steps );
+			if( asJson != oldSteps ) {
+				storeScript( script );
+				oldSteps = asJson;
+			}
+			enableButtons( script.actions );
+
+			// Info
+			if( script.current ) {
+				var current = script.current;
+
+				asJson = JSON.stringify( current );
+				if( oldCurrent != asJson ) {
+
+					oldCurrent = asJson;
+
+					$('.runstopinfo').text( (current.index+1) + ". " +
+							current.desc + " [" + current.mode + ']' );
+				}
+			} else {
+				$('.runstopinfo').text( " - no script - " );
+			}
+		}
+
+		function clearElements() {
+			$elem.find( 'header h2' ).text( '' );
+			clearScript();
+			enableButtons( [] );
+			$('.runstopinfo').text( '' );
+		}
 
 		function gotData( data ) {
 
@@ -192,69 +194,34 @@ var BAG_Controls = (function($){
 
 				var boiler = data.boilers[ device ];
 
-				var name = boiler.name;
-
-				$e.find( 'header h1' ).text( 'Boiler ' + (boiler.index+1) + ": " + boiler.name );
-				for( var key in manualControls ) {
-
-					var value = key.getFrom( boiler );
-
-					if( typeof( value ) == 'undefined' ) continue;
-
-					manualControls[ key ].set( value );
-				}
-
 				if( 'script' in boiler ) {
 
 					var script = boiler.script;
 
-					$e.find( 'header h2' ).text( script.name );
+					if( ! curCtrl ) {
 
-					var asJson = JSON.stringify( script.steps );
-					if( asJson != oldSteps ) {
-						storeScript( script );
-						oldSteps = asJson;
-					}
-					enableButtons( script.actions );
+						$elem.find( '.ctrl_program' )
+								.expectOne()
+								.load( '5steps.html', function() {
 
-					// Info
-					if( script.current ) {
-						var current = script.current;
-
-						asJson = JSON.stringify( current );
-						if( oldCurrent != asJson ) {
-
-							oldCurrent = asJson;
-
-							$('.runstopinfo').text( (current.index+1) + ". " +
-									current.desc + " [" + current.mode + ']' );
-						}
+									updateElements( script );
+								} )
+								;
+						curCtrl = true;
 					} else {
-						$('.runstopinfo').text( " - no script - " );
+						updateElements( script );
 					}
+
 
 				} else {
 
-					$e.find( 'header h2' ).text( '' );
-					clearScript();
-					enableButtons( [] );
-					$('.runstopinfo').text( '' );
+					clearElements();
 				}
-			} 
-			
-			if( 'config' in data ) {
-
-				var config = data.config;
-
-				console.trace( "CONFIG", config );
-
 			} 
 			
 			if( 'scripts' in data ) {
 
 				var scripts = data.scripts;
-
-				console.trace( "SCRIPTS", scripts );
 
 				var $options = $.map( scripts, function( script ){
 					return $('<option/>')
@@ -263,7 +230,7 @@ var BAG_Controls = (function($){
 							;
 				} )
 
-				$e.find( 'section.loadsave select' )
+				$elem.find( 'section.loadsave select' )
 						.empty()
 						.append( $("<option>--</option>" ) )
 						.append( $options );

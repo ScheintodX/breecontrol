@@ -1,0 +1,15 @@
+/* line 3, ../sass/load.scss */
+body {
+  background-color: #16335e;
+  color: white;
+}
+
+/* line 8, ../sass/load.scss */
+img.loading {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  left: 50%;
+  top: 50%;
+  margin: -70px 0 0 -50px;
+}

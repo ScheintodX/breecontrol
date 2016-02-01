@@ -34,7 +34,7 @@ var BAG_Com = (function(){
 
 		//console.trace( data );
 
-		_callback( data );
+		if( _callback ) _callback( data );
 	}
 
 	function gotClose( what ) {

@@ -5,22 +5,13 @@
 
 @import "compass/reset";
 
+@import "config.lib";
 @import "sprites.lib";
 @import "control.lib";
-
-//$bg: #204a87;
-$bg: #16335e;
-$bg_ctrl: lighten( $bg, 10% );
-$bg_chart: lighten( $bg, 5% );
 
 html {
 	font-family: "Droid Sans", "Roboto", sans-serif;
 	font-size: 16px;
-}
-
-body {
-	background-color: $bg;
-	color: white;
 }
 
 select {

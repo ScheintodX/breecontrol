@@ -1,0 +1,13 @@
+@import "config.lib";
+
+body {
+	background-color: $bg;
+	color: white;
+}
+
+img.loading {
+	position: absolute;
+	width: 120px; height: 120px;
+	left: 50%; top: 50%;
+	margin: -70px 0 0 -50px;
+}

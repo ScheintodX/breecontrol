@@ -41,13 +41,12 @@ var BAG_Ctrl = (function($){
 				data = _last;
 			}
 
-			//console.log( data );
-
 			$.each( controls, function( name, control ) {
 
-				control.gotData( data );
+				if( control.gotData ) control.gotData( data );
 
 			} );
+
 			return Ctrl;
 		}
 
@@ -62,7 +61,7 @@ var BAG_Ctrl = (function($){
 			return Ctrl;
 		}
 
-		$.each( controls, function( name, control ){
+		function initControl( name, control ) {
 
 			if( ! 'gotData' in control ) {
 				console.warn( "Missing 'gotData'" );
@@ -71,8 +70,9 @@ var BAG_Ctrl = (function($){
 			if( 'onControl' in control ) {
 				control.onControl( gotControl );
 			}
+		}
 
-		} );
+		$.each( controls, initControl );
 
 		var Ctrl = {
 
@@ -85,6 +85,13 @@ var BAG_Ctrl = (function($){
 			onCom: function( com ) {
 
 				_com = com;
+			},
+
+			put: function( id, control ) {
+
+				initControl( id, control );
+
+				controls[ id ] = control;
 			}
 
 		};

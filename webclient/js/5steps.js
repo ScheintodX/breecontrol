@@ -31,7 +31,8 @@ var BAG_Chart = (function($,Ψ){
 
 		passive = passive || true;
 
-		var $elem = $( elem ).expectOne(),
+		var $elem = ( elem instanceof jQuery ? elem : $( elem ) )
+				.expectOne(),
 		    _svg = false;
 
 		$elem.on( 'load', function() {
