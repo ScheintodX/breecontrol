@@ -6,8 +6,6 @@
 	
 	var lastMessage = {};
 
-	//ctrl.put( 'chart'+idx, BAG_Chart( $script.find( '.chart' ), id ) );
-
 	function loadDevice( $parent, device, idx ) {
 
 		var id = 'boiler' + idx,
@@ -15,6 +13,8 @@
 					.attr( 'id', id )
 					.appendTo( $parent )
 					.load( device.type + ".html", function() {
+
+						console.log( $device );
 
 						ctrl.put( 'tab'+idx, BAG_Tab( $device, id ) );
 						ctrl.put( 'info'+idx, BAG_Info( $device.find( '.info' ), id ) );

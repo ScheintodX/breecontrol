@@ -7,6 +7,7 @@ var BAG_Script = (function($){
 		var _onControl = false;
 
 		var $elem = ( elem instanceof jQuery ? elem : $( elem ) ).expectOne(),
+			$secScript = $elem.find( 'section.script' ).expectOne(),
 			$secLoadSave = $elem.find( 'section.loadsave' ).expectOne(),
 			$secProgram = $elem.find( 'section.program' ).expectOne(),
 			$secRunStop = $elem.find( 'section.runstop' ).expectOne()
@@ -207,11 +208,18 @@ var BAG_Script = (function($){
 									updateElements( script );
 								} )
 								;
-						curCtrl = true;
+
+						curCtrl = BAG_5steps( $secScript.find( 'object.chart' ), device );
+
+						/*
+						$secScript.find( 'object' )
+								.attr( 'data', '5steps.svg' )
+								;
+						*/
+
 					} else {
 						updateElements( script );
 					}
-
 
 				} else {
 
@@ -235,6 +243,10 @@ var BAG_Script = (function($){
 						.append( $("<option>--</option>" ) )
 						.append( $options );
 						;
+			}
+
+			if( curCtrl ){
+				curCtrl.gotData( data );
 			}
 		}
 
