@@ -41,9 +41,9 @@
 
 			$main.empty();
 
-			for( var i=0; i < data.config.boilers.length; i++ ) {
+			for( var i=0; i < data.config.devices.length; i++ ) {
 
-				var device = data.config.boilers[ i ];
+				var device = data.config.devices[ i ];
 
 				loadDevice( $main, device, (i+1) );
 			}

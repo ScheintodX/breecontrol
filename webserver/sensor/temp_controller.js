@@ -64,15 +64,15 @@ module.exports = function( conf, defaults ) {
 		subscribe: function( emit ) {
 			emit( 'status' );
 		},
-		run: function( boiler, warn ) {
+		run: function( device, warn ) {
 
 			if( self.status >= self.nominal ) {
 
-				if( boiler.upper) boiler.upper.temp.setTo( 0 );
-				if( boiler.lower) boiler.lower.temp.setTo( 0 );
+				if( device.upper) device.upper.temp.setTo( 0 );
+				if( device.lower) device.lower.temp.setTo( 0 );
 			} else {
-				if( boiler.upper ) boiler.upper.temp.setTo( optiTemp( boiler.upper ) );
-				if( boiler.lower ) boiler.lower.temp.setTo( optiTemp( boiler.lower ) );
+				if( device.upper ) device.upper.temp.setTo( optiTemp( device.upper ) );
+				if( device.lower ) device.lower.temp.setTo( optiTemp( device.lower ) );
 			}
 		}
 

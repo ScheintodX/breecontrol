@@ -117,9 +117,9 @@ BAG.Script_5Steps_Chart = (function($,Ψ){
 
 				if( ! Chart.ready() ) return;
 
-				if( !( 'boilers' in data ) ) return;
+				if( !( 'devices' in data ) ) return;
 
-				var boiler = data.boilers[ device ];
+				var boiler = data.devices[ device ];
 
 				if( !( 'script' in boiler ) ) return;
 

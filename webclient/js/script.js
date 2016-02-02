@@ -151,9 +151,9 @@ BAG.Script = (function($,BAG){
 		// Callback for received data from Ctrl
 		function gotData( data ) {
 
-			if( 'boilers' in data ) {
+			if( 'devices' in data ) {
 
-				var boiler = data.boilers[ device ];
+				var boiler = data.devices[ device ];
 
 				if( 'script' in boiler ) {
 

@@ -21,8 +21,7 @@ var Config = require( './config.js' ),
 	hello = false;
 
 var Devices = require( './devices.js' ),
-	Boilers = require( './boiler.js' ),
-    boilers = false,
+    devices = false,
 	Brewery = require( './brewery.js' ),
 	brewery = false;
 
@@ -37,7 +36,7 @@ function initConfig( done ) {
 		config = data;
 		hello = {
 			config: {
-				boilers: config.boilers,
+				devices: config.devices,
 			}
 		}
 		repl.addContext( { config: config, hello: hello } );
@@ -51,19 +50,19 @@ function initConfig( done ) {
 
 function initBoilers( done ) {
 
-	Devices.createAll( config.boilers, Catch.ExitOn( "Devices", function( err, data ) {
+	Devices.createAll( config.devices, Catch.ExitOn( "Devices", function( err, data ) {
 	
-		boilers = data;
+		devices = data;
 
-		brewery = Brewery( boilers );
+		brewery = Brewery( devices );
 		repl.addContext( { brewery: brewery } );
 		repl.addContext( {
 				brewery: brewery,
-				boilers: boilers,
+				devices: devices,
 		} );
-		repl.addContext( brewery.boilers );
+		repl.addContext( brewery.devices );
 
-		log.startup( "boilers", "READY" );
+		log.startup( "devices", "READY" );
 
 		return done();
 	

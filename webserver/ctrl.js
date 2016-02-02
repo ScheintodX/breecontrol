@@ -10,8 +10,6 @@ var Assert = require( './assert.js' );
 
 var Scripts = require( './scripts.js' );
 
-var Boiler = require( './boiler.js' );
-
 
 module.exports = function( config, hello, brewery ) {
 
@@ -21,11 +19,11 @@ module.exports = function( config, hello, brewery ) {
 
 	var _mqtt, _web;
 
-	function _msg( boiler, level, text ) {
+	function _msg( device, level, text ) {
 
 		return _web( {
 			message: {
-				device: boiler, 
+				device: device, 
 				level: level,
 				messages: [
 					{ level: level, text: text }
@@ -34,10 +32,10 @@ module.exports = function( config, hello, brewery ) {
 		} );
 	}
 
-	function _warn( boiler, text ) {
-		return _msg( boiler, 'warn', text );
+	function _warn( device, text ) {
+		return _msg( device, 'warn', text );
 	}
-	function _info( boiler, text ) {
+	function _info( device, text ) {
 		return _msg( 'info', text );
 	}
 
@@ -73,9 +71,9 @@ module.exports = function( config, hello, brewery ) {
 		Assert.present( 'data.device', data.device );
 		Assert.present( 'data.topic', data.topic );
 
-		var boiler = brewery.boilers[ data.device ];
+		var device = brewery.devices[ data.device ];
 
-		if( ! boiler ) throw new Error( "No boiler found" );
+		if( ! device ) throw new Error( "No device found" );
 
 		switch( data.topic ) {
 
@@ -87,18 +85,18 @@ module.exports = function( config, hello, brewery ) {
 
 					if( err ) return log.error( err );
 
-					var TheScript = Script( script, boiler, config, {
+					var TheScript = Script( script, device, config, {
 
-						notify: function( boiler, what, message ){
-							log.info( boiler.name, what, message );
+						notify: function( device, what, message ){
+							log.info( device.name, what, message );
 						},
 
 						time: config.script.time
 
 					} );
 
-					boiler.script = TheScript.hello;
-					boiler._script = TheScript;
+					device.script = TheScript.hello;
+					device._script = TheScript;
 
 					sendStatusWeb();
 
@@ -111,17 +109,17 @@ module.exports = function( config, hello, brewery ) {
 
 				log.trace( "SAVE", data.value.name );
 
-				if( !boiler.script ) {
+				if( !device.script ) {
 					_warn( data.device, 'No script available' );
 					return;
 				}
 
-				var TheScript = boiler._script.parse( data.value );
+				var TheScript = device._script.parse( data.value );
 
-				boiler.script = TheScript.hello;
-				boiler._script = TheScript;
+				device.script = TheScript.hello;
+				device._script = TheScript;
 
-				var saveable = boiler._script.save();
+				var saveable = device._script.save();
 
 				Scripts.save( data.value.name, saveable, function( err ) {
 
@@ -143,17 +141,17 @@ module.exports = function( config, hello, brewery ) {
 
 				log.trace( "SET" );
 
-				if( !boiler.script ) {
+				if( !device.script ) {
 					_warn( data.device, 'No script available' );
 					return;
 				}
 
-				var TheScript = boiler._script.parse( data.value );
+				var TheScript = device._script.parse( data.value );
 
-				boiler.script = TheScript.hello;
-				boiler._script = TheScript;
+				device.script = TheScript.hello;
+				device._script = TheScript;
 
-				log.info( "SET done", boiler.script );
+				log.info( "SET done", device.script );
 
 				break;
 
@@ -168,13 +166,13 @@ module.exports = function( config, hello, brewery ) {
 
 		Assert.present( 'data.device', data.device );
 
-		var boiler = brewery.boilers[ data.device ];
+		var device = brewery.devices[ data.device ];
 
-		Assert.present( 'boiler', boiler );
+		Assert.present( 'device', device );
 
 		if( [ 'start', 'pause', 'resume', 'stop', 'next', 'prev' ].indexOf( data.topic ) >= 0 ){
 
-			var script = boiler._script;
+			var script = device._script;
 
 			Assert.present( 'script', script );
 
@@ -249,13 +247,13 @@ module.exports = function( config, hello, brewery ) {
 				} );
 			}
 
-			// Run available scripts from boilers
-			for( var key in brewery.boilers ) {
+			// Run available scripts from devices
+			for( var key in brewery.devices ) {
 
-				var boiler = brewery.boilers[ key ];
+				var device = brewery.devices[ key ];
 
-				if( boiler._script ){
-					boiler._script.run();
+				if( device._script ){
+					device._script.run();
 				}
 			}
 		},

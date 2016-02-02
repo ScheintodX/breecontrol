@@ -87,9 +87,9 @@ BAG.Boiler = (function($,Ψ){
 
 				if( !_svg ) return;
 
-				if( !( 'boilers' in data ) ) return;
+				if( !( 'devices' in data ) ) return;
 
-				var boiler = data.boilers[ device ];
+				var boiler = data.devices[ device ];
 
 				if( 'aggitator' in boiler ) {
 					Boiler.setAggitator( boiler.aggitator.status );

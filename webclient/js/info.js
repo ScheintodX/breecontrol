@@ -28,9 +28,9 @@ BAG.Info = (function($){
 
 			gotData: function( data ) {
 
-				if( 'boilers' in data ) {
+				if( 'devices' in data ) {
 
-					var boiler = data.boilers[ device ];
+					var boiler = data.devices[ device ];
 
 					if( 'warn' in boiler && boiler.warn.messages.length > 0 ) {
 

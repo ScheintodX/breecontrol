@@ -53,9 +53,9 @@ BAG.Boiler_Controls = (function($){
 
 		function gotData( data ) {
 
-			if( 'boilers' in data ) {
+			if( 'devices' in data ) {
 
-				var boiler = data.boilers[ device ];
+				var boiler = data.devices[ device ];
 
 				var name = boiler.name;
 

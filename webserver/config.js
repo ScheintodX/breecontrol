@@ -19,7 +19,7 @@ module.exports = function( done ) {
 			prefix: 'griesbraeu/'
 		},
 
-		boilers: [
+		devices: [
 			{
 				id: 'boiler1',
 				type: "boiler",

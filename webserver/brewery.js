@@ -8,7 +8,7 @@ var _ = require( 'underscore' );
 var E = require( './E.js' );
 var jdp = require( 'jsondiffpatch' );
 
-module.exports = function( boilers ) {
+module.exports = function( devices ) {
 
 	function diff( orig, changed ) {
 
@@ -42,7 +42,7 @@ module.exports = function( boilers ) {
 
 	var self = {
 
-		boilers: boilers,
+		devices: devices,
 
 		infrastructure: {},
 
@@ -52,9 +52,9 @@ module.exports = function( boilers ) {
 
 		asJson: function() {
 
-			var boilers = [];
+			var devices = [];
 
-			return JS.stringifyPublic( { boilers: self.boilers } );
+			return JS.stringifyPublic( { devices: self.devices } );
 		},
 
 		// Direct access to sub fields via setByMqttMethod
@@ -68,7 +68,7 @@ module.exports = function( boilers ) {
 
 				return doSupervised( function() {
 
-					HM.setByMqttMethod( self.boilers, topic, value );
+					HM.setByMqttMethod( self.devices, topic, value );
 
 					self.watch();
 				} );
@@ -88,7 +88,7 @@ module.exports = function( boilers ) {
 
 				return doSupervised( function() {
 
-					HM.setByWebMethod( self.boilers, topic, value );
+					HM.setByWebMethod( self.devices, topic, value );
 
 					self.watch();
 				} );
@@ -97,21 +97,20 @@ module.exports = function( boilers ) {
 
 		watch: function() {
 
-			for( var boiler in self.boilers ) {
+			for( var device in self.devices ) {
 
-				self.boilers[ boiler ].watch();
+				self.devices[ device ].watch();
 			}
 		},
 
 		// Recursive access to fields via publish/emit
 		publish: function( emit ) {
 
-			for( var boiler in self.boilers ) {
+			for( var device in self.devices ) {
 
-				self.boilers[ boiler ].publish( function( topic, data ) {
+				self.devices[ device ].publish( function( topic, data ) {
 
-					//E.rr( 'emit', boiler + '/' + topic, data );
-					emit( boiler + '/' + topic, data );
+					emit( device + '/' + topic, data );
 				} );
 			}
 		},
@@ -121,12 +120,11 @@ module.exports = function( boilers ) {
 
 			emit( 'infrastructure/#' );
 
-			for( var boiler in self.boilers ) {
+			for( var device in self.devices ) {
 
-				self.boilers[ boiler ].subscribe( function( topic ) {
+				self.devices[ device ].subscribe( function( topic ) {
 
-					//E.rr( 'emit', boiler + '/' + topic );
-					emit( boiler + '/' + topic );
+					emit( device + '/' + topic );
 				} );
 			}
 		}

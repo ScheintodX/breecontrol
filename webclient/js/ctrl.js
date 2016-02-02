@@ -33,10 +33,10 @@ BAG.Ctrl = (function($){
 
 			//console.log( data );
 
-			if( 'boilers' in data ) {
+			if( 'devices' in data ) {
 				_last = data;
 			}
-			if( 'diff' in data && 'boilers' in data.diff && _last ) {
+			if( 'diff' in data && 'devices' in data.diff && _last ) {
 				_last = jsondiffpatch.patch( _last, data.diff );
 				data = _last;
 			}

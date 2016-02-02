@@ -63,13 +63,13 @@ module.exports = function( conf, defaults ) {
 			emit( 'status' );
 		},
 
-		run: function( boiler, warn ) {
+		run: function( device, warn ) {
 
 			if( self.status <= self.nominal ) {
 
-				boiler.jacket.temp.setTo( self.nominal );
+				device.jacket.temp.setTo( self.nominal );
 			} else {
-				boiler.jacket.temp.setTo( optiTemp( boiler.jacket ) );
+				device.jacket.temp.setTo( optiTemp( device.jacket ) );
 			}
 		}
 
