@@ -149,6 +149,7 @@ var Helpers = {
 		setByMqttAutotype: function( obj, topic, value ){
 			return setByAutotype( obj, splitByMqtt( topic ), value );
 		},
+		setByMethod: setByMethod,
 		setByMqttMethod: setByMqttMethod,
 		setByWebMethod: setByWebMethod,
 		getByParts: getByParts,

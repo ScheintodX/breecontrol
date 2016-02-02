@@ -6,18 +6,20 @@
 	
 	var lastMessage = {};
 
-	function loadDevice( $parent, device, idx ) {
+	function loadDevice( $parent, device ) {
 
-		var id = 'boiler' + idx,
+		console.trace( "LOAD", device.id );
+
+		var id = device.id,
 			$device = $( '<section class="tab device ' + device.type + '"/>' )
 					.attr( 'id', id )
 					.appendTo( $parent )
 					.load( device.type + ".html", function() {
-						ctrl.put( 'tab'+idx, BAG.Tab( $device, id ) );
-						ctrl.put( 'info'+idx, BAG.Info( $device.find( '.info' ), id ) );
-						ctrl.put( 'boiler'+idx, BAG.Boiler( $device.find( '.boiler' ), id ) );
-						ctrl.put( 'boilerctrl'+idx, BAG.Boiler_Controls( $device, id ) );
-						ctrl.put( 'ctrl'+idx, BAG.Script( $device, id ) );
+						ctrl.put( 'tab_'+id, BAG.Tab( $device, id ) );
+						ctrl.put( 'info_'+id, BAG.Info( $device.find( '.info' ), id ) );
+						ctrl.put( 'boiler_'+id, BAG.Boiler( $device.find( '.boiler' ), id ) );
+						ctrl.put( 'boilerctrl_'+id, BAG.Boiler_Controls( $device, id ) );
+						ctrl.put( 'ctrl_'+id, BAG.Script( $device, id ) );
 
 						// fix for elements to display scripts aren't ready when we get that kind of config/data.
 						ctrl.gotData( lastMessage );
@@ -45,7 +47,7 @@
 
 				var device = data.config.devices[ i ];
 
-				loadDevice( $main, device, (i+1) );
+				loadDevice( $main, device );
 			}
 		}
 

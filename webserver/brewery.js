@@ -60,15 +60,17 @@ module.exports = function( devices ) {
 		// Direct access to sub fields via setByMqttMethod
 		setByMqtt: function( topic, value ) {
 
-			if( topic.match( /^infrastructure\// ) ){
+			topic = HM.splitByMqtt( topic );
 
-				HM.setByMqtt( self, topic, value );
+			if( topic[0] == "infrastructure" ){
 
-			} else if( topic.match( /^boiler[0-9]+\// ) ) {
+				HM.setByParts( self, topic, value );
+
+			} else if( topic[0] in self.devices ) {
 
 				return doSupervised( function() {
 
-					HM.setByMqttMethod( self.devices, topic, value );
+					HM.setByMethod( self.devices, topic, value, 'setByMqtt' );
 
 					self.watch();
 				} );
@@ -82,13 +84,15 @@ module.exports = function( devices ) {
 		// Direct access to sub fields via setByMqttMethod
 		setByWeb: function( topic, value ) {
 
-			if( topic.match( /^boiler[0-9]+\./ ) ){
+			topic = HM.splitByMqtt( topic );
+
+			if( topic[0] in self.devices ){
 
 				log.info( "SET " + topic + " " + value, typeof value );
 
 				return doSupervised( function() {
 
-					HM.setByWebMethod( self.devices, topic, value );
+					HM.setByMethod( self.devices, topic, value, 'setByWeb' );
 
 					self.watch();
 				} );

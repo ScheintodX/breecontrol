@@ -19,7 +19,7 @@ module.exports.createAll = function( config, done ) {
 			Factory = require( './' + deviceConfig.type + '.js' );
 
 
-		result[ 'boiler' + (i+1) ] = Factory.create( i, deviceConfig );
+		result[ deviceConfig.id ] = Factory.create( i, deviceConfig );
 	}
 
 	return done( null, result );

@@ -25,8 +25,8 @@ var log = require( '../logging.js' )
 var Devices = {
 		boiler1: require( './sim_boiler.js' )( 'boiler1' ),
 		boiler2: require( './sim_boiler.js' )( 'boiler2' ),
-		boiler3: require( './sim_gloggmaker.js' )( 'boiler3' ),
-		boiler4: require( './sim_chiller.js' )( 'boiler4' ),
+		gloggmaker1: require( './sim_gloggmaker.js' )( 'gloggmaker1' ),
+		chiller1: require( './sim_chiller.js' )( 'chiller1' ),
 	}
 	;
 
