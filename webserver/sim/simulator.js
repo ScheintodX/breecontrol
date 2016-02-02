@@ -83,7 +83,7 @@ function onConnect() {
 
 		for( var i=0; i<subs.length; i++ ) {
 
-			mqttClient.subscribe( config.mqtt.prefix + subs );
+			mqttClient.subscribe( config.mqtt.prefix + subs[ i ] );
 		}
 	}
 
@@ -92,7 +92,7 @@ function onConnect() {
 	startDevices();
 }
 
-function onMessage() {
+function onMessage( topic, data ) {
 
 	var message = data.toString();
 

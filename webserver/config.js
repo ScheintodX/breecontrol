@@ -31,7 +31,7 @@ module.exports = function( done ) {
 				power: 9.000, // kw
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
-			}, {
+			}/*, {
 				id: 'boiler2',
 				type: "boiler",
 				name: "Kurt von Kessel",
@@ -42,10 +42,10 @@ module.exports = function( done ) {
 				power: 9.000, // kw
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
-			}, {
+			}*/, {
 				id: 'gloggmaker1',
 				type: "gloggmaker",
-				name: "Pete the Preserver",
+				name: "Willibald Weck",
 				minTemp:   0, //°C
 				maxTemp: 100, //°C
 				capacity: 30, // L

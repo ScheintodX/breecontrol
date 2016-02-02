@@ -84,9 +84,14 @@ module.exports = function( devices ) {
 		// Direct access to sub fields via setByMqttMethod
 		setByWeb: function( topic, value ) {
 
-			topic = HM.splitByMqtt( topic );
+			topic = HM.splitByWeb( topic );
+
+			console.log( topic );
+			console.log( self.devices );
 
 			if( topic[0] in self.devices ){
+
+				console.log( "SET " + topic + " " + value, typeof value );
 
 				log.info( "SET " + topic + " " + value, typeof value );
 

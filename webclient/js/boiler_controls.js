@@ -57,8 +57,6 @@ BAG.Boiler_Controls = (function($){
 
 				var boiler = data.devices[ device ];
 
-				var name = boiler.name;
-
 				/*
 				if( name == "Pete the Preserver" ){
 					console.log( boiler );
@@ -66,7 +64,7 @@ BAG.Boiler_Controls = (function($){
 				*/
 
 				$e.find( 'header h1' )
-						.text( 'Boiler ' + (boiler.index+1) + ": " + boiler.name )
+						.text( boiler.name )
 						;
 
 				for( var key in manualControls ) {
