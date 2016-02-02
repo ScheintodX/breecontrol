@@ -2,8 +2,6 @@
 
 "use strict";
 
-var DEVICE = "boiler1";
-
 var util = require( 'util' );
 
 var E = require( '../E.js' );
@@ -24,171 +22,110 @@ var mqtt = require( 'mqtt' );
 var log = require( '../logging.js' )
 		.file( '/var/log/braumeister.test' );
 
-var Sensors = {
+var Devices = {
+		boiler1: require( './sim_boiler.js' )( 'boiler1' ),
+		boiler2: require( './sim_boiler.js' )( 'boiler2' ),
+		boiler3: require( './sim_gloggmaker.js' )( 'boiler3' ),
+		boiler4: require( './sim_chiller.js' )( 'boiler4' ),
+	}
+	;
 
-	upper: AJacket( {
-		topic: DEVICE + '/upper',
-		temp: {
-			topic: DEVICE + '/upper/temp',
-			status: { range: [ -20, 600 ], initial: 20 },
-			nominal: { range: [ 0, 400 ], initial: 0 },
-			timeout: 5000,
-			mode: 'simulate'
-		},
-		heater: {
-			topic: DEVICE + '/upper/heater',
-			status: { initial: false },
-			freq: .5,
-			mode: 'simulate'
-		},
-		speed: 10,
-		jitter: 3,
-		iv: 1000,
-		mode: 'simulate'
-	} ),
-
-	lower: AJacket( {
-		topic: DEVICE + '/lower',
-		temp: {
-			topic: DEVICE + '/lower/temp',
-			status: { range: [ -20, 500 ], initial: 19 },
-			nominal: { range: [ 0, 300 ], initial: 0 },
-			timeout: 5000,
-			mode: 'simulate'
-		},
-		heater: {
-			topic: DEVICE + '/lower/heater',
-			status: { initial: false },
-			req: .5,
-			mode: 'simulate'
-		},
-		speed: 10,
-		jitter: 2,
-		iv: 1000,
-		mode: 'simulate'
-	} ),
-
-	temp: SInnerTemp( {
-		topic: DEVICE + '/temp',
-		status: { range: [ -20, 200 ], initial: 14 },
-		mode: 'simulate',
-		iv: 1000,
-		speed: .3,
-		jitter: .5
-	} ),
-
-	fill: SFloat( {
-		topic: DEVICE + '/fill',
-		status: { range: [ 0, 1 ], initial: .4 },
-		iv: 5000,
-		mode: 'random'
-	} ),
-	lid: SBool( {
-		topic: DEVICE + '/lid',
-		status: { initial: true },
-		freq: .5,
-		iv: 300,
-		mode: 'simple'
-	} ),
-	aggitator: ABool( {
-		topic: DEVICE + '/aggitator',
-		status: { initial: false },
-		nominal: { initial: false },
-		initial: false,
-		timeout: 5000,
-		freq: .1,
-		iv: 700,
-		mode: 'simple'
-	} ),
-	spare: ABool( {
-		topic: DEVICE + '/spare',
-		status: { initial: false },
-		nominal: { initial: false },
-		initial: false,
-		timeout: 1000,
-		freq: .1,
-		iv: 700,
-		mode: 'random'
-	} )
-}
-
-var repl = require( '../repl.js' )( Sensors );
-
-function round( val ) {
-	return Math.round( val * 10 ) / 10;
-}
+var repl = require( '../repl.js' )( Devices );
 
 function emit( topic, data ) {
 
 	mqttClient.publish( config.mqtt.prefix + topic, data );
 }
 
-function run( sensor ) {
+function run( sensor, device ) {
 
 	return function() {
 
-		sensor.run( emit, Sensors );
+		sensor.run( emit, device );
 	}
 }
 
-function startSensors() {
+function startDevices() {
 
-	for( var key in Sensors ) {
+	for( var dev in Devices ) {
 
-		var sensor = Sensors[ key ];
+		var device = Devices[ dev ];
 
-		E.cho( "Starting " + key + "(" + sensor.conf.iv + ")..." );
+		for( var key in device ) {
 
-		setInterval( run( sensor ), sensor.conf.iv );
+			if( key == '_conf' ) continue;
+
+			var sensor = device[ key ];
+
+			E.cho( "Starting " + device._conf.device + "/" + key + "(" + sensor.conf.iv + ")..." );
+
+			setInterval( run( sensor, device ), sensor.conf.iv );
+		}
 	}
-
-	E.cho( "Sensors started" );
-
+	E.cho( "Devices started" );
 }
 
 process.on( 'uncaughtException', function( ex ) {
 
-	console.log( util.inspect( Sensors, {showHidden:false, depth: null} ) );
+	console.log( util.inspect( Devices, {showHidden:false, depth: null} ) );
 	console.log( ex.stack );
 } );
 
 log.info( "start mqtt test" );
 
+function onConnect() {
+
+	for( var dev in Devices ) {
+
+		var device = Devices[ dev ],
+			subs = device._conf.subscriptions
+			;
+
+		for( var i=0; i<subs.length; i++ ) {
+
+			mqttClient.subscribe( config.mqtt.prefix + subs );
+		}
+	}
+
+	E.cho( "MQTT STARTED" );
+
+	startDevices();
+}
+
+function onMessage() {
+
+	var message = data.toString();
+
+	if( ! topic.startsWith( config.mqtt.prefix ) ) {
+		E.rr( "wrong prefix in: " + topic );
+	}
+
+	// remove Griessbraeu
+	topic = topic.slice( config.mqtt.prefix.length );
+
+	for( var dev in Devices ) {
+
+		var device = Devices[ dev ];
+
+		for( var key in device ) {
+
+			if( key.startsWith( '_' ) ) continue;
+
+			var sensor = device[ key ];
+
+			if( sensor.msg && topic.startsWith( sensor.conf.topic ) ) {
+				sensor.msg( emit, topic, message );
+			}
+		}
+	}
+}
+
 var mqttClient = mqtt.connect( config.mqtt.url, {
 	username: config.mqtt.username,
 	password: config.mqtt.password
 } )
-		.on( 'connect', function() {
-
-			mqttClient.subscribe( config.mqtt.prefix + DEVICE + '/+/set' );
-			mqttClient.subscribe( config.mqtt.prefix + DEVICE + '/upper/+/set' );
-			mqttClient.subscribe( config.mqtt.prefix + DEVICE + '/lower/+/set' );
-
-			E.cho( "MQTT STARTED" );
-
-			startSensors();
-} )
-		.on( 'message', function( topic, data ) {
-
-			var message = data.toString();
-
-			if( ! topic.startsWith( config.mqtt.prefix ) ) {
-				E.rr( "wrong prefix in: " + topic );
-			}
-
-			topic = topic.slice( config.mqtt.prefix.length );
-
-			for( var key in Sensors ) {
-
-				var sensor = Sensors[ key ];
-
-				if( sensor.msg && topic.startsWith( sensor.conf.topic ) ) {
-					sensor.msg( emit, topic, message );
-				}
-			}
-
-		} )
+		.on( 'connect', onConnect )
+		.on( 'message', onMessage )
 		;
 
-repl.addContext( { mqtt: mqttClient, config: config, boiler: Sensors } );
-
+repl.addContext( { mqtt: mqttClient, config: config } );

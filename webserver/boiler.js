@@ -23,19 +23,6 @@ var InProxy = require( './sensor/in_proxy.js' ),
 	Aggitator = require( './sensor/aggitator.js' )
 	;
 
-
-function Debug( sensor ) {
-
-	return H.func.augment( sensor,
-		function() {
-			E.rr( arguments );
-		},
-		function() {
-			E.rr( sensor );
-		}
-	);
-}
-
 function createBoiler( index, config ) {
 
 	var self = Object.assign( {

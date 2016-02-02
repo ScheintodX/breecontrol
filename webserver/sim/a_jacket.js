@@ -14,7 +14,7 @@ module.exports = function( conf ) {
 		conf: conf,
 
 		temp: AFloat( conf.temp ),
-		heater: SBool( conf.heater ),
+		heater: SBool( conf.heater ? conf.heater : conf.cooler ),
 
 		run: function( emit, Sensors ) {
 
@@ -32,7 +32,9 @@ module.exports = function( conf ) {
 					self.temp.status += diff/50*conf.speed;
 				}
 
-				if( self.temp.status < 14 ) self.temp.status = 14;
+				var min = (typeof conf.min != 'undefined') ? conf.min : 14;
+
+				if( self.temp.status < min ) self.temp.status = min;
 
 				self.temp.status = self.temp.status.jitter( conf.jitter );
 

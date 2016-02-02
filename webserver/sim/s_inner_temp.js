@@ -21,6 +21,7 @@ module.exports = function( conf ) {
 
 				var avgHeaters = 0,
 					numHeaters = 0;
+
 				if( Sensors.upper ){
 					avgHeaters += Sensors.upper.temp.status;
 					numHeaters++;
@@ -29,17 +30,27 @@ module.exports = function( conf ) {
 					avgHeaters += Sensors.lower.temp.status;
 					numHeaters++;
 				}
+				if( Sensors.jacket ){
+					avgHeaters += Sensors.jacket.temp.status;
+					numHeaters++;
+				}
 				avgHeaters /= numHeaters;
 
 				var diff = avgHeaters - self.status;
 
+				var change;
+
 				if( diff > 0 ) {
-					self.status += .02*diff*conf.speed;
+					change = .02*diff*conf.speed;
 				} else {
-					self.status += .01*diff*conf.speed;
+					change = .01*diff*conf.speed;
 				}
+				self.status += change;
 
 				if( self.status > 100 ) self.status = 100;
+				if( self.status < 0 ) self.status = 0;
+
+				var jitter = self.status.jitter( conf.jitter );
 
 				self.status = self.status.jitter( conf.jitter );
 			}

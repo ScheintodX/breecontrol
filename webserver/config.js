@@ -52,6 +52,16 @@ module.exports = function( done ) {
 				efficency: .7,
 				power: 2.000, // kw
 				lower: { minTemp: 0, maxTemp: 300 }
+			}, {
+				id: 'chiller1',
+				type: "chiller",
+				name: "Franz Frost",
+				minTemp:   0, //°C
+				maxTemp: 100, //°C
+				capacity: 100, // L
+				efficency: .7,
+				power: 1.000, // kw
+				lower: { minTemp: 0, maxTemp: 100 }
 			}
 
 		],

@@ -13,9 +13,6 @@
 					.attr( 'id', id )
 					.appendTo( $parent )
 					.load( device.type + ".html", function() {
-
-						console.log( $device );
-
 						ctrl.put( 'tab'+idx, BAG.Tab( $device, id ) );
 						ctrl.put( 'info'+idx, BAG.Info( $device.find( '.info' ), id ) );
 						ctrl.put( 'boiler'+idx, BAG.Boiler( $device.find( '.boiler' ), id ) );

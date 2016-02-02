@@ -3,5 +3,7 @@
 
 Number.prototype.jitter = function( amount ) {
 
-	return this + Math.random() * amount * 2 - amount;
+	var jitter = ( Math.random() * 2 - 1 ) * amount; 
+
+	return this + jitter;
 }

@@ -17,9 +17,9 @@ var log = require( './logging.js' );
 var InProxy = require( './sensor/in_proxy.js' ),
 	OutProxy = require( './sensor/out_proxy.js' ),
 	InOutProxy = require( './sensor/inout_proxy.js' ),
-	TempController = require( './sensor/temp_controller.js' ),
+	TempControllerCooler = require( './sensor/temp_controller_cooler.js' ),
 	Combined = require( './sensor/combined.js' ),
-	Heater = require( './sensor/heater.js' ),
+	Cooler = require( './sensor/cooler.js' ),
 	Aggitator = require( './sensor/aggitator.js' )
 	;
 
@@ -33,77 +33,36 @@ function createBoiler( index, config ) {
 
 	}, Combined( {
 
-		lower: Combined( {
-				overheat: 50,
-				boost: 50
+		jacket: Combined( {
+				overheat: 1,
+				boost: 10
 			}, {
-				temp: Heater( {
-						name: 'Lower Heater',
+				temp: Cooler( {
+						name: 'Cooler',
 						type: 'f',
 						timeout: 5000,
-						minfill: .3
 					}, {
 						status: 0,
 						nominal: 0,
-						max: 300,
+						max: 100,
 						set: 0
 				} ),
-				heater: InProxy( {
+				cooler: InProxy( {
 						type: 'b',
 						timeout: 5000
 				} )
 		} ),
 
-		temp: TempController( {
+		temp: TempControllerCooler( {
 				type: 'f',
 				mine: true,
 				timeout: 5000
 			}, { set: 0 } ),
 
-		aggitator: Aggitator( {
-				type: 'b',
-				timeout: 1000
-			}, { set: 0 } ),
-
-		fill: InProxy( {
-				type: 'f',
-				timeout: 2000 } ),
-
-		lid: InProxy( {
-				type: 'b',
-				timeout: 1000 } ),
-
-		spare: InOutProxy( {
-				type: 'b',
-				timeout: 1000
-			}, { set: 0 } ),
-
-		indicator: {
-			color: OutProxy( { type: 's' } ),
-			mode: OutProxy( { type: 's' } ),
-
-			_notify: function( what ){
-				switch( what ) {
-					case 'run':
-						self.indicator.color.set = '0000ff0000aa000044000000'.repeat(3);
-						self.indicator.mode.set = 'rotate';
-						break;
-					case 'ready':
-						self.indicator.color.set = 'ffff00'.repeat(12);
-						self.indicator.mode.set = 'fade';
-						break;
-					case 'done':
-						self.indicator.color.set = '00ff00'.repeat(12);
-						self.indicator.mode.set = 'show';
-						break;
-				}
-			}
-		},
-
 	} ), {
 
 		_watchTime: [
-			'temp', 'lower.temp', 'lid', 'spare'
+			'temp', 'jacket.temp'
 		],
 
 		watch: function() {
@@ -156,9 +115,7 @@ function createBoiler( index, config ) {
 			// Check for things which shouldn't happen and
 			// correct the values. Send warnings.
 			
-			self.lower.temp.watch( self, self.warn );
-
-			self.aggitator.watch( self, self.warn );
+			self.jacket.temp.watch( self, self.warn );
 		}
 
 	} );

@@ -31,7 +31,7 @@ module.exports = function( conf, defaults ) {
 		}
 
 		if( typeof self.status == "undefined" ) {
-			warn.severe( "Unknown upper temp" )
+			warn.severe( "Unknown " + self._conf.name + " temp" )
 			self.setTo( 0 );
 		}
 	}

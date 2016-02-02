@@ -23,6 +23,7 @@ BAG.Boiler = (function($,Ψ){
 		function svg( id ) {
 			return _svg.getElementById( id );
 		}
+
 		// Find svg element via jQuery
 		function $svg( id ) {
 			//return $elem.contents().find( '#' + id );
@@ -45,6 +46,10 @@ BAG.Boiler = (function($,Ψ){
 			setLowerTempNominal: ψ.asDegree( ψ.text( 'lower_temp_nominal' ) ),
 			setLowerTempIcon: ψ.asColor( ψ.fill( 'temp_lower_icon' ) ),
 			setLowerHeater: ψ.border( 'temp_lower_icon' ),
+			setJacketTempStatus: ψ.asDegree( ψ.text( 'jacket_temp_status' ) ),
+			setJacketTempNominal: ψ.asDegree( ψ.text( 'jacket_temp_nominal' ) ),
+			setJacketTempIcon: ψ.asColor( ψ.fill( 'temp_jacket_icon' ) ),
+			setJacketCooler: ψ.border( 'temp_jacket_icon' ),
 			setLid: ψ.visible( 'lid' ),
 			setLidOverride: ψ.override( ψ.visible( 'lid_override' ) ),
 			setMode: ψ.oneOf( 'mode_', [ 'run', 'pause', 'stop' ] ),
@@ -124,6 +129,17 @@ BAG.Boiler = (function($,Ψ){
 					}
 					if( 'heater' in boiler.lower ) {
 						Boiler.setLowerHeater( boiler.lower.heater.status );
+					}
+				}
+
+				if( 'jacket' in boiler ) {
+					if( 'temp' in boiler.jacket ) {
+						Boiler.setJacketTempStatus( boiler.jacket.temp.status );
+						Boiler.setJacketTempNominal( boiler.jacket.temp.nominal );
+						Boiler.setJacketTempIcon( boiler.jacket.temp.status );
+					}
+					if( 'heater' in boiler.jacket ) {
+						Boiler.setJacketHeater( boiler.jacket.heater.status );
 					}
 				}
 

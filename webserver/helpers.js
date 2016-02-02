@@ -169,21 +169,47 @@ var Helpers = {
 	func: {
 		augment: function( obj, before, after ) {
 
-			for( var key in obj ) {
+			if( typeof obj == 'function' ) {
 
-				if( !( typeof key == 'function' ) ) return;
-
-				var f = obj[ key ];
-
-				obj[ key ] = function() {
-
-					if( before ) before.apply( null, arguments );
-					f.apply( obj, arguments );
-					if( after ) after.apply( null, arguments );
+				return function(){
+					var args = Array.prototype.slice.call( arguments );
+					args.unshift( obj );
+					if( before ) before.apply( this, args );
+					f.apply( this, arguments );
+					if( after ) after.apply( this, args );
 				}
 
-			}
+			} else if( typeof obj == 'object' ) {
+
+				for( var key in obj ) {
+
+					if( !( typeof key == 'function' ) ) return;
+
+					var f = obj[ key ];
+
+					obj[ key ] = function() {
+
+						var args = Array.prototype.slice.call( arguments );
+						args.unshift( f );
+						if( before ) before.apply( obj, args );
+						f.apply( obj, arguments );
+						if( after ) after.apply( obj, args );
+					}
+
+				}
+			} else throw new Error( "Cannot augment " + (typeof obj) );
 			return obj;
+		},
+		trace: function( func, before, after ) {
+			return Helpers.func.augment( func,
+					function() {
+						E.rr( arguments );
+					},
+					function() {
+						E.rr( "done" );
+					}
+			)
+
 		}
 	},
 
