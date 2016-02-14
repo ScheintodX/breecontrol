@@ -19,6 +19,10 @@ module.exports = function( done ) {
 			prefix: 'griesbraeu/'
 		},
 
+		brewery: {
+			maxPower: 12000
+		},
+
 		devices: [
 			{
 				id: 'boiler1',
@@ -26,7 +30,7 @@ module.exports = function( done ) {
 				name: "Bernd der Bottich",
 				minTemp:   0, //°C
 				maxTemp: 100, //°C
-				capacity: 80, // L
+				capacity: 180, // L
 				efficency: .8,
 				power: 9.000, // kw
 				upper: { minTemp: 0, maxTemp: 300 },
@@ -42,7 +46,7 @@ module.exports = function( done ) {
 				power: 9.000, // kw
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
-			}*/, {
+			}, {
 				id: 'gloggmaker1',
 				type: "gloggmaker",
 				name: "Willibald Weck",
@@ -62,14 +66,15 @@ module.exports = function( done ) {
 				efficency: .7,
 				power: 1.000, // kw
 				lower: { minTemp: 0, maxTemp: 100 }
-			}
+			}*/
 
 		],
 
 		script: {
 			time: function() {
 				// Fast
-				return (new Date().getTime()/10)<<0;
+				//return (new Date().getTime()/10)<<0;
+				return (new Date().getTime()/(1000/60))<<0;
 			}
 		}
 

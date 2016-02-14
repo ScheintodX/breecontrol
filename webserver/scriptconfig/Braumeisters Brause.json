@@ -3,19 +3,19 @@
 	"script": "5steps.js",
 	"steps": [
 		{
-			"heat": 63
+			"heat": 66
 		},
 		{
-			"heat": 60,
-			"hold": 1800
+			"heat": 61,
+			"hold": 1860
 		},
 		{
-			"heat": 80,
-			"hold": 1800
+			"heat": 81,
+			"hold": 1860
 		},
 		{
-			"heat": 90,
-			"hold": 900
+			"heat": 91,
+			"hold": 960
 		},
 		{
 			"heat": 100

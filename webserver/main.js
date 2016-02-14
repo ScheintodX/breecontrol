@@ -11,7 +11,8 @@ var Catch = require( './catch.js' ).log( log );
 
 var repl = require( './repl.js' )( {} );
 
-var Websocket = require( './websocket.js' ),
+//var Websocket = require( './websocket.js' ),
+var Websocket = require( './express.js' ),
     websocket = false;
 var Mqtt = require( './mqtt.js' ),
     mqtt = false;
