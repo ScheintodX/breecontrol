@@ -2,6 +2,7 @@
 
 var log = require( './logging.js' );
 var E = require( './E.js' );
+var async = require( 'async' );
 
 var Assert = require( './assert.js' );
 
@@ -14,8 +15,10 @@ var server = require( 'http' ).createServer(),
 	PORT = 8999
 	;
 
+
 var _onData = false;
 var _hello = false;
+
 
 function sendToAll( data ) {
 
@@ -41,21 +44,21 @@ function sendToAll( data ) {
 	} );
 }
 
+
 function gotClose( conn, code, reason ) {
 
-	E.rr( 'Connection closed', code, reason );
 	log.trace( 'Connection closed', code, reason );
 }
 
+
 function gotError( conn, err ) {
 
-	E.rr( 'ERR ', err );
 	log.warn( err );
 }
 
+
 function gotMessage( message ) {
 
-	E.rr( 'Received ', message );
 	log.trace( 'Received ', message );
 
 	try {
@@ -71,9 +74,8 @@ function gotMessage( message ) {
 	}
 }
 
-function gotConnection( conn ) {
 
-	E.rr( "CON" );
+function gotConnection( conn ) {
 
 	//var location = url.parse( conn.upgradeReq.url, true );
 
@@ -88,6 +90,25 @@ function gotConnection( conn ) {
 	}, 0 );
 }
 
+
+function startWSS( server, done ){
+
+	wss = new WebSocketServer( { server: server } );
+	wss.on( 'connection', gotConnection );
+	wss.on( 'error', gotError );
+
+	// Constructor has a callback but it's only called if started on dedicated port
+	return done();
+}
+
+
+function startHttpServer( server, app, done ){
+
+	server.on( 'request', app );
+	server.listen( PORT, done );
+}
+
+
 module.exports = function( onData, hello, config, done ) {
 
 	Assert.present( 'onData', onData );
@@ -96,24 +117,24 @@ module.exports = function( onData, hello, config, done ) {
 
 	log.trace( "Express starting" );
 
+	var __websocket = {
+		send: sendToAll
+	}
+
 	_hello = hello;
 	_onData = onData;
 
 	app = express();
 	app.use( express.static( '../webclient' ) );
 
-	wss = new WebSocketServer( { server: server } );
-	wss.on( 'connection', gotConnection );
+	async.series( [
 
-	server.on( 'request', app );
+		function( done ){ startWSS( server, done ); },
+		function( done ){ startHttpServer( server, app, done ); }
 
-	server.listen( PORT, function(){ 
-	
-		return done( null, __websocket );
-	});
+	], function( err ){
 
-	var __websocket = {
-		send: sendToAll
-	}
+		return done( err, __websocket );
+	} );
 
 }

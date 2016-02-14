@@ -108,7 +108,7 @@ module.exports = function( devices ) {
 
 			for( var device in self.devices ) {
 
-				self.devices[ device ].watch();
+				self.devices[ device ].watch( self );
 			}
 		},
 
@@ -117,10 +117,15 @@ module.exports = function( devices ) {
 
 			for( var device in self.devices ) {
 
-				self.devices[ device ].publish( function( topic, data ) {
+				var dev = self.devices[ device ];
 
-					emit( device + '/' + topic, data );
-				} );
+				if( 'publish' in dev ) {
+
+					dev.publish( function( topic, data ) {
+
+						emit( device + '/' + topic, data );
+					} );
+				}
 			}
 		},
 
@@ -131,10 +136,15 @@ module.exports = function( devices ) {
 
 			for( var device in self.devices ) {
 
-				self.devices[ device ].subscribe( function( topic ) {
+				var dev = self.devices[ device ];
 
-					emit( device + '/' + topic );
-				} );
+				if( 'subscribe' in dev ) {
+
+					dev.subscribe( function( topic ) {
+
+						emit( device + '/' + topic );
+					} );
+				}
 			}
 		}
 

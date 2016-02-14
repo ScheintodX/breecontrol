@@ -32,10 +32,10 @@ module.exports = function( done ) {
 				maxTemp: 100, //°C
 				capacity: 180, // L
 				efficency: .8,
-				power: 9.000, // kw
+				power: 9000, // W
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
-			}/*, {
+			}, {
 				id: 'boiler2',
 				type: "boiler",
 				name: "Kurt von Kessel",
@@ -43,7 +43,7 @@ module.exports = function( done ) {
 				maxTemp: 100, //°C
 				capacity: 80, // L
 				efficency: .8,
-				power: 9.000, // kw
+				power: 9000, // W
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
 			}, {
@@ -54,7 +54,7 @@ module.exports = function( done ) {
 				maxTemp: 100, //°C
 				capacity: 30, // L
 				efficency: .7,
-				power: 2.000, // kw
+				power: 2000, // W
 				lower: { minTemp: 0, maxTemp: 300 }
 			}, {
 				id: 'chiller1',
@@ -64,9 +64,15 @@ module.exports = function( done ) {
 				maxTemp: 100, //°C
 				capacity: 100, // L
 				efficency: .7,
-				power: 1.000, // kw
+				power: 1000, // W
 				lower: { minTemp: 0, maxTemp: 100 }
-			}*/
+			}, {
+				id: 'pg',
+				type: "powerguard",
+				name: "powerguard",
+				maxPower: 12000, // W
+				watched: [ 'boiler1', 'boiler2', 'gloggmaker1', 'chiller1'  ]
+			}
 
 		],
 

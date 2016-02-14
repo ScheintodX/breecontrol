@@ -159,6 +159,20 @@ function createBoiler( index, config ) {
 			self.lower.temp.watch( self, self.warn );
 
 			self.aggitator.watch( self, self.warn );
+		},
+
+		power: function() {
+
+			var result = 0;
+
+			if( self.lower.heater.status ) result += self.conf.power;
+
+			return result;
+		},
+
+		powerLimit: function( limit ) {
+
+			if( limit < self.conf.power ) self.lower.temp.set = 0;
 		}
 
 	} );

@@ -2,13 +2,7 @@
 
 require( './polyfill.js' );
 
-var _ = require( 'underscore' );
-
-var Dot = require( 'dot-object' ),
-	dash = new Dot( '/' );
-
-var E = require( './E.js' ),
-	Assert = require( './assert.js' );
+var E = require( './E.js' );
 
 var H = require( './helpers.js' );
 
@@ -127,23 +121,30 @@ function createBoiler( index, config ) {
 			'temp', 'upper.temp', 'lower.temp', 'lid', 'spare'
 		],
 
+		warn: {
+
+			level: '',
+			messages: [],
+			_warn: function( level, val ){
+				self.warn.messages.push( { level: level, text: val } );
+			},
+			clear: function() {
+				self.warn.level = 'ok';
+				self.warn.messages = [];
+			},
+			warn: function( val ){
+				if( self.warn.level != 'severe' ) self.warn.level = 'warn';
+				self.warn._warn( 'warn', val );
+			},
+			severe: function( val ){
+				self.warn.level = 'severe';
+				self.warn._warn( 'severe', val );
+			}
+		},
+
 		watch: function() {
 
-			self.warn = {
-				level: 'warn',
-				messages: [],
-				_warn: function( level, val ){
-					self.warn.messages.push( { level: level, text: val } );
-				},
-				warn: function( val ){
-					self.warn._warn( 'warn', val );
-				},
-				severe: function( val ){
-					self.warn.level = 'severe';
-					self.warn._warn( 'severe', val );
-				}
-			}
-
+			self.warn.clear();
 
 			// ============ Check for Timeouts =============
 			// If there are messages missing set the corresponging
@@ -181,6 +182,22 @@ function createBoiler( index, config ) {
 			self.lower.temp.watch( self, self.warn );
 
 			self.aggitator.watch( self, self.warn );
+		},
+
+		power: function() {
+
+			var result = 0;
+
+			if( self.upper.heater.status ) result += self.conf.power/2;
+			if( self.lower.heater.status ) result += self.conf.power/2;
+
+			return result;
+		},
+
+		powerLimit: function( limit ) {
+
+			if( limit < self.conf.power ) self.upper.temp.set = 0;
+			if( limit < self.conf.power/2 ) self.lower.temp.set = 0;
 		}
 
 	} );

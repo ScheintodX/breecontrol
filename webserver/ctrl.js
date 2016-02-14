@@ -183,11 +183,20 @@ module.exports = function( config, hello, brewery ) {
 		}
 	}
 
+	function isReady() {
+
+		return _mqtt && _web;
+	}
+
 	var self = {
 
 		gotWebData: Catch.fatal( "Ctrl/gotWeb", function( data ) {
 
 			log.trace( "WebData", data );
+
+			if( !isReady() ) {
+				log.warn( "Premature web data: ", data );
+			}
 
 			switch( data.on ) {
 				case "set": return gotWebDataSet( data ); break;
@@ -199,6 +208,10 @@ module.exports = function( config, hello, brewery ) {
 		} ),
 
 		gotMqttData: Catch.fatal( "Ctrl/GotMqtt", function( topic, data ) {
+
+			if( !isReady() ) {
+				log.warn( "Premature mqtt data: ", topic, data );
+			}
 
 			var diff = brewery.setByMqtt( topic, data );
 

@@ -8,6 +8,7 @@ var async = require( 'async' );
 var E = require( './E.js' );
 var log = require( './logging.js' ).file( '/var/log/braumeister.log' );
 var Catch = require( './catch.js' ).log( log );
+var Assert = require( './assert.js' );
 
 var repl = require( './repl.js' )( {} );
 
@@ -53,6 +54,8 @@ function initBoilers( done ) {
 
 	Devices.createAll( config.devices, Catch.ExitOn( "Devices", function( err, data ) {
 	
+		Assert.present( 'data', data );
+
 		devices = data;
 
 		brewery = Brewery( devices );
@@ -74,6 +77,8 @@ function startWebsocket( done ) {
 
 	Websocket( ctrl.gotWebData, hello, config.ws, Catch.ExitOn( "Websockets", function( err, data ) {
 
+		Assert.present( 'data', data );
+
 		websocket = data;
 
 		ctrl.onWebMessage( websocket.send );
@@ -88,6 +93,8 @@ function startMqtt( done ) {
 
 	Mqtt( ctrl.gotMqttData, config.mqtt, brewery.subscribe,
 			Catch.ExitOn( "Mqtt", function( err, data ) {
+
+		Assert.present( 'data', data );
 
 		mqtt = data;
 
