@@ -10,25 +10,17 @@ require( './patch.js' );
 
 var config = require( '../config.js' )( function( err, data ){ return data; } );
 
-var SFloat = require( './s_float.js' ),
-	SBool = require( './s_bool.js' ),
-	ABool = require( './a_bool.js' ),
-	AJacket = require( './a_jacket.js' ),
-	SInnerTemp = require( './s_inner_temp.js' )
-	;
-
 var mqtt = require( 'mqtt' );
 
 var log = require( '../logging.js' )
 		.file( '/var/log/braumeister.test' );
 
 var Devices = {
-		boiler1: require( './sim_boiler.js' )( 'boiler1' ),
-		boiler2: require( './sim_boiler.js' )( 'boiler2' ),
-		gloggmaker1: require( './sim_gloggmaker.js' )( 'gloggmaker1' ),
-		chiller1: require( './sim_chiller.js' )( 'chiller1' ),
-	}
-	;
+	boiler1: require( './sim_boiler.js' )( 'boiler1' ),
+	boiler2: require( './sim_boiler.js' )( 'boiler2' ),
+	gloggmaker1: require( './sim_gloggmaker.js' )( 'gloggmaker1' ),
+	chiller1: require( './sim_chiller.js' )( 'chiller1' ),
+};
 
 var repl = require( '../repl.js' )( Devices );
 

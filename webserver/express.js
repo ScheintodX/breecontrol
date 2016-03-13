@@ -12,7 +12,7 @@ var server = require( 'http' ).createServer(),
 	wss,
 	express = require( 'express' ),
 	app,
-	PORT = 8999
+	PORT
 	;
 
 
@@ -116,6 +116,8 @@ module.exports = function( onData, hello, config, done ) {
 	Assert.present( 'done', done );
 
 	log.trace( "Express starting" );
+
+	PORT = config.port;
 
 	var __websocket = {
 		send: sendToAll

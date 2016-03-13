@@ -5,7 +5,7 @@ module.exports = function( done ) {
 	return done( null, {
 
 		ws: {
-			port: 8765,
+			port: 80,
 		},
 
 		updateIntervalCtrl: 500,
