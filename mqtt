@@ -1,3 +1,0 @@
-#!/bin/bash
-
-mqtt_pub -h localhost -u test -P test $1 $2
