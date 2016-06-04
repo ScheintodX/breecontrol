@@ -22,17 +22,20 @@ function peek( what ){
 	function round( val, prec ) {
 		return Math.round( val * prec ) / prec;
 	}
+	function floor( val, prec ) {
+		return Math.floor( val * prec ) / prec;
+	}
 	function zf2( val ) {
 		if( val > 9 ) return ''+val;
 		else return '0'+val;
 	}
 	Number.prototype.toTemp = function( prec ) {
 		if( !prec ) prec = 10;
-		return round( this, prec ).toLocaleString() + '°';
+		return floor( this, prec ).toLocaleString() + '°';
 	};
 	Number.prototype.toTempC = function( prec ) {
 		if( !prec ) prec = 10;
-		return round( this, prec ).toLocaleString() + '°C';
+		return floor( this, prec ).toLocaleString() + '°C';
 	};
 	Number.prototype.toMinSec = function() {
 		var t = Time( this );

@@ -35,7 +35,7 @@ module.exports = function( done ) {
 				power: 9000, // W
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
-			}, {
+			}/*, {
 				id: 'boiler2',
 				type: "boiler",
 				name: "Kurt von Kessel",
@@ -72,7 +72,7 @@ module.exports = function( done ) {
 				name: "powerguard",
 				maxPower: 12000, // W
 				watched: [ 'boiler1', 'boiler2', 'gloggmaker1', 'chiller1'  ]
-			}
+			}*/
 
 		],
 
@@ -80,7 +80,8 @@ module.exports = function( done ) {
 			time: function() {
 				// Fast
 				//return (new Date().getTime()/10)<<0;
-				return (new Date().getTime()/(1000/60))<<0;
+				//return (new Date().getTime()/(1000/60))<<0;
+				return (new Date().getTime()/1000)<<0;
 			}
 		}
 

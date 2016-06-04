@@ -28,14 +28,14 @@ function createBoiler( index, config ) {
 	}, Combined( {
 
 		upper: Combined( {
-				overheat: 20,
-				boost: 15
+				overheat: 50, // Always have so much temp in jacket *over* the desired temp
+				boost: 75     // Multiply nominal-actual diff with this. e.g. nominal: 40, actual: 38, jacket-temp * 40 + 50(overheat) + (40-38=2)*75 = 240
 			}, {
 				temp: Heater( {
 						name: 'Upper Heater',
 						type: 'f',
 						timeout: 5000,
-						minfill: .7
+						minfill: .6
 					}, {
 						status: 0,
 						nominal: 0,
@@ -50,7 +50,7 @@ function createBoiler( index, config ) {
 
 		lower: Combined( {
 				overheat: 50,
-				boost: 50
+				boost: 75
 			}, {
 				temp: Heater( {
 						name: 'Lower Heater',
@@ -86,7 +86,7 @@ function createBoiler( index, config ) {
 
 		lid: InProxy( {
 				type: 'b',
-				timeout: 1000 } ),
+				timeout: 2500 } ),
 
 		spare: InOutProxy( {
 				type: 'b',
