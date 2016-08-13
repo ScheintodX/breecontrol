@@ -12,13 +12,17 @@ var server = require( 'http' ).createServer(),
 	wss,
 	express = require( 'express' ),
 	app,
-	PORT = 8999
+	PORT
 	;
 
 
 var _onData = false;
 var _hello = false;
 
+function onSendError( error ) {
+
+	E.rr( "Error sending", error );
+}
 
 function sendToAll( data ) {
 
@@ -39,7 +43,13 @@ function sendToAll( data ) {
 
 	wss.clients.forEach( function( client ) {
 
-		client.send( text );
+		if( client.readyState != client.OPEN ){
+
+			E.rr( "Clinet not ready" );
+
+		} else {
+			client.send( text, onSendError );
+		}
 
 	} );
 }
@@ -116,6 +126,8 @@ module.exports = function( onData, hello, config, done ) {
 	Assert.present( 'done', done );
 
 	log.trace( "Express starting" );
+
+	PORT = config.port;
 
 	var __websocket = {
 		send: sendToAll

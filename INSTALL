@@ -1,0 +1,18 @@
+apt-get install nodejs npm
+
+adduser braumeister:nogroup
+
+cp to /var/lib/braumeister
+chown braumeister:root "
+
+cd /var/lib/braumeister
+npm install
+
+cp to /etc/systemd/system/braumeister.service
+
+setcap 'cap_net_bind_service=+ep' /usr/bin/nodejs
+
+mkdir /var/log/braumeister
+chown braumeister:root "
+
+systemctl start braumeister

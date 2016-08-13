@@ -19,6 +19,7 @@
 						ctrl.put( 'info_'+id, BAG.Info( $device.find( '.info' ), id ) );
 						ctrl.put( 'boiler_'+id, BAG.Boiler( $device.find( '.boiler' ), id ) );
 						ctrl.put( 'boilerctrl_'+id, BAG.Boiler_Controls( $device, id ) );
+						ctrl.put( 'fan_'+id, BAG.Fan( $device.find( '.fan' ), id ) );
 						ctrl.put( 'ctrl_'+id, BAG.Script( $device, id ) );
 
 						// fix for elements to display scripts aren't ready when we get that kind of config/data.

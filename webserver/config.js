@@ -5,7 +5,7 @@ module.exports = function( done ) {
 	return done( null, {
 
 		ws: {
-			port: 8765,
+			port: 80,
 		},
 
 		updateIntervalCtrl: 500,
@@ -35,6 +35,16 @@ module.exports = function( done ) {
 				power: 9000, // W
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
+			}/*, {
+				id: 'fan1',
+				type: 'fan',
+				name: 'Soeder',
+				power: 400
+			}, {
+				id: 'pump1',
+				type: 'pump',
+				name: 'Arnold',
+				power: 400
 			}, {
 				id: 'boiler2',
 				type: "boiler",
@@ -49,7 +59,7 @@ module.exports = function( done ) {
 			}, {
 				id: 'gloggmaker1',
 				type: "gloggmaker",
-				name: "Willibald Weck",
+				name: "Willi Weck",
 				minTemp:   0, //°C
 				maxTemp: 100, //°C
 				capacity: 30, // L
@@ -72,7 +82,7 @@ module.exports = function( done ) {
 				name: "powerguard",
 				maxPower: 12000, // W
 				watched: [ 'boiler1', 'boiler2', 'gloggmaker1', 'chiller1'  ]
-			}
+			}*/
 
 		],
 
@@ -80,7 +90,8 @@ module.exports = function( done ) {
 			time: function() {
 				// Fast
 				//return (new Date().getTime()/10)<<0;
-				return (new Date().getTime()/(1000/60))<<0;
+				//return (new Date().getTime()/(1000/60))<<0;
+				return (new Date().getTime()/1000)<<0;
 			}
 		}
 

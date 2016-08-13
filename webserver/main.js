@@ -6,7 +6,7 @@ var util = require( 'util' );
 var async = require( 'async' );
 
 var E = require( './E.js' );
-var log = require( './logging.js' ).file( '/var/log/braumeister.log' );
+var log = require( './logging.js' ).file( '/var/log/braumeister/braumeister.log' );
 var Catch = require( './catch.js' ).log( log );
 var Assert = require( './assert.js' );
 

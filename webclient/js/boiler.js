@@ -159,7 +159,7 @@ BAG.Boiler = (function($,Ψ){
 			ready: function() {
 				return _svg !== false;
 			}
-		}
+		};
 
 		$elem.on( 'load', function() {
 

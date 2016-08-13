@@ -1,0 +1,24 @@
+{
+	"name": "All-In Beer",
+	"script": "5steps.js",
+	"steps": [
+		{
+			"heat": 63
+		},
+		{
+			"heat": 62,
+			"hold": 1800
+		},
+		{
+			"heat": 72,
+			"hold": 1800
+		},
+		{
+			"heat": 78,
+			"hold": 600
+		},
+		{
+			"heat": 78
+		}
+	]
+}
