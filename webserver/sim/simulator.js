@@ -13,13 +13,15 @@ var config = require( '../config.js' )( function( err, data ){ return data; } );
 var mqtt = require( 'mqtt' );
 
 var log = require( '../logging.js' )
-		.file( '/var/log/braumeister.test' );
+		.file( '/var/log/braumeister/braumeister.test' );
 
 var Devices = {
-	boiler1: require( './sim_boiler.js' )( 'boiler1' ),
-	boiler2: require( './sim_boiler.js' )( 'boiler2' ),
-	gloggmaker1: require( './sim_gloggmaker.js' )( 'gloggmaker1' ),
-	chiller1: require( './sim_chiller.js' )( 'chiller1' ),
+	//boiler1: require( './sim_boiler.js' )( 'boiler1' ),
+	//boiler2: require( './sim_boiler.js' )( 'boiler2' ),
+	//gloggmaker1: require( './sim_gloggmaker.js' )( 'gloggmaker1' ),
+	//chiller1: require( './sim_chiller.js' )( 'chiller1' ),
+	fan1: require( './sim_fan.js' )( 'fan1' )
+	//pump1: require( './sim_pump.js' )( 'pump1' ),
 };
 
 var repl = require( '../repl.js' )( Devices );
@@ -49,6 +51,7 @@ function startDevices() {
 
 			var sensor = device[ key ];
 
+			E.cho( key );
 			E.cho( "Starting " + device._conf.device + "/" + key + "(" + sensor.conf.iv + ")..." );
 
 			setInterval( run( sensor, device ), sensor.conf.iv );

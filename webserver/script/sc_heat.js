@@ -60,7 +60,8 @@ module.exports = function( args, config, env ){
 					boiler.conf.efficency
 			);
 
-			if( boiler.temp.status >= args.heat ) {
+			// Todo: 1°C vor erreichen der Zieltemperatur wird abgeschalten. Der Wert sollte in irgend eine Config
+			if( boiler.temp.status >= (args.heat-1.0) ) {
 				
 				current.mode = 'done';
 			}

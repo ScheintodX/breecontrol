@@ -36,6 +36,16 @@ module.exports = function( done ) {
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
 			}/*, {
+				id: 'fan1',
+				type: 'fan',
+				name: 'Soeder',
+				power: 400
+			}, {
+				id: 'pump1',
+				type: 'pump',
+				name: 'Arnold',
+				power: 400
+			}, {
 				id: 'boiler2',
 				type: "boiler",
 				name: "Kurt von Kessel",
@@ -49,7 +59,7 @@ module.exports = function( done ) {
 			}, {
 				id: 'gloggmaker1',
 				type: "gloggmaker",
-				name: "Willibald Weck",
+				name: "Willi Weck",
 				minTemp:   0, //°C
 				maxTemp: 100, //°C
 				capacity: 30, // L

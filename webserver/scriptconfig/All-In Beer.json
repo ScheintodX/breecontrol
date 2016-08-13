@@ -3,7 +3,7 @@
 	"script": "5steps.js",
 	"steps": [
 		{
-			"heat": 65
+			"heat": 63
 		},
 		{
 			"heat": 62,
