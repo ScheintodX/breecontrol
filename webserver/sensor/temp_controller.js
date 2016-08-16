@@ -27,13 +27,30 @@ module.exports = function( conf, defaults ) {
 		if( typeof actual == 'undefined' )
 				return nominal + overheat;
 
-		// Do something for "boiling mode"
 		// if( nominal == 100 )
-				
-		var opti = nominal
-				+ overheat
-				+ (nominal - actual) * boost
-				;
+
+		var opti;
+		// boiling mode
+		if( nominal >= 100 ) {
+
+			// verdunstungsenthalpie:
+			// 0,63kWh / kg Wasser
+
+			/*
+			var diffto100 = nominal-100;
+			opti = 200+diffto100*50;
+			*/
+
+			// full throttle
+			opti = 350;
+
+		// normal mode
+		} else {
+			opti = nominal
+					+ overheat
+					+ (nominal - actual) * boost
+					;
+		}
 
 		// console.log( "===", opti );
 

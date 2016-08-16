@@ -35,12 +35,12 @@ module.exports = function( done ) {
 				power: 9000, // W
 				upper: { minTemp: 0, maxTemp: 300 },
 				lower: { minTemp: 0, maxTemp: 300 }
-			}/*, {
+			}, {
 				id: 'fan1',
 				type: 'fan',
 				name: 'Soeder',
 				power: 400
-			}, {
+			}/*, {
 				id: 'pump1',
 				type: 'pump',
 				name: 'Arnold',

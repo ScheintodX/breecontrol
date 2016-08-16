@@ -13,12 +13,13 @@ BAG.Script = (function($,BAG){
 			curControls = false
 			;
 
-		var $elem = ( elem instanceof jQuery ? elem : $( elem ) ).expectOne(),
+		var $elem = ( elem instanceof jQuery ? elem : $( elem ) )
+				.expectOne(),
 
 			$secScript = $elem.find( 'section.script' ).expectOne(),
-			$secLoadSave = $elem.find( 'section.loadsave' ).expectOne(),
-			$secProgram = $elem.find( 'section.program' ).expectOne(),
-			$secRunStop = $elem.find( 'section.runstop' ).expectOne(),
+			$secLoadSave = $secScript.find( 'section.loadsave' ).expectOne(),
+			$secProgram = $secScript.find( 'section.program' ).expectOne(),
+			$secRunStop = $secScript.find( 'section.runstop' ).expectOne(),
 
 			$selectLoad = $secLoadSave.find( 'select[name="load"]' ).expectOne()
 			;

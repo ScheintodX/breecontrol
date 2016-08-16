@@ -21,7 +21,7 @@ var _hello = false;
 
 function onSendError( error ) {
 
-	E.rr( "Error sending", error );
+	if( error ) E.rr( "Error sending", error );
 }
 
 function sendToAll( data ) {

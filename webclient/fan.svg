@@ -42,6 +42,26 @@
        y2="987.89789"
        gradientUnits="userSpaceOnUse"
        gradientTransform="translate(0,2)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4356"
+       id="linearGradient3219"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-38)"
+       x1="129.59387"
+       y1="988.61218"
+       x2="227.62959"
+       y2="987.89789" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4356"
+       id="linearGradient3223"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-78)"
+       x1="129.59387"
+       y1="988.61218"
+       x2="227.62959"
+       y2="987.89789" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -51,10 +71,10 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="237.30153"
+     inkscape:cx="177.4801"
      inkscape:cy="46.088738"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g4298"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1031"
@@ -71,7 +91,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -82,11 +102,11 @@
      transform="translate(0,-952.36218)">
     <g
        id="g4199"
-       transform="translate(13.441841,-10)">
+       transform="translate(13.798984,-10)">
       <path
-         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:url(#linearGradient4362);fill-opacity:1;stroke:none;stroke-width:8;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:url(#linearGradient4362);fill-opacity:1;stroke:none;stroke-width:8;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans;opacity:0.8"
          d="m 113.36724,986.58036 0,-3.34648 -17.465454,7.02116 17.465454,7.25334 0,-2.92802 124.3158,0 0,-8 z"
-         id="path4316"
+         id="status"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cccccccc" />
       <path
@@ -209,6 +229,30 @@
              id="tspan4278"
              sodipodi:role="line">g/m²</tspan></text>
       </g>
+      <text
+         sodipodi:linespacing="125%"
+         id="text4276-3"
+         y="966.12537"
+         x="50.794773"
+         style="font-size:8.17345715px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
+         xml:space="preserve"><tspan
+           style="font-weight:normal;text-align:center;text-anchor:middle;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
+           y="966.12537"
+           x="50.794773"
+           id="tspan4278-6"
+           sodipodi:role="line">outdoors</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:8.17345715px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:sans-serif"
+         x="307.80756"
+         y="966.12537"
+         id="text4014"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4016"
+           x="307.80756"
+           y="966.12537"
+           style="font-weight:normal;text-align:center;text-anchor:middle;font-family:Droid Sans;-inkscape-font-specification:Droid Sans">indoors</tspan></text>
     </g>
     <g
        id="g4318"
@@ -303,8 +347,8 @@
     </g>
     <path
        sodipodi:type="arc"
-       style="color:#000000;fill:#729fcf;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:8;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="path4364"
+       style="color:#000000;fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:8;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="mode"
        sodipodi:cx="178.92857"
        sodipodi:cy="53.214287"
        sodipodi:rx="6.7857141"

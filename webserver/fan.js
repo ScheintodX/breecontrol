@@ -52,10 +52,17 @@ function createFan( index, config ) {
 				timeout: 2500
 			} )
 		} ),
-		fan: InProxy( {}, {
-			type: 'b'
-		} )
-
+		fan: Combined( {}, {
+			mode: InOutProxy( {
+					type: 's',
+					timeout: 3000
+				}, { set: 'auto' }
+			),
+			on: InProxy( {
+				type: 'b',
+				timeout: 3000
+			}, {} )
+		} ),
 
 	} ), {
 

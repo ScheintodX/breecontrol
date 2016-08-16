@@ -2,7 +2,6 @@
 	<h1>FAN X: SCRIPT</h1>
 	<h2></h2>
 	<button class="manual">Manual</button>
-	<button class="script">Script</button>
 </header>
 
 <object class="fan" data="fan.svg"></object>
@@ -17,10 +16,11 @@
 
 	<label>
 		<h6>Fan</h6>
-		<input class="fan" type="checkbox" name=".fan.mode.set" value="on">On</input>
-		<input class="fan" type="checkbox" name=".fan.mode.set" value="off">Off</input>
-		<input class="fan" type="checkbox" name=".fan.mode.set" value="auto">Auto</input>
+		<select class="mode" name=".fan.mode.set">
+			<option value="auto" selected="selected">Auto</option>
+			<option value="on">On</option>
+			<option value="off">Off</option>
+		</select>
 	</label>
 
 </section><!--/.manual-->
-

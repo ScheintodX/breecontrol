@@ -7,7 +7,7 @@ var SFloat = require( './s_float.js' )
 
 function calcAbsoluteHumidity( t, rh ) {
 
-	var sat = 6.1078 * pow( 10, ( 7.5 * t ) / ( 237.3 * t ) ); // Sättigungsdampfdruck
+	var sat = 6.1078 * Math.pow( 10, ( 7.5 * t ) / ( 237.3 * t ) ); // Sättigungsdampfdruck
 	var p = rh * sat; // act. Dampfdruck
 	var ah = 10000.0 * ( 18.016 / 8314.3 ) * ( p / ( t + 273 ) ); // Abs humi
 
@@ -26,18 +26,41 @@ module.exports = function( conf ) {
 
 		run: function( emit, Sensors ) {
 
+			if( conf.mode == 'simulate' ) {
+
+				if( conf.where == 'indoor' ) {
+
+					if( Sensors.fan.status ) {
+
+						E.rr( self.temp.status
+								, Sensors.outdoor.temp.status );
+						E.rr( self.humidity_rel.status
+								, Sensors.outdoor.humidity_rel.status );
+
+						self.temp.status = ( self.temp.status * 9
+								+ Sensors.outdoor.temp.status ) / 10;
+						self.humidity_rel.status = ( self.humidity_rel.status * 9
+								+ Sensors.outdoor.humidity_rel.status ) / 10;
+
+						E.rr( self.temp.status
+								, Sensors.outdoor.temp.status );
+						E.rr( self.humidity_rel.status
+								, Sensors.outdoor.humidity_rel.status );
+
+					} else {
+						self.temp.status -= .1;
+						self.humidity_rel.status += .5;
+					}
+				}
+
+				self.humidity_abs.status = calcAbsoluteHumidity(
+						self.temp.status, self.humidity_rel.status );
+
+			}
+
 			self.temp.run( emit );
 			self.humidity_rel.run( emit );
 			self.humidity_abs.run( emit );
-
-			if( conf.mode == 'simulate' ) {
- 
-				self.indoor.humidity_abs = calcAbsoluteHumidity(
-					self.indoor.temp.status, self.indoor.humidity_rel );
-
-				self.outdoor.humidity_abs = calcAbsoluteHumidity(
-					self.outdoor.temp.status, self.outdoor.humidity_rel );
-			}
 
 			/*
 			if( conf.mode == 'simulate' ) {

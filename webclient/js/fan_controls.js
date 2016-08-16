@@ -1,6 +1,6 @@
 "use strict";
 
-BAG.Boiler_Controls = (function($){
+BAG.Fan_Controls = (function($){
 
 	return function( elem, device ) {
 
@@ -22,9 +22,7 @@ BAG.Boiler_Controls = (function($){
 			var $c = $secManual.find( sel )
 					;
 
-			if( !$c.isOne() ) return undefined;
-
-			console.log( $c );
+			if( ! $c.isOne() ) return undefined;
 
 			// topic (for notify) is taken from button name.
 			var topic = $c.attr('name');
@@ -33,45 +31,27 @@ BAG.Boiler_Controls = (function($){
 					.onNotify( notify )
 					;
 
-			if( topic.match( /\.override$/ ) )
-					control = control.override();
-
 			return control;
 		}
 
 		var manualControls = {
 		// Set
-			'temp.nominal': Control( 'input[name=".temp.set" ]' ),
-			'aggitator.nominal': Control( 'input[name=".aggitator.set" ]' ),
-
-		// Tunde
-		 	'upper.temp.max': Control( 'input[name=".upper.temp.max"]' ),
-		 	'lower.temp.max': Control( 'input[name=".lower.temp.max"]' ),
-
-		// Override
-			'fill.override': Control( 'input[name=".fill.override"] ', 100 ),
-			'lid.override': Control( 'input[name=".lid.override"] ' )
+			'mode': Control( 'select[name=".fan.mode.set" ]' )
 		};
 
 		function gotData( data ) {
 
 			if( 'devices' in data ) {
 
-				var boiler = data.devices[ device ];
-
-				/*
-				if( name == "Pete the Preserver" ){
-					console.log( boiler );
-				}
-				*/
+				var fan = data.devices[ device ];
 
 				$e.find( 'header h1' )
-						.text( boiler.name )
+						.text( fan.name )
 						;
 
 				for( var key in manualControls ) {
 
-					var value = key.getFrom( boiler );
+					var value = key.getFrom( fan );
 					if( typeof( value ) == 'undefined' ) continue;
 
 					var control = manualControls[ key ];
@@ -83,7 +63,7 @@ BAG.Boiler_Controls = (function($){
 			}
 		}
 
-		var BoilerControls = {
+		var FanControls = {
 
 			gotData: gotData,
 
@@ -93,7 +73,7 @@ BAG.Boiler_Controls = (function($){
 			}
 		};
 
-		return BoilerControls;
+		return FanControls;
 	}
 
 })($);

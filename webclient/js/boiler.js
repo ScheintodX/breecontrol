@@ -13,6 +13,8 @@ BAG.Boiler = (function($,Ψ){
 	// Constructor function
 	return function( elem, device, passive ) {
 
+		console.log( elem );
+
 		passive = passive || true;
 
 		var $elem = ( elem instanceof jQuery ? elem : $( elem ) )
@@ -40,15 +42,15 @@ BAG.Boiler = (function($,Ψ){
 			setTimeElapsed: ψ.asHourMinSec( ψ.text( 'time_elapsed' ) ),
 			setUpperTempStatus: ψ.asDegree( ψ.text( 'upper_temp_status' ) ),
 			setUpperTempNominal: ψ.asDegree( ψ.text( 'upper_temp_nominal' ) ),
-			setUpperTempIcon: ψ.asColor( ψ.fill( 'temp_upper_icon' ) ),
+			setUpperTempIcon: ψ.asTempColor( ψ.fill( 'temp_upper_icon' ) ),
 			setUpperHeater: ψ.border( 'temp_upper_icon' ),
 			setLowerTempStatus: ψ.asDegree( ψ.text( 'lower_temp_status' ) ),
 			setLowerTempNominal: ψ.asDegree( ψ.text( 'lower_temp_nominal' ) ),
-			setLowerTempIcon: ψ.asColor( ψ.fill( 'temp_lower_icon' ) ),
+			setLowerTempIcon: ψ.asTempColor( ψ.fill( 'temp_lower_icon' ) ),
 			setLowerHeater: ψ.border( 'temp_lower_icon' ),
 			setJacketTempStatus: ψ.asDegree( ψ.text( 'jacket_temp_status' ) ),
 			setJacketTempNominal: ψ.asDegree( ψ.text( 'jacket_temp_nominal' ) ),
-			setJacketTempIcon: ψ.asColor( ψ.fill( 'temp_jacket_icon' ) ),
+			setJacketTempIcon: ψ.asTempColor( ψ.fill( 'temp_jacket_icon' ) ),
 			setJacketCooler: ψ.border( 'temp_jacket_icon' ),
 			setLid: ψ.visible( 'lid' ),
 			setLidOverride: ψ.override( ψ.visible( 'lid_override' ) ),
@@ -56,7 +58,7 @@ BAG.Boiler = (function($,Ψ){
 
 			setAggitator: ψ.ifchanged( function( on ) {
 
-				svg('aggitator').style.opacity = on ? .8 : .2;
+				svg('aggitator').style.opacity = (on ? .8 : .2);
 			} ),
 
 			setFill: ψ.ifchanged( function( value ) {

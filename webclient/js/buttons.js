@@ -31,6 +31,31 @@ BAG.Button = function($){
 		return self;
 	}
 
+	function InputSelect( $e, topic ) {
+
+		function trigger() {
+			console.log( "notify", $e.val() );
+			self.notify( 'manual', topic, $e.val() );
+		}
+
+		$e.on( 'change', function( val ) {
+
+			trigger();
+			return false;
+		} );
+
+		var self = Notifyable( Overridable( {
+			$e: $e,
+			topic: topic,
+			trigger: trigger,
+			set: function( val ) {
+				$e.val( val );
+			}
+		} ) );
+
+		return self;
+	}
+
 	function InputNumber( $e, topic, scale ) {
 
 		if( !scale ) scale = 1;
@@ -131,16 +156,28 @@ BAG.Button = function($){
 		return button;
 	}
 
-	var self = function( type, $e, topic, scale ) {
-		switch( type ){
-			case 'number': return InputNumber( $e, topic, scale );
-			case 'checkbox': return InputCheckbox( $e, topic, scale );
-			default: throw "Unsupported type: " + type;
+	var self = function( $e, topic, scale ) {
+		var type = $e.attr( 'type' );
+		var tag = $e.prop( 'nodeName' );
+		switch( tag ) {
+			case 'INPUT':
+			switch( type ){
+				case 'number': return InputNumber( $e, topic, scale );
+				case 'checkbox': return InputCheckbox( $e, topic, scale );
+				default: throw "Unsupported type: " + type;
+			}
+			break;
+			case 'SELECT':
+				return InputSelect( $e, topic, scale );
+			break;
+			default:
+				console.warn( "Unknown: " + tag );
 		}
 	
 	}
 	self.InputCheckbox = InputCheckbox;
 	self.InputNumber = InputNumber;
+	self.InputSelect = InputSelect;
 
 	return self;
 

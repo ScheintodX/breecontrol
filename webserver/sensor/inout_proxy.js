@@ -30,11 +30,7 @@ module.exports = function( conf, defaults ) {
 
 			if( topic == 'status' || topic == 'nominal' ) {
 
-				if( topic == 'status' ) {
-					self.status = MQTT.fromString( data, self._conf.type );
-				} else if( topic == 'nominal' ) {
-					self.nominal = MQTT.fromString( data, self._conf.type );
-				}
+				self[ topic ] = MQTT.fromString( data, self._conf.type );
 				self._time = new Date();
 			}
 		},

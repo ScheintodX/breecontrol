@@ -8,19 +8,31 @@
 
 	function loadDevice( $parent, device ) {
 
-		console.trace( "LOAD", device.id );
+		var dId = device.id,
+		    dType = device.type,
+			dModule = dType.substring( 0,1 ).toUpperCase() + dType.substring( 1 ),
+			dControls = dModule + "_Controls"
+			;
 
-		var id = device.id,
-			$device = $( '<section class="tab device ' + device.type + '"/>' )
+		console.trace( "LOAD", dId );
+
+		var id = dId,
+			$device = $( '<section class="tab device ' + dType + '"/>' )
 					.attr( 'id', id )
 					.appendTo( $parent )
-					.load( device.type + ".html", function() {
+					.load( dType + ".html", function() {
+
+						var $info = $device.find( '.info' ),
+						    $dev = $device.find( '.' + dType ),
+							$script = $device.find( 'section.script' )
+							;
+
+						// Tab
 						ctrl.put( 'tab_'+id, BAG.Tab( $device, id ) );
-						ctrl.put( 'info_'+id, BAG.Info( $device.find( '.info' ), id ) );
-						ctrl.put( 'boiler_'+id, BAG.Boiler( $device.find( '.boiler' ), id ) );
-						ctrl.put( 'boilerctrl_'+id, BAG.Boiler_Controls( $device, id ) );
-						ctrl.put( 'fan_'+id, BAG.Fan( $device.find( '.fan' ), id ) );
-						ctrl.put( 'ctrl_'+id, BAG.Script( $device, id ) );
+						if( $info.length > 0 ) ctrl.put( 'info_'+id, BAG.Info( $info, id ) );
+						ctrl.put( dType + '_'+id, BAG[ dModule ]( $dev, id ) );
+						if( BAG[ dControls ] ) ctrl.put( dType + 'ctrl_'+id, BAG[ dControls ]( $device, id ) );
+						if( $script.length ) ctrl.put( 'ctrl_'+id, BAG.Script( $device, id ) );
 
 						// fix for elements to display scripts aren't ready when we get that kind of config/data.
 						ctrl.gotData( lastMessage );

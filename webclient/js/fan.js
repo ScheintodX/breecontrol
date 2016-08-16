@@ -36,6 +36,22 @@ BAG.Fan = (function($,Ψ){
 
 		var Fan = {
 
+			outdoor: {
+				setTemp: ψ.scaled( ψ.text( 'outdoor_temp' ), 0 ),
+				setHumidityRel: ψ.scaled( ψ.text( 'outdoor_humidity_rel' ), 0 ),
+				setHumidityAbs: ψ.scaled( ψ.text( 'outdoor_humidity_abs' ), 0 ), 
+			},
+			indoor: {
+				setTemp: ψ.scaled( ψ.text( 'indoor_temp' ), 0 ),
+				setHumidityRel: ψ.scaled( ψ.text( 'indoor_humidity_rel' ), 0 ),
+				setHumidityAbs: ψ.scaled( ψ.text( 'indoor_humidity_abs' ), 0 ), 
+			},
+
+			setStatus: ψ.dimmed( 'status' ),
+
+			setMode: ψ.asModeColor( ψ.fill( 'mode' ) ),
+
+			/*
 			setFill: ψ.ifchanged( function( value ) {
 
 				var move = 100 - value * 100.0,
@@ -46,6 +62,7 @@ BAG.Fan = (function($,Ψ){
 						.children[ 0 ].textContent = round + '%'
 						;
 			} ),
+			*/
 
 			gotData: function( data ) {
 
@@ -53,12 +70,54 @@ BAG.Fan = (function($,Ψ){
 
 				if( !( 'devices' in data ) ) return;
 
-				var fan = data.devices[ device ];
+				var msg = data.devices[ device ];
 
-				console.log( fan );
+				if( 'indoor' in msg ) {
+				}
+				if( 'outdoor' in msg ) {
+					var met = msg.outdoor,
+					    Met = Fan.outdoor;
+					if( 'temp' in met ) Met.setTemp( met.temp.status );
+					if( 'humidity_rel' in met ) Met.setHumidityRel( met.humidity_rel.status );
+					if( 'humidity_abs' in met ) Met.setHumidityAbs( met.humidity_abs.status );
+				}
+				if( 'indoor' in msg ) {
+					var met = msg.indoor,
+					    Met = Fan.indoor;
+					if( 'temp' in met ) Met.setTemp( met.temp.status );
+					if( 'humidity_rel' in met ) Met.setHumidityRel( met.humidity_rel.status );
+					if( 'humidity_abs' in met ) Met.setHumidityAbs( met.humidity_abs.status );
+				}
+				if( 'fan' in msg ) {
+
+					var fan = msg.fan;
+
+					if( 'on' in fan ) {
+
+						Fan.setStatus( fan.on.status );
+					}
+
+					if( 'mode' in fan ) {
+
+						Fan.setMode( fan.mode.status );
+					}
+				}
 			}
 
 		};
+
+		$elem.on( 'load', function() {
+
+			_svg = $elem.get( 0 ).contentDocument;
+
+			// Animate stuff
+			/*
+			$svg('level')
+					.expectOne()
+					.velocity( { translateY: [0, 5] }, { duration: 2000, loop: true } )
+					;
+			*/
+		} );
 
 		return Fan;
 	};

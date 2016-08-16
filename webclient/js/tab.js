@@ -18,7 +18,6 @@ BAG.Tab = (function($){
 
 		// Tab Header Controls
 		$header.find( 'button' )
-				.expectN( 2 )
 				.on( 'click', function(){
 					var clz = $(this).attr( 'class' );
 					$elem.find( 'section.'+clz ).toggleClass( 'visible' );

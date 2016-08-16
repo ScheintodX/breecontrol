@@ -2,6 +2,23 @@
 
 BAG.Function = ( function(){
 
+	function col( c ){
+		return '#' + d2h(c[0]) + d2h(c[1]) + d2h(c[2]);
+	}
+
+	function d2h( c ) {
+		var hex = (c<<0).toString(16);
+		return hex.length == 1 ? "0" + hex : hex;
+	}
+
+	function mix( c1, c2, val ) {
+		return col([
+				c1[0] * (1-val) + c2[0]*val,
+				c1[1] * (1-val) + c2[1]*val,
+				c1[2] * (1-val) + c2[2]*val
+		]);
+	}
+
 	return function( svg ){
 	
 		var ψ = {
@@ -22,6 +39,41 @@ BAG.Function = ( function(){
 				} );
 			},
 
+			scaled: function( f, scale ) {
+
+				if( scale !== 0 && !scale ) scale = 1;
+
+				return function( val ) {
+
+					var text;
+
+					if( val !== 0 && !val ) text = '??';
+					else {
+						var x = Math.pow( 10, scale );
+						text = Math.round( val*x ) / x;
+					}
+					return f( text );
+					
+				}
+			},
+
+			asPercent: function( f, scale ) {
+
+				if( !scale ) scale = 1;
+
+				return function( val ) {
+
+					var text;
+
+					if( val !== 0 && !val ) text = '??';
+					else {
+						var x = Math.pow( 10, scale );
+						text = Math.round( val*100*x ) / x;
+					}
+					return f( text );
+				};
+			},
+
 			asDegree: function( f, inclC, scale ) {
 
 				if( !scale ) scale = 1;
@@ -34,7 +86,7 @@ BAG.Function = ( function(){
 						if( inclC ) text += 'C';
 					}
 					return f( text );
-				}
+				};
 			},
 
 			asHourMinSec: function( f ) {
@@ -61,7 +113,7 @@ BAG.Function = ( function(){
 				}
 			},
 
-			asColor: function( f ) {
+			asTempColor: function( f ) {
 
 				var X = [
 						[ 100, 100, 255 ],
@@ -72,22 +124,6 @@ BAG.Function = ( function(){
 						[ 174, 255, 246 ]
 				];
 
-				function d2h( c ) {
-					var hex = (c<<0).toString(16);
-					return hex.length == 1 ? "0" + hex : hex;
-				}
-
-				function col( c ){
-					return '#' + d2h(c[0]) + d2h(c[1]) + d2h(c[2]);
-				}
-
-				function mix( c1, c2, val ) {
-					return col([
-							c1[0] * (1-val) + c2[0]*val,
-							c1[1] * (1-val) + c2[1]*val,
-							c1[2] * (1-val) + c2[2]*val
-					]);
-				}
 
 				return function( heat ) {
 
@@ -101,6 +137,21 @@ BAG.Function = ( function(){
 					else color = col( X[3] );
 					return f( color );
 				}
+			},
+
+			asModeColor: function( f ) {
+
+				return function( mode ) {
+
+					var color;
+					if( mode == 'on' || mode === true ) color = '#4e9a06';
+					else if( mode == 'off' || mode === false ) color = '#a40000';
+					else if( mode == 'auto' ) color = '#204a87';
+					else color = '#000000';
+
+					return f( color );
+				}
+
 			},
 
 			fill: function( id ) {
@@ -128,6 +179,13 @@ BAG.Function = ( function(){
 				return ψ.ifchanged( function( visible ) {
 					var svgE = svg( id );
 					if( svgE ) svgE.style.opacity = visible ? 1 : 0;
+				} );
+			},
+
+			dimmed: function( id ) {
+				return ψ.ifchanged( function( visible ) {
+					var svgE = svg( id );
+					if( svgE ) svgE.style.opacity = visible ? .8 : .2;
 				} );
 			},
 

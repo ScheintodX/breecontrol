@@ -3,12 +3,12 @@
 var HQ = require( '../helpers.js' ).mqtt;
 var E = require( '../E.js' );
 
-var ABool = require( './a_bool.js' );
+var SBool = require( './s_bool.js' );
 var _ = require( 'underscore' );
 
 module.exports = function( conf ) {
 
-	var parent = ABool( conf ),
+	var parent = SBool( conf ),
 		parentRun = parent.run
 		;
 
@@ -32,14 +32,15 @@ module.exports = function( conf ) {
 
 					var hum_in = Sensors.indoor.humidity_abs.status,
 						hum_out = Sensors.outdoor.humidity_abs.status,
-						offset = conf.offset
+						offset = conf.offset,
+						hysteresis = conf.hysteresis
 						;
 
-					if( hum_i > hum_out + offset ) {
+					if( hum_in > hum_out + offset ) {
 
 						self.status = true;
 
-					} else if( hum_i < hum_out + offset - hysteresis ) {
+					} else if( hum_in < hum_out + offset - hysteresis ) {
 
 						self.status = false;
 					}
@@ -48,6 +49,8 @@ module.exports = function( conf ) {
 
 					E.rr( "Unknown mode: " + mode );
 				}
+
+				if( ! conf.disabled ) emit( conf.topic + '/status', '' + HQ.toString( self.status, 'b' ) );
 
 			} else {
 				parentRun( emit, Sensors );
