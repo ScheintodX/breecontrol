@@ -72,8 +72,6 @@ BAG.Fan = (function($,Ψ){
 
 				var msg = data.devices[ device ];
 
-				if( 'indoor' in msg ) {
-				}
 				if( 'outdoor' in msg ) {
 					var met = msg.outdoor,
 					    Met = Fan.outdoor;
@@ -105,19 +103,6 @@ BAG.Fan = (function($,Ψ){
 			}
 
 		};
-
-		$elem.on( 'load', function() {
-
-			_svg = $elem.get( 0 ).contentDocument;
-
-			// Animate stuff
-			/*
-			$svg('level')
-					.expectOne()
-					.velocity( { translateY: [0, 5] }, { duration: 2000, loop: true } )
-					;
-			*/
-		} );
 
 		return Fan;
 	};

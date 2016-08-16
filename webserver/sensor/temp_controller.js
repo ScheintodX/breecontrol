@@ -17,8 +17,6 @@ module.exports = function( conf, defaults ) {
 			boost = jacket._conf.boost
 			;
 		
-		// console.log( max, actual, nominal, overheat, boost );
-
 		// If no temp set send 0 to heater
 		if( typeof nominal == 'undefined' )
 				return 0;
@@ -31,26 +29,26 @@ module.exports = function( conf, defaults ) {
 
 		var opti;
 		// boiling mode
+		/*
 		if( nominal >= 100 ) {
 
 			// verdunstungsenthalpie:
 			// 0,63kWh / kg Wasser
 
-			/*
-			var diffto100 = nominal-100;
-			opti = 200+diffto100*50;
-			*/
+			//var diffto100 = nominal-100;
+			//opti = 200+diffto100*50;
 
 			// full throttle
 			opti = 350;
 
 		// normal mode
 		} else {
-			opti = nominal
-					+ overheat
-					+ (nominal - actual) * boost
-					;
-		}
+		*/
+		opti = nominal
+				+ overheat
+				+ (nominal - actual) * boost
+				;
+		//}
 
 		// console.log( "===", opti );
 

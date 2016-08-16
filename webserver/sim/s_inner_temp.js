@@ -47,8 +47,8 @@ module.exports = function( conf ) {
 				}
 				self.status += change;
 
-				if( self.status > 100 ) self.status = 100;
-				if( self.status < 0 ) self.status = 0;
+				if( self.status > self.conf.max ) self.status = self.conf.max;
+				if( self.status < self.conf.min ) self.status = self.conf.min;
 
 				var jitter = self.status.jitter( conf.jitter );
 

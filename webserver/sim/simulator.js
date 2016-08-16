@@ -20,8 +20,8 @@ var Devices = {
 	//boiler2: require( './sim_boiler.js' )( 'boiler2' ),
 	//gloggmaker1: require( './sim_gloggmaker.js' )( 'gloggmaker1' ),
 	//chiller1: require( './sim_chiller.js' )( 'chiller1' ),
-	fan1: require( './sim_fan.js' )( 'fan1' )
-	//pump1: require( './sim_pump.js' )( 'pump1' ),
+	//fan1: require( './sim_fan.js' )( 'fan1' ),
+	pump1: require( './sim_pump.js' )( 'pump1' )
 };
 
 var repl = require( '../repl.js' )( Devices );

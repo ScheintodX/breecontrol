@@ -27,10 +27,12 @@
 							$script = $device.find( 'section.script' )
 							;
 
+						console.log( dId, dType, dModule );
+
 						// Tab
 						ctrl.put( 'tab_'+id, BAG.Tab( $device, id ) );
 						if( $info.length > 0 ) ctrl.put( 'info_'+id, BAG.Info( $info, id ) );
-						ctrl.put( dType + '_'+id, BAG[ dModule ]( $dev, id ) );
+						if( BAG[ dModule ] ) ctrl.put( dType + '_'+id, BAG[ dModule ]( $dev, id ) );
 						if( BAG[ dControls ] ) ctrl.put( dType + 'ctrl_'+id, BAG[ dControls ]( $device, id ) );
 						if( $script.length ) ctrl.put( 'ctrl_'+id, BAG.Script( $device, id ) );
 

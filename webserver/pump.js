@@ -24,38 +24,25 @@ function createPump( index, config ) {
 
 	}, Combined( {
 
-		indoor: Combined( {}, {
-			temp: InProxy( {
-				type: 'f',
-				timeout: 2500
-			} ),
-			humidity_rel: InProxy( {
-				type: 'f',
-				timeout: 2500
-			} ),
-			humidity_abs: InProxy( {
-				type: 'f',
-				timeout: 2500
-			} )
+		temp: InProxy( {
+			type: 'f',
+			timeout: 2500
 		} ),
-		outdoor: Combined( {}, {
-			temp: InProxy( {
-				type: 'f',
-				timeout: 2500
-			} ),
-			humidity_rel: InProxy( {
-				type: 'f',
-				timeout: 2500
-			} ),
-			humidity_abs: InProxy( {
-				type: 'f',
-				timeout: 2500
-			} )
+		fill: InProxy( {
+			type: 'f',
+			timeout: 2500
 		} ),
-		fan: InProxy( {}, {
-			type: 'b'
+		pump: Combined( {}, {
+			mode: InOutProxy( {
+					type: 's',
+					timeout: 3000
+				}, { set: 'auto' }
+			),
+			on: InProxy( {
+				type: 'b',
+				timeout: 3000
+			}, {} )
 		} )
-
 
 	} ), {
 
@@ -65,14 +52,14 @@ function createPump( index, config ) {
 
 		power: function() {
 
-			if( self.fan.status ) return self.conf.power;
+			if( self.pump.status ) return self.conf.power;
 
 			return 0;
 		},
 
 		powerLimit: function( limit ) {
 
-			if( limit < self.conf.power ) self.fan.mode.set = 'off';
+			if( limit < self.conf.power ) self.pump.mode.set = 'off';
 		}
 
 	} );

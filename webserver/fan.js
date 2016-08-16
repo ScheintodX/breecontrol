@@ -62,7 +62,7 @@ function createFan( index, config ) {
 				type: 'b',
 				timeout: 3000
 			}, {} )
-		} ),
+		} )
 
 	} ), {
 

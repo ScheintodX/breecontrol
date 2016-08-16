@@ -9,13 +9,28 @@ var H = require( './helpers.js' );
 
 var log = require( './logging.js' );
 
-function createDevice( index, config ) {
+var InProxy = require( './sensor/in_proxy.js' ),
+	Combined = require( './sensor/combined.js' )
+	;
 
-	var self = {
+function createPowerguard( index, config ) {
+
+	var self = Object.assign( {
 
 		name: config.name,
 		index: index,
 		conf: config,
+
+	}, Combined( {
+
+		power_used: InProxy( {
+			type: 'f'
+		} ),
+		power_max: InProxy( {
+			type: 'f'
+		} )
+
+	} ), {
 
 		watch: function( brewery ) {
 
@@ -52,13 +67,15 @@ function createDevice( index, config ) {
 
 			}
 
+			self.power_max.status = max;
+			self.power_used.status = sum;
 		}
 
-	}
+	} );
 
 	return self;
 }
 
 module.exports = {};
 
-module.exports.create = createDevice;
+module.exports.create = createPowerguard;

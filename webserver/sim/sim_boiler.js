@@ -72,7 +72,9 @@ module.exports = function( DEVICE ) {
 			mode: 'simulate',
 			iv: 1000,
 			speed: .3,
-			jitter: .5
+			jitter: .5,
+			min: 0.5,
+			max: 99.7
 		} ),
 
 		fill: SFloat( {

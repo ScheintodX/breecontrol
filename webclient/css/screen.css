@@ -251,7 +251,18 @@ section.manual > section h3:after, section.script > section h3:after {
   content: " =";
 }
 
-/* line 150, ../sass/screen.scss */
+/* line 148, ../sass/screen.scss */
+section.display {
+  padding: 8px;
+  text-align: center;
+}
+
+/* line 152, ../sass/screen.scss */
+.powerguard {
+  font-size: 26px;
+}
+
+/* line 158, ../sass/screen.scss */
 section.runstop button, section.loadsave button {
   position: relative;
   height: 28px;
@@ -259,12 +270,12 @@ section.runstop button, section.loadsave button {
   padding-left: 20px;
   margin: 6px;
 }
-/* line 154, ../sass/screen.scss */
+/* line 162, ../sass/screen.scss */
 section.runstop button.set, section.loadsave button.set {
   display: block;
   width: auto;
 }
-/* line 159, ../sass/screen.scss */
+/* line 167, ../sass/screen.scss */
 section.runstop button:disabled::before, section.loadsave button:disabled::before {
   opacity: .3;
 }
@@ -359,7 +370,7 @@ section.runstop button[name="set"]:before, section.loadsave button[name="set"]:b
   height: 16px;
 }
 
-/* line 194, ../sass/screen.scss */
+/* line 202, ../sass/screen.scss */
 .runstopinfo {
   display: block;
   text-align: center;

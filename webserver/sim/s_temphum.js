@@ -32,20 +32,10 @@ module.exports = function( conf ) {
 
 					if( Sensors.fan.status ) {
 
-						E.rr( self.temp.status
-								, Sensors.outdoor.temp.status );
-						E.rr( self.humidity_rel.status
-								, Sensors.outdoor.humidity_rel.status );
-
 						self.temp.status = ( self.temp.status * 9
 								+ Sensors.outdoor.temp.status ) / 10;
 						self.humidity_rel.status = ( self.humidity_rel.status * 9
 								+ Sensors.outdoor.humidity_rel.status ) / 10;
-
-						E.rr( self.temp.status
-								, Sensors.outdoor.temp.status );
-						E.rr( self.humidity_rel.status
-								, Sensors.outdoor.humidity_rel.status );
 
 					} else {
 						self.temp.status -= .1;

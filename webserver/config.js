@@ -40,12 +40,12 @@ module.exports = function( done ) {
 				type: 'fan',
 				name: 'Soeder',
 				power: 400
-			}/*, {
+			}, {
 				id: 'pump1',
 				type: 'pump',
-				name: 'Arnold',
+				name: 'Arni',
 				power: 400
-			}, {
+			}/*, {
 				id: 'boiler2',
 				type: "boiler",
 				name: "Kurt von Kessel",
@@ -76,13 +76,14 @@ module.exports = function( done ) {
 				efficency: .7,
 				power: 1000, // W
 				lower: { minTemp: 0, maxTemp: 100 }
-			}, {
+			}*/, {
 				id: 'pg',
 				type: "powerguard",
 				name: "powerguard",
 				maxPower: 12000, // W
-				watched: [ 'boiler1', 'boiler2', 'gloggmaker1', 'chiller1'  ]
-			}*/
+				watched: [ 'pump1', 'fan1', 'boiler1'/*, 'boiler2', 'gloggmaker1', 'chiller1' 
+				*/]
+			}
 
 		],
 

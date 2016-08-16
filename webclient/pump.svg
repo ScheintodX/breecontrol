@@ -70,9 +70,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6"
-     inkscape:cx="141.99229"
-     inkscape:cy="46.343404"
+     inkscape:zoom="1.979899"
+     inkscape:cx="305.51375"
+     inkscape:cy="8.4186679"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -131,7 +131,7 @@
          sodipodi:role="line">60%</tspan></text>
     <path
        style="color:#000000;fill:none;stroke:#ffffff;stroke-width:6;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 95.209958,990.36779 c -2.52538,-2.77792 -4.63755,-32.08939 19.697982,-28.78935 22.85102,3.09874 14.98945,59.85156 34.85026,59.85156 20.70813,0 66.41753,-0.7577 66.41753,-0.7577"
+       d="m 95.209958,990.36779 c -2.52538,-2.77792 -4.783099,-30.73487 19.697982,-28.78935 23.10356,1.83605 8.42346,59.85156 34.85026,59.85156 20.70813,0 66.41753,-0.7577 66.41753,-0.7577"
        id="path4932"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cssc" />
@@ -166,12 +166,12 @@
     <path
        sodipodi:type="arc"
        style="color:#000000;fill:#729fcf;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:8;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="status"
+       id="mode"
        sodipodi:cx="178.92857"
        sodipodi:cy="53.214287"
        sodipodi:rx="6.7857141"
        sodipodi:ry="6.7857141"
-       d="m 185.71429,53.214287 c 0,3.747646 -3.03807,6.785714 -6.78572,6.785714 -3.74764,0 -6.78571,-3.038068 -6.78571,-6.785714 0,-3.747647 3.03807,-6.785714 6.78571,-6.785714 3.74765,0 6.78572,3.038067 6.78572,6.785714 z"
+       d="m 185.71429,53.214287 a 6.7857141,6.7857141 0 1 1 -13.57143,0 6.7857141,6.7857141 0 1 1 13.57143,0 z"
        transform="matrix(0.82114574,0,0,0.82114574,31.101443,956.93151)" />
     <path
        style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:url(#linearGradient4989);fill-opacity:1;stroke:none;stroke-width:8;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
