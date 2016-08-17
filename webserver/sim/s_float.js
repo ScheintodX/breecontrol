@@ -23,7 +23,9 @@ module.exports = function( conf ) {
 				self.status = self._genStatus( self.status );
 			}
 
-			if( ! conf.disabled ) emit( conf.topic + '/status', HQ.toString( self.status, 'f', 1 ) );
+			var asString = HQ.toString( self.status, 'f', 'scale' in conf.status ? conf.status.scale : 1 );
+
+			if( ! conf.disabled ) emit( conf.topic + '/status', asString );
 		}
 	}
 	return self;

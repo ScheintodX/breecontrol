@@ -20,14 +20,14 @@ module.exports = function( conf ) {
 
 				if( Sensors.pump.status ) {
 
-					self.status -= .5;
+					self.status -= .05;
 
 					if( self.status < Sensors.pump.conf.off )
 							self.status = Sensors.pump.conf.off;
 
 				} else {
 
-					self.status += .1;
+					self.status += .01;
 
 					if( self.status > Sensors.pump.conf.on )
 							self.status = Sensors.pump.conf.on;

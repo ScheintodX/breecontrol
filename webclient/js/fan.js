@@ -104,6 +104,12 @@ BAG.Fan = (function($,Ψ){
 
 		};
 
+		$elem.on( 'load', function() {
+
+			_svg = $elem.get( 0 ).contentDocument;
+
+		} );
+
 		return Fan;
 	};
 

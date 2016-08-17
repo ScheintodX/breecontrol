@@ -13,8 +13,6 @@ BAG.Pump = (function($,Ψ){
 	// Constructor function
 	return function( elem, device, passive ) {
 
-		console.log( elem );
-
 		passive = passive || true;
 
 		var $elem = ( elem instanceof jQuery ? elem : $( elem ) )
@@ -36,20 +34,25 @@ BAG.Pump = (function($,Ψ){
 
 		var Pump = {
 
-			setStatus: ψ.dimmed( 'status' ),
+			setStatus: ψ.dimmed( 'pumping' ),
 
 			setMode: ψ.asModeColor( ψ.fill( 'mode' ) ),
 
-			setTemp: ψ.asDegree( ψ.text( 'temp' ) ),
+			setTemp: ψ.scaled( ψ.text( 'temp' ), 0 ),
 
 			setFill: ψ.ifchanged( function( value ) {
 
-				var move = 100 - value * 100.0,
+				var move = 50 - value * 50.0,
 				    round = ( value * 100 )<<0
 					;
 
-				$svg( 'fill' )
-						.children[ 0 ].textContent = round + '%'
+				console.log( move );
+
+				$svg('fill_content')
+						.velocity( { translateY: move }, { duration: 500 } )
+						;
+
+				svg('fill').children[ 0 ].textContent = round + '%'
 						;
 			} ),
 
@@ -61,6 +64,18 @@ BAG.Pump = (function($,Ψ){
 
 				var msg = data.devices[ device ];
 
+				console.log( msg );
+
+				if( 'pump' in msg ) {
+
+					var pump = msg.pump;
+
+					if( 'mode' in pump ) Pump.setMode( pump.mode.status );
+					if( 'on' in pump ) Pump.setStatus( pump.on.status );
+				}
+
+				if( 'temp' in msg ) Pump.setTemp( msg.temp.status );
+				if( 'fill' in msg ) Pump.setFill( msg.fill.status );
 			}
 
 		};
@@ -69,9 +84,9 @@ BAG.Pump = (function($,Ψ){
 
 			_svg = $elem.get( 0 ).contentDocument;
 
-			// Animate stuff
+			// Don't animate stuff. Save power.
 			/*
-			$svg('level')
+			$svg('fill_content')
 					.expectOne()
 					.velocity( { translateY: [0, 5] }, { duration: 2000, loop: true } )
 					;

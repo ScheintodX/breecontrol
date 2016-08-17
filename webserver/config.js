@@ -24,6 +24,7 @@ module.exports = function( done ) {
 		},
 
 		devices: [
+			/*
 			{
 				id: 'boiler1',
 				type: "boiler",
@@ -40,7 +41,7 @@ module.exports = function( done ) {
 				type: 'fan',
 				name: 'Soeder',
 				power: 400
-			}, {
+			},*/ {
 				id: 'pump1',
 				type: 'pump',
 				name: 'Arni',
@@ -81,7 +82,7 @@ module.exports = function( done ) {
 				type: "powerguard",
 				name: "powerguard",
 				maxPower: 12000, // W
-				watched: [ 'pump1', 'fan1', 'boiler1'/*, 'boiler2', 'gloggmaker1', 'chiller1' 
+				watched: [ 'pump1', /*'fan1', 'boiler1', 'boiler2', 'gloggmaker1', 'chiller1' 
 				*/]
 			}
 

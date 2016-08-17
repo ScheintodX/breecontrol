@@ -29,8 +29,8 @@ module.exports = function( DEVICE ) {
 			freq: .5,
 			iv: 300,
 			mode: 'simulate',
-			on: 60, //%
-			off: 40 //%
+			on: .60, //%
+			off: .40 //%
 		} ),
 
 		mode: AOnOffAuto( {
@@ -45,16 +45,16 @@ module.exports = function( DEVICE ) {
 
 		fill: SRefiller( {
 			topic: DEVICE + '/fill',
-			status: { range: [ 0, 30 ], initial: 20 },
+			status: { range: [ 0, 1 ], initial: .70, scale: 3 },
 			iv: 1000,
 			mode: 'simulate'
 		} ),
 
 		temp: SFloat( {
 			topic: DEVICE + '/temp',
-			status: { range: [ 0, 30 ], initial: 20 },
+			status: { range: [ 0, 100 ], initial: 20 },
 			iv: 2000,
-			mode: 'simple'
+			mode: 'random'
 		} )
 	}
 

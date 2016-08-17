@@ -24,8 +24,6 @@ BAG.Boiler_Controls = (function($){
 
 			if( !$c.isOne() ) return undefined;
 
-			console.log( $c );
-
 			// topic (for notify) is taken from button name.
 			var topic = $c.attr('name');
 

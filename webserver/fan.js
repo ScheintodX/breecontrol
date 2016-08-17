@@ -72,7 +72,7 @@ function createFan( index, config ) {
 
 		power: function() {
 
-			if( self.fan.status ) return self.conf.power;
+			if( self.fan.on.status ) return self.conf.power;
 
 			return 0;
 		},

@@ -52,7 +52,7 @@ function createPump( index, config ) {
 
 		power: function() {
 
-			if( self.pump.status ) return self.conf.power;
+			if( self.pump.on.status ) return self.conf.power;
 
 			return 0;
 		},

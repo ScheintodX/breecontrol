@@ -13,8 +13,6 @@ BAG.Boiler = (function($,Ψ){
 	// Constructor function
 	return function( elem, device, passive ) {
 
-		console.log( elem );
-
 		passive = passive || true;
 
 		var $elem = ( elem instanceof jQuery ? elem : $( elem ) )

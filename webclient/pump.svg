@@ -54,12 +54,12 @@
        inkscape:collect="always" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath3213">
+       id="clipPath4157">
       <path
          sodipodi:nodetypes="cccc"
          inkscape:connector-curvature="0"
-         id="path3215"
-         d="m 32.460236,912.36218 12.860854,81.81102 54.28572,0 17.06362,-81.81102"
+         id="path4159"
+         d="m 32.460236,952.36218 12.860854,81.81102 54.28572,0 17.06362,-81.81102"
          style="fill:#5c3566;stroke:none" />
     </clipPath>
   </defs>
@@ -70,9 +70,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="305.51375"
-     inkscape:cy="8.4186679"
+     inkscape:zoom="3.959798"
+     inkscape:cx="206.95511"
+     inkscape:cy="50.113648"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -100,22 +100,25 @@
      id="layer1"
      transform="translate(0,-952.36218)">
     <g
-       id="level"
-       clip-path="url(#clipPath3213)"
-       transform="translate(0,40)">
-      <path
-         sodipodi:nodetypes="ccscscsccc"
-         inkscape:connector-curvature="0"
-         id="path3202"
-         d="m 30.357143,949.50504 -0.08929,-19.46429 c -0.655961,1.23475 7.202504,16.66566 12.321429,10.80357 1.27036,-1.45479 4.358725,-11.40387 12.678571,-5.08928 -9.345693,2.30406 2.994056,12.49697 15.625,4.73214 3.461356,-2.12786 11.21212,-15.55189 20.089286,-10.89286 -8.819418,2.23982 -6.633848,11.68282 10.000001,8.30357 7.17487,-1.45761 17.14286,-11.78571 17.14286,-11.78571 l -0.26787,23.39286 z"
-         style="fill:#ffffff;stroke:none" />
-      <path
+       id="fill_container"
+       clip-path="url(#clipPath4157)">
+      <g
          clip-path="none"
-         sodipodi:nodetypes="ccccc"
-         inkscape:connector-curvature="0"
-         id="path4905"
-         d="m 30.31493,937.63628 0,67.17512 87.63073,0 0,-62.88197 C 79.8022,933.92663 53.48223,959.786 30.31493,937.63628 z"
-         style="fill:#edd400;stroke:none" />
+         id="fill_content">
+        <path
+           style="fill:#ffffff;stroke:none"
+           d="m 30.357143,989.50504 -0.08929,-19.46429 c -0.655961,1.23475 7.202504,16.66566 12.321429,10.80357 1.27036,-1.45479 4.358725,-11.40387 12.678571,-5.08928 -9.345693,2.30406 2.994056,12.49697 15.625,4.73214 3.461356,-2.12786 11.21212,-15.55189 20.089286,-10.89286 -8.819418,2.23982 -6.633848,11.68282 10.000001,8.30357 7.17487,-1.45761 17.14286,-11.78571 17.14286,-11.78571 l -0.26787,23.39286 z"
+           id="path3202"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccscscsccc" />
+        <path
+           style="fill:#edd400;stroke:none"
+           d="m 30.31493,977.63628 0,67.17512 87.63073,0 0,-62.88197 C 79.8022,973.92663 53.48223,999.786 30.31493,977.63628 z"
+           id="path4905"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc"
+           clip-path="none" />
+      </g>
     </g>
     <text
        sodipodi:linespacing="125%"
@@ -195,13 +198,13 @@
            style="font-size:39.39413834px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
            x="64.202766"
            y="1004.2411"
-           id="outdoor_temp"
+           id="temp"
            sodipodi:linespacing="125%"><tspan
              sodipodi:role="line"
              id="tspan4787"
              x="64.202766"
              y="1004.2411"
-             style="text-align:end;text-anchor:end">24</tspan></text>
+             style="text-align:end;text-anchor:end">44</tspan></text>
         <text
            sodipodi:linespacing="125%"
            id="text4231"
@@ -248,5 +251,14 @@
        id="path4393"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc" />
+    <rect
+       style="opacity:1;color:#000000;fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect4258"
+       width="7.323606"
+       height="12.879445"
+       x="10.354064"
+       y="8.8337326"
+       transform="translate(0,952.36218)"
+       ry="3.661803" />
   </g>
 </svg>

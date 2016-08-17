@@ -30,11 +30,11 @@ module.exports = function( conf ) {
 
 				} else if( mode == "auto" ) {
 
-					if( Sensors.fill.status >= self.conf.on ) {
+					if( Sensors.fill.status >= conf.on ) {
 
 						self.status = true;
 
-					} else if( Sensors.fill.status <= self.conf.off ) {
+					} else if( Sensors.fill.status <= conf.off ) {
 
 						self.status = false;
 					}
