@@ -33,8 +33,8 @@ module.exports = function( done ) {
 				capacity: 180, // L
 				efficency: .8,
 				power: 9000, // W
-				upper: { minTemp: 0, maxTemp: 300 },
-				lower: { minTemp: 0, maxTemp: 300 }
+				upper: { minTemp: 0, maxTemp: 350 },
+				lower: { minTemp: 0, maxTemp: 350 }
 			}, {
 				id: 'fan1',
 				type: 'fan',

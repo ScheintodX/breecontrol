@@ -25,34 +25,30 @@ module.exports = function( conf, defaults ) {
 		if( typeof actual == 'undefined' )
 				return nominal + overheat;
 
-		// if( nominal == 100 )
-
-		var opti;
-		// boiling mode
-		/*
+		var boiling = 0;
 		if( nominal >= 100 ) {
+			boiling = nominal-100;
+			nominal = 100;
+		}
+
+		// normal operation
+		var opti = nominal
+				+ overheat
+				+ (nominal - actual) * boost
+				;
+
+		// boiling mode
+		if( boiling ) {
 
 			// verdunstungsenthalpie:
 			// 0,63kWh / kg Wasser
 
-			//var diffto100 = nominal-100;
-			//opti = 200+diffto100*50;
+			opti = Math.max( opti, 200+boiling*10 );
+		}
 
-			// full throttle
-			opti = 350;
+		opti = Math.min( opti, max );
 
-		// normal mode
-		} else {
-		*/
-		opti = nominal
-				+ overheat
-				+ (nominal - actual) * boost
-				;
-		//}
-
-		// console.log( "===", opti );
-
-		return Math.min( opti, max );
+		return opti;
 	}
 
 	var self = _.defaults( {
