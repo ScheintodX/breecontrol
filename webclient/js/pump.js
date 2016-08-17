@@ -64,8 +64,6 @@ BAG.Pump = (function($,Ψ){
 
 				var msg = data.devices[ device ];
 
-				console.log( msg );
-
 				if( 'pump' in msg ) {
 
 					var pump = msg.pump;
