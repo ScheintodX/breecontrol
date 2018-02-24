@@ -53,7 +53,7 @@ BAG.Com = (function(){
 		// With Apache and WS on dedicated port
 		//_websocket = new WebSocket( 'ws://' + location.host + ':' + BAG.Config.ws.port + '/' );
 		// With WS on same port using upgrade
-		_websocket = new WebSocket( 'ws://' + location.host + '' );
+		_websocket = new WebSocket( 'ws://' + location.host + '/ws' );
 		_websocket.onmessage = gotData;
 		_websocket.onopen = gotOpen;
 		_websocket.gotclose = gotClose;

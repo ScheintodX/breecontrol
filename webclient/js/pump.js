@@ -46,8 +46,6 @@ BAG.Pump = (function($,Ψ){
 				    round = ( value * 100 )<<0
 					;
 
-				console.log( move );
-
 				$svg('fill_content')
 						.velocity( { translateY: move }, { duration: 500 } )
 						;
@@ -63,8 +61,6 @@ BAG.Pump = (function($,Ψ){
 				if( !( 'devices' in data ) ) return;
 
 				var msg = data.devices[ device ];
-
-				console.log( msg );
 
 				if( 'pump' in msg ) {
 

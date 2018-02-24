@@ -5,7 +5,7 @@ module.exports = function( done ) {
 	return done( null, {
 
 		ws: {
-			port: 80,
+			port: 3001,
 		},
 
 		updateIntervalCtrl: 500,
@@ -24,7 +24,6 @@ module.exports = function( done ) {
 		},
 
 		devices: [
-			/*
 			{
 				id: 'boiler1',
 				type: "boiler",
@@ -34,14 +33,14 @@ module.exports = function( done ) {
 				capacity: 180, // L
 				efficency: .8,
 				power: 9000, // W
-				upper: { minTemp: 0, maxTemp: 300 },
-				lower: { minTemp: 0, maxTemp: 300 }
+				upper: { minTemp: 0, maxTemp: 450 },
+				lower: { minTemp: 0, maxTemp: 450 }
 			}, {
 				id: 'fan1',
 				type: 'fan',
 				name: 'Soeder',
 				power: 400
-			},*/ {
+			}, {
 				id: 'pump1',
 				type: 'pump',
 				name: 'Arni',
@@ -82,7 +81,7 @@ module.exports = function( done ) {
 				type: "powerguard",
 				name: "powerguard",
 				maxPower: 12000, // W
-				watched: [ 'pump1', /*'fan1', 'boiler1', 'boiler2', 'gloggmaker1', 'chiller1' 
+				watched: [ 'pump1', 'fan1', 'boiler1',/* 'boiler2', 'gloggmaker1', 'chiller1' 
 				*/]
 			}
 

@@ -1,0 +1,24 @@
+{
+	"name": "Aufheizen",
+	"script": "5steps.js",
+	"steps": [
+		{
+			"heat": 10
+		},
+		{
+			"heat": 10,
+			"hold": 43200
+		},
+		{
+			"heat": 62,
+			"hold": 42000
+		},
+		{
+			"heat": 62,
+			"hold": 600
+		},
+		{
+			"heat": 62
+		}
+	]
+}

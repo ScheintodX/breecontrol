@@ -1,0 +1,25 @@
+[Unit]
+Description=Der Braumeister kocht mal wieder
+After=mosquitto.service
+
+[Service]
+
+ExecStart=/usr/bin/nodejs /var/lib/braumeister/webserver/main.js
+WorkingDirectory=/var/lib/braumeister/webserver
+
+Restart=always
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=braumeister
+
+User=braumeister
+Group=nogroup
+
+Environment=NODE_ENV=production
+
+
+[Install]
+
+WantedBy=multi-user.target
+
