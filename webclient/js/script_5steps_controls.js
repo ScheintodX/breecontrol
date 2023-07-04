@@ -37,12 +37,15 @@ BAG.Script_5Steps_Controls = (function($){
 		}
 
 		function readScript() {
+
 			function val( $s, name ) {
 				return $s.find( '[name="' + name + '"]' ).val();
 			}
+
 			function valF( $s, name ) {
 				return parseFloat( val( $s, name ) );
 			}
+
 			function valFF( i, name ) {
 				return valF( $secProgram.find( 'div.step' + i ), name );
 			}

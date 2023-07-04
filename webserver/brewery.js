@@ -130,6 +130,10 @@ module.exports = function( devices ) {
 		},
 
 		// Recursive access to fields via subscribe/emit
+		// this method is called by mqtt once connected
+		// 'emit' calls mqtt.subscribe
+		// so this is a onConnect callback with a funtion
+		// to subscribe to topics
 		subscribe: function( emit ) {
 
 			emit( 'infrastructure/#' );
