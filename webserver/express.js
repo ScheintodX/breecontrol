@@ -1,23 +1,16 @@
-"use strict";
+import { log } from './logging.js';
+import { E } from './E.js';
 
-var log = require( './logging.js' );
-var E = require( './E.js' );
-var async = require( 'async' );
+import { Assert } from './assert.js';
 
-var Assert = require( './assert.js' );
-
-var server = require( 'http' ).createServer(),
-    url = require('url'),
-	WebSocketServer = require( 'ws' ).Server,
-	wss,
-	express = require( 'express' ),
-	app,
-	PORT
-	;
-
+import Http from 'http';
+import Ws from 'ws';
+import Express from 'express';
 
 var _onData = false;
 var _hello = false;
+
+var _wss;
 
 function onSendError( error ) {
 
@@ -41,7 +34,7 @@ function sendToAll( data ) {
 
 	//log.trace( "send (" + wss.connections.length + ")", text );
 
-	wss.clients.forEach( function( client ) {
+	_wss.clients.forEach( function( client ) {
 
 		if( client.readyState != client.OPEN ){
 
@@ -78,7 +71,7 @@ function gotMessage( message ) {
 	}
 
 	try {
-		if( _onData ) _onData( data );
+		_onData( data );
 	} catch( ex ) {
 		return log.ex( ex, 'Processing Event: ', data );
 	}
@@ -86,8 +79,6 @@ function gotMessage( message ) {
 
 
 function gotConnection( conn ) {
-
-	//var location = url.parse( conn.upgradeReq.url, true );
 
 	conn.on( 'message', gotMessage );
 	conn.on( 'error', gotError );
@@ -101,52 +92,47 @@ function gotConnection( conn ) {
 }
 
 
-function startWSS( server, done ){
+async function startWSS( server ){
 
-	wss = new WebSocketServer( { server: server } );
+	var wss = new Ws.Server( { server: server } );
 	wss.on( 'connection', gotConnection );
 	wss.on( 'error', gotError );
 
-	// Constructor has a callback but it's only called if started on dedicated port
-	return done();
+	return wss;
+}
+
+function startHttpServer( server, app, port ){
+
+	return new Promise( resolve => {
+
+		server.on( 'request', app );
+		server.listen( port, 'localhost', () => resolve( server ) );
+	} );
 }
 
 
-function startHttpServer( server, app, done ){
-
-	server.on( 'request', app );
-	server.listen( PORT, done );
-}
-
-
-module.exports = function( onData, hello, config, done ) {
-
+export default async function Websocket( onData, hello, config ) {
+	
 	Assert.present( 'onData', onData );
 	Assert.present( 'config', config );
-	Assert.present( 'done', done );
 
 	log.trace( "Express starting" );
 
-	PORT = config.port;
+	_hello = hello;
+	_onData = onData;
 
 	var __websocket = {
 		send: sendToAll
 	}
 
-	_hello = hello;
-	_onData = onData;
+	const server = Http.createServer();
 
-	app = express();
-	app.use( express.static( '../webclient' ) );
+	const app = Express();
+	app.use( Express.static( '../webclient' ) );
 
-	async.series( [
+	_wss = await startWSS( server );
 
-		function( done ){ startWSS( server, done ); },
-		function( done ){ startHttpServer( server, app, done ); }
+	await startHttpServer( server, app, config.port );
 
-	], function( err ){
-
-		return done( err, __websocket );
-	} );
-
+	return __websocket;
 }

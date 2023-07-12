@@ -1,10 +1,7 @@
-"use strict";
+import { Mqtt } from '../helpers.js';
+import _ from 'underscore';
 
-var E = require( '../E.js' );
-var MQTT = require( '../helpers.js' ).mqtt;
-var _ = require( 'underscore' );
-
-module.exports = function( conf, defaults ) {
+export default function( conf, defaults ) {
 
 	defaults = defaults || {};
 
@@ -30,7 +27,7 @@ module.exports = function( conf, defaults ) {
 
 			if( topic == 'status' || topic == 'nominal' ) {
 
-				self[ topic ] = MQTT.fromString( data, self._conf.type );
+				self[ topic ] = Mqtt.fromString( data, self._conf.type );
 				self._time = new Date();
 			}
 		},
@@ -40,7 +37,7 @@ module.exports = function( conf, defaults ) {
 		},
 		publish: function( emit ) {
 			if( typeof self.set != 'undefined' )
-					emit( 'set', MQTT.toString( self.set, self._conf.type, 1 ) );
+					emit( 'set', Mqtt.toString( self.set, self._conf.type, 1 ) );
 		}
 
 	}, defaults );

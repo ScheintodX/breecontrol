@@ -20,7 +20,6 @@ BAG.Com = (function(){
 
 			setTimeout( reconnect, 2000 );
 		}
-
 	}
 
 	function gotOpen( what ) {
@@ -53,7 +52,7 @@ BAG.Com = (function(){
 		// With Apache and WS on dedicated port
 		//_websocket = new WebSocket( 'ws://' + location.host + ':' + BAG.Config.ws.port + '/' );
 		// With WS on same port using upgrade
-		_websocket = new WebSocket( 'ws://' + location.host + '/ws' );
+		_websocket = new WebSocket( 'wss://' + location.host + '/ws' );
 		_websocket.onmessage = gotData;
 		_websocket.onopen = gotOpen;
 		_websocket.gotclose = gotClose;

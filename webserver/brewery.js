@@ -1,15 +1,14 @@
-"use strict";
+import { Assert } from './assert.js';
+import { log } from './logging.js';
+import { Message as HM, Json as JS } from './helpers.js';
+import _ from 'underscore';
+import jdp from 'jsondiffpatch';
 
-var log = require( './logging.js' );
-var HM = require( './helpers.js' ).message,
-    JS = require( './helpers.js' ).json;;
-var Dot = require( 'dot-object' );
-var _ = require( 'underscore' );
-var E = require( './E.js' );
-var jdp = require( 'jsondiffpatch' );
+export default async function Brewery( config ) {
 
-module.exports = function( devices ) {
+	Assert.present( config, "config" );
 
+	/*
 	function diff( orig, changed ) {
 
 		var result = {};
@@ -28,6 +27,7 @@ module.exports = function( devices ) {
 
 		return result;
 	}
+	*/
 
 	function doSupervised( f ) {
 
@@ -39,6 +39,16 @@ module.exports = function( devices ) {
 
 		return jdp.diff( original, changed );
 	}
+
+	async function load( config, index ){
+
+		const {default:Factory} = await import( "./devices/" + config.type + ".js" );
+		return [ config.id, Factory( config, index ) ];
+	}
+
+	const devices = await Promise.all( config.devices.map( load ) )
+			.then( Object.fromEntries )
+			;
 
 	var self = {
 

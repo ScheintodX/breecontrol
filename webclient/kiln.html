@@ -1,11 +1,11 @@
 <header>
-	<h1>BOILER: SCRIPT</h1>
+	<h1>KILN: SCRIPT</h1>
 	<h2></h2>
 	<button class="manual">Manual</button>
 	<button class="script">Script</button>
 </header>
 
-<object class="boiler" data="boiler.svg"></object>
+<object class="kiln" data="kiln.svg"></object>
 
 <div class="runstopinfo"></div>
 
@@ -22,35 +22,19 @@
 		<input class="temp" type="number" min="0" max="115" step="1" name=".temp.set"/>
 	</label>
 
-	<label>
-		<h6>Aggitator</h6>
-		<input type="checkbox" name=".aggitator.set" />
-	</label>
-
 
 	<h3>Tuning</h3>
 
 	<label>
-		<h6>Max. Upper Temp / °C</h6>
-		<input class="temp" type="number" min="0" max="350" step="10" name=".upper.temp.max"/>
+		<h6>Extra Mass</h6>
+		<input class="mass" type="number" min="0" max="500" step="10" name=".extramass.set"/>
 	</label>
-
-	<label>
-		<h6>Max. Lower Temp / °C</h6>
-		<input class="temp" type="number" min="0" max="350" step="10" name=".lower.temp.max"/>
-	</label>
-
 
 	<h3>Sensors override</h3>
 
 	<label>
-		<h6>Water Level / %</h6>
-		<input class="fill" type="number" min="0" max="100" step="10" name=".fill.override" />
-	</label>
-
-	<label>
-		<h6>Lid Closed</h6>
-		<input type="checkbox" name=".lid.override" />
+		<h6>Door Closed</h6>
+		<input type="checkbox" name=".door.override" />
 	</label>
 
 </section><!--/.manual-->

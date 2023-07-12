@@ -1,6 +1,5 @@
-"use strict";
+export const Assert = {
 
-module.exports = {
 	present: function( name, value ) {
 		if( typeof value == 'undefined' ) throw new Error( "'" + name + "' is missing" );
 	},

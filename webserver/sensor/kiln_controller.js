@@ -86,5 +86,7 @@ export default function( conf, defaults ) {
 
 	}, defaults );
 
+	console.log( self );
+
 	return self;
 };

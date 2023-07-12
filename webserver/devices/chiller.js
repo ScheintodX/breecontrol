@@ -1,29 +1,9 @@
-"use strict";
+import { Message as HM } from '../helpers.js';
 
-require( './polyfill.js' );
+import InProxy from '../sensor/in_proxy.js';
+import Combined from '../sensor/combined.js';
 
-var _ = require( 'underscore' );
-
-var Dot = require( 'dot-object' ),
-	dash = new Dot( '/' );
-
-var E = require( './E.js' ),
-	Assert = require( './assert.js' );
-
-var H = require( './helpers.js' );
-
-var log = require( './logging.js' );
-
-var InProxy = require( './sensor/in_proxy.js' ),
-	OutProxy = require( './sensor/out_proxy.js' ),
-	InOutProxy = require( './sensor/inout_proxy.js' ),
-	TempControllerCooler = require( './sensor/temp_controller_cooler.js' ),
-	Combined = require( './sensor/combined.js' ),
-	Cooler = require( './sensor/cooler.js' ),
-	Aggitator = require( './sensor/aggitator.js' )
-	;
-
-function createBoiler( index, config ) {
+export default function createChiller( config, index ) {
 
 	var self = Object.assign( {
 
@@ -92,7 +72,7 @@ function createBoiler( index, config ) {
 			for( var i=0; i<self._watchTime.length; i++ ) {
 
 				var name = self._watchTime[ i ];
-				var w = H.message.getByDot( self, name );
+				var w = HM.getByDot( self, name );
 				//var w = self._watchTime[ i ];
 
 				var age = now - w._time;
@@ -122,7 +102,3 @@ function createBoiler( index, config ) {
 
 	return self;
 };
-
-module.exports = {};
-
-module.exports.create = createBoiler;

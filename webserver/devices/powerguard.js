@@ -1,19 +1,10 @@
-"use strict";
+import { Assert } from '../assert.js';
+import { E } from '../E.js';
 
-require( './polyfill.js' );
+import InProxy from '../sensor/in_proxy.js';
+import Combined from '../sensor/combined.js';
 
-var Assert = require( './assert.js' );
-var E = require( './E.js' );
-
-var H = require( './helpers.js' );
-
-var log = require( './logging.js' );
-
-var InProxy = require( './sensor/in_proxy.js' ),
-	Combined = require( './sensor/combined.js' )
-	;
-
-function createPowerguard( index, config ) {
+export default function createPowerguard( config, index ) {
 
 	var self = Object.assign( {
 
@@ -47,11 +38,9 @@ function createPowerguard( index, config ) {
 
 				if( !( 'power' in dev ) ) continue;
 
-				var power = dev.power(),
+				var power = dev.calculatePower(),
 					expected = power + sum
 					;;
-
-				//E.rr( device, power, expected );
 
 				if( expected > max ) {
 
@@ -63,7 +52,7 @@ function createPowerguard( index, config ) {
 					}
 				}
 
-				sum += dev.power(); // get power again because we need the real limited value;
+				sum += dev.calculatePower(); // get power again because we need the real limited value;
 
 			}
 
@@ -75,7 +64,3 @@ function createPowerguard( index, config ) {
 
 	return self;
 }
-
-module.exports = {};
-
-module.exports.create = createPowerguard;

@@ -18,6 +18,17 @@ BAG.Function = ( function(){
 				c1[2] * (1-val) + c2[2]*val
 		]);
 	}
+	function mixArray( colors, power ) {
+		var rangeSize = 1 / ( colors.length-1 );
+		var rangeIndex = Math.floor(power / rangeSize );
+		var percent = ( power - ( rangeIndex * rangeSize )) / rangeSize;
+
+		var c1 = colors[rangeIndex];
+		var c2 = colors[rangeIndex + 1];
+
+		return mix(c1, c2, percent);
+	}
+
 
 	return function( svg ){
 	
@@ -135,6 +146,20 @@ BAG.Function = ( function(){
 					else if( heat < 300 ) color = mix( X[3], X[4], (heat-200)/100 );
 					else if( heat < 400 ) color = mix( X[4], X[5], (heat-300)/100 );
 					else color = col( X[3] );
+					return f( color );
+				}
+			},
+
+			asPowerColor: function( f, max ){
+				const colors = [
+					[ 0x00, 0x22, 0xff ]
+					[ 0xff, 0xff, 0x22 ],
+					[ 0xff, 0x22, 0x00 ]
+				]
+
+				return function( power ){
+					var percent = power/max;
+					var color = mixArray( colors, percent );
 					return f( color );
 				}
 			},

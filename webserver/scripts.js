@@ -1,16 +1,13 @@
-"use strict";
-
 /**
  * Load / Save scripts
  * List available scripts
  */
 
-var fs = require( 'fs' );
-var _ = require( 'underscore' );
-var log = require( './logging.js' );
-var JS = require( './helpers.js' ).json;
+import fs from 'fs';
+import _ from 'underscore';
+import { log } from './logging.js';
 
-var E = require( './E.js' );
+import { Json as JS } from './helpers.js';
 
 var _CONFIG_ = 'scriptconfig/',
 	_SCRIPT_ = 'script/';
@@ -45,13 +42,12 @@ function load( name, done ) {
 		try {
 			var scriptconfig = JSON.parse( data );
 
-			var Script = require( './' + _SCRIPT_ + scriptconfig.script );
+			import( './' + _SCRIPT_ + scriptconfig.script )
+					.then( Script => done( null, Skript, scriptconfig ) );
 
 		} catch( ex ) {
 			return done( ex );
 		}
-
-		return done( null, Script, scriptconfig );
 
 	} );
 }
@@ -83,7 +79,7 @@ function list( done ) {
 	} );
 }
 
-module.exports = {
+export const Scripts = {
 	list: list,
 	load: load,
 	save: save

@@ -14,7 +14,7 @@
 			dControls = dModule + "_Controls"
 			;
 
-		console.trace( "LOAD", dId );
+		console.trace( "LOAD DEV", dId );
 
 		var id = dId,
 			$device = $( '<section class="tab device ' + dType + '"/>' )
@@ -53,6 +53,8 @@
 		}
 
 		if( 'config' in data ) {
+
+			console.log( data.config );
 
 			var $main = $('main');
 

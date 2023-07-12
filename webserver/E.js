@@ -1,5 +1,4 @@
-"use strict";
-require( 'colors' );
+import 'colors';
 
 function stack( depth ) {
 
@@ -15,7 +14,7 @@ function stack( depth ) {
 	}
 }
 
-module.exports = {
+export const E = {
 
 	rr: function(){
 

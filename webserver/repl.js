@@ -1,18 +1,18 @@
-var repl = require('repl')
-var net = require('net')
+import repl from 'repl';
+import net from 'net';
 
 var help = {
 
 	A: "B"
 };
 
-module.exports = function( context, port ) {
+export default function Repl( context, port ) {
 
 	var r;
 
 	function addContext( context, value ) {
 		if( arguments.length == 1 ) {
-			for( key in context ) {
+			for( const key in context ) {
 				r.context[ key ] = context[ key ];
 			}
 		} else if( arguments.length == 2 ) {
