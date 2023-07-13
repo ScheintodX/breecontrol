@@ -13,6 +13,7 @@ var _mqtt = false;
 
 const config = {
     //url: "mqtt://mqtt.flo.axon-e.de:1883",
+    client: "kilnsim",
     url: "mqtt://localhost:1883",
     username: "lakai",
     password: "lakai",

@@ -50,8 +50,3 @@ log.file = function( file ) {
 	log.FILE = file;
 	return log;
 }
-
-log.pause = function( value ) {
-	log.pause = value;
-	return log;
-}

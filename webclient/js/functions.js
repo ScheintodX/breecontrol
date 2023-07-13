@@ -18,15 +18,19 @@ BAG.Function = ( function(){
 				c1[2] * (1-val) + c2[2]*val
 		]);
 	}
-	function mixArray( colors, power ) {
-		var rangeSize = 1 / ( colors.length-1 );
-		var rangeIndex = Math.floor(power / rangeSize );
-		var percent = ( power - ( rangeIndex * rangeSize )) / rangeSize;
+
+	function mixArray( colors, percent ) {
+
+		var rangeSize = 1 / ( colors.length-1 ); //e.g. 3 colors: 0..0.5..1
+		var rangeIndex = Math.floor( percent / rangeSize + 0.5 ) - 1;
+		var subpercent = ( percent - ( rangeIndex * rangeSize )) / rangeSize;
+
+		console.log( percent, rangeSize, rangeIndex, subpercent );
 
 		var c1 = colors[rangeIndex];
 		var c2 = colors[rangeIndex + 1];
 
-		return mix(c1, c2, percent);
+		return mix(c1, c2, subpercent);
 	}
 
 
@@ -100,6 +104,22 @@ BAG.Function = ( function(){
 				};
 			},
 
+			asUnit: function( f, unit, exp, scale ) {
+
+				if( !scale ) scale = 1000;
+
+				return function( val ) {
+					var text;
+					if( val !== 0 && !val ) text = '??';
+					else {
+						val = val / Math.pow( 10, exp );
+						text = val.toScale( scale );
+						text += " " + unit;
+					}
+					return f( text );
+				};
+			},
+
 			asHourMinSec: function( f ) {
 
 				return function( val ) {
@@ -152,10 +172,10 @@ BAG.Function = ( function(){
 
 			asPowerColor: function( f, max ){
 				const colors = [
-					[ 0x00, 0x22, 0xff ]
+					[ 0x00, 0x22, 0xff ],
 					[ 0xff, 0xff, 0x22 ],
 					[ 0xff, 0x22, 0x00 ]
-				]
+				];
 
 				return function( power ){
 					var percent = power/max;

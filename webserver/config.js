@@ -14,6 +14,7 @@ export default function Config(){
 
 			mqtt: {
 				url: 'mqtt://localhost:1883/',
+				client: "brewmaster",
 				username: 'braumeister',
 				password: 'braumeister',
 				prefix: 'braumeister/'
@@ -24,15 +25,14 @@ export default function Config(){
 			},
 
 			devices: [
-				{
+				/*{
 					id: 'kiln1',
 					type: 'kiln',
 					name: 'Kera der Großklotz',
 					minTemp: 0,
 					maxTemp: 1300,
-					power: 18000
-				}
-				/*
+					maxPower: 18000
+				},*/
 				{
 					id: 'boiler1',
 					type: "boiler",
@@ -44,7 +44,7 @@ export default function Config(){
 					power: 9000, // W
 					upper: { minTemp: 0, maxTemp: 450 },
 					lower: { minTemp: 0, maxTemp: 450 }
-				}, {
+				}/*, {
 					id: 'fan1',
 					type: 'fan',
 					name: 'Soeder',

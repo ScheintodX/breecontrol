@@ -132,9 +132,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="195.51503"
-     inkscape:cy="126.39534"
+     inkscape:zoom="2"
+     inkscape:cx="204"
+     inkscape:cy="124.25"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -250,7 +250,7 @@
        x="207.07642"
        height="142.17853"
        width="15.494354"
-       id="temp_icon"
+       id="temp_heater_icon"
        style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#ef2929;fill-opacity:1;fill-rule:nonzero;stroke:#2e3436;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;marker:none;enable-background:accumulate" />
     <path
        style="fill:none;stroke:#ce5c00;stroke-width:2.13716;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -425,17 +425,19 @@
        id="rect5105"
        width="18.791565"
        height="22.903328"
-       x="81.001915"
-       y="1009.2436"
-       ry="1.6847187" />
+       x="125.19579"
+       y="1004.3611"
+       ry="1.6847187"
+       transform="rotate(2.4863391)" />
     <rect
        style="fill:#ffffff;stroke-width:1.51181;stop-color:#000000"
        id="rect5187"
        width="15.058474"
        height="18.353403"
-       x="102.89158"
-       y="1013.6418"
-       ry="1.3500361" />
+       x="57.070732"
+       y="1017.5546"
+       ry="1.3500361"
+       transform="rotate(-2.5614443)" />
     <path
        id="rect5211"
        style="fill:#ffffff;stroke-width:1.51181;stop-color:#000000"
@@ -448,8 +450,47 @@
        sodipodi:nodetypes="ssszzzzsssssss" />
     <path
        style="fill:#ffffff;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 125.02063,1020.8075 c -0.69768,4.8987 0.94662,7.1734 2.19822,9.8882 l 22.9038,0.1867 1.49848,-5.0134 -11.54033,-1.5242 1.5621,-10.6342 -10.97931,-1.1314 -0.27509,1.3307 2.76562,0.419 -1.2957,8.1515 z"
+       d="m 131.56898,1032.2443 19.01477,0.1612 1.30235,-4.4728 -7.90817,-1.5085 -0.0171,-1.1902 -2.69934,-0.6955 0.85029,-8.9581 -1.2224,-0.2169 0.28632,-2.3237 -2.22807,-0.2679 -0.28174,2.3242 -6.88289,-0.7576 -0.11323,1.7407 1.1314,0.1284 c 0.31228,2.0209 0.0889,3.9966 -0.075,5.9773 -3.41692,-0.3273 -5.92462,-1.2895 -7.96643,-2.2024 0.61597,8.5048 3.87027,10.5545 6.80924,12.2618 z"
        id="path8311"
-       sodipodi:nodetypes="ccccccccccc" />
+       sodipodi:nodetypes="ccccccccccccccccc" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4779"
+       d="M 223.08988,1035.2812 H 335.89796"
+       style="fill:none;stroke:#eeeeec;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cc" />
+    <text
+       id="heater_power_status"
+       y="1032.0814"
+       x="279.56458"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.45006px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1"
+       xml:space="preserve"><tspan
+         style="font-weight:bold;font-size:10.6146px;line-height:1.25;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';text-align:end;text-anchor:end;stroke-width:1"
+         y="1032.0814"
+         x="279.56458"
+         id="tspan4783"
+         sodipodi:role="line">11.3kW</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.45006px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1"
+       x="334.60651"
+       y="1032.0814"
+       id="heater_power_nominal"><tspan
+         sodipodi:role="line"
+         id="tspan3985"
+         x="334.60651"
+         y="1032.0814"
+         style="font-weight:bold;font-size:10.6146px;line-height:1.25;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';text-align:end;text-anchor:end;stroke-width:1">18.0kW</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none"
+       x="288.80908"
+       y="1031.9896"
+       id="text3991"><tspan
+         sodipodi:role="line"
+         id="tspan3993"
+         x="288.80908"
+         y="1031.9896"
+         style="font-weight:bold;font-size:17.0972px;line-height:1.25;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';text-align:end;text-anchor:end">/</tspan></text>
   </g>
 </svg>

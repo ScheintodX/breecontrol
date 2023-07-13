@@ -55,6 +55,10 @@ function peek( what ){
 	Number.prototype.toPercent = function() {
 		return Math.round( this*100 ) + '%';
 	}
+	Number.prototype.toScale = function( prec ) {
+		if( !prec ) prec = 10;
+		return floor( this, prec ).toLocaleString();
+	}
 	/*
 	String.prototype.toF = function() {
 		return parseFloat( this );

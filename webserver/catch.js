@@ -1,3 +1,5 @@
+import { E } from './E.js';
+
 var _log;
 
 function gotError( done, err, module ) {

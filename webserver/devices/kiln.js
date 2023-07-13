@@ -1,6 +1,7 @@
 import { Message as HM } from '../helpers.js';
 
 import InProxy from '../sensor/in_proxy.js';
+import InOutProxy from '../sensor/inout_proxy.js';
 import Combined from '../sensor/combined.js';
 
 export default function createKiln( config, index ) {
@@ -17,7 +18,7 @@ export default function createKiln( config, index ) {
 				type: 'f',
 				timeout: 2500 } ),
 
-		power: InProxy( {
+		power: InOutProxy( {
 				type: 'f',
 				timeout: 2500 } ),
 

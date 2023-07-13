@@ -27,7 +27,7 @@
 							$script = $device.find( 'section.script' )
 							;
 
-						console.log( dId, dType, dModule );
+						//console.log( dId, dType, dModule );
 
 						// Tab
 						ctrl.put( 'tab_'+id, BAG.Tab( $device, id ) );

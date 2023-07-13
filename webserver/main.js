@@ -53,6 +53,10 @@ async function initBrewery( config ) {
 			devices: brewery.devices,
 	} );
 
+	for( const [name,device] of Object.entries( brewery.devices ) ){
+		repl.addContext( name, device );
+	}
+
 	log.startup( "brewery", "READY" );
 
 	return brewery;
@@ -60,11 +64,11 @@ async function initBrewery( config ) {
 
 async function startMqtt( config, ctrl, brewery ) {
 
-	const mqtt = await Mqtt( ctrl.gotMqttData, config.mqtt, brewery.subscribe );
+	const mqtt = await Mqtt( ctrl.gotMqttData, config.mqtt, brewery.subscribe, ctrl.filter );
 			
 	Assert.present( 'mqtt', mqtt );
 
-	ctrl.onMqttMessage( mqtt.send );
+	ctrl.setMqttCom( mqtt.send );
 
 	log.startup( "mqtt", "STARTED" );
 
@@ -77,7 +81,7 @@ async function startWebsocket( config, ctrl ) {
 
 	Assert.present( 'websocket', websocket );
 
-	ctrl.onWebMessage( websocket.send );
+	ctrl.setWebCom( websocket.send );
 
 	log.startup( "websockets", "STARTED" );
 

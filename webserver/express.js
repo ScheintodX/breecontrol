@@ -4,7 +4,7 @@ import { E } from './E.js';
 import { Assert } from './assert.js';
 
 import Http from 'http';
-import Ws from 'ws';
+import { WebSocketServer } from 'ws';
 import Express from 'express';
 
 var _onData = false;
@@ -94,7 +94,7 @@ function gotConnection( conn ) {
 
 async function startWSS( server ){
 
-	var wss = new Ws.Server( { server: server } );
+	var wss = new WebSocketServer( { server } );
 	wss.on( 'connection', gotConnection );
 	wss.on( 'error', gotError );
 

@@ -1,30 +1,34 @@
 #!/usr/bin/nodejs
 
-"use strict";
+import util from 'util';
 
-var util = require( 'util' );
+import { E } from '../E.js';
+import './patch.js';
 
-var E = require( '../E.js' );
-require( '../polyfill.js' );
-require( './patch.js' );
+import Config from '../config.js';
 
-var config = require( '../config.js' )( function( err, data ){ return data; } );
+import mqtt from 'mqtt';
 
-var mqtt = require( 'mqtt' );
+import { log } from '../logging.js';
+log.file( '/var/log/braumeister/braumeister.test' );
 
-var log = require( '../logging.js' )
-		.file( '/var/log/braumeister/braumeister.test' );
+import Boiler from './sim_boiler';
+import Gloggmaker from './sim_gloggmaker';
+import Chiller from './sim_chiller';
+import Fan from './sim_fan';
+import Pump from './sim_pump';
 
 var Devices = {
-	boiler1: require( './sim_boiler.js' )( 'boiler1' ),
-	//boiler2: require( './sim_boiler.js' )( 'boiler2' ),
-	//gloggmaker1: require( './sim_gloggmaker.js' )( 'gloggmaker1' ),
-	//chiller1: require( './sim_chiller.js' )( 'chiller1' ),
-	fan1: require( './sim_fan.js' )( 'fan1' ),
-	pump1: require( './sim_pump.js' )( 'pump1' )
+	boiler1: Boiler( 'boiler1' ),
+	//boiler2: Boiler( 'boiler2' ),
+	//gloggmaker1: Gloggmaker( 'gloggmaker1' ),
+	//chiller1: Chiller( 'chiller1' ),
+	fan1: Fan( 'fan1' ),
+	pump1: Pump( 'pump1' )
 };
 
-var repl = require( '../repl.js' )( Devices );
+import Repl from '../repl.js';
+var repl = Repl( Devices );
 
 function emit( topic, data ) {
 
@@ -34,7 +38,6 @@ function emit( topic, data ) {
 function run( sensor, device ) {
 
 	return function() {
-
 		sensor.run( emit, device );
 	}
 }
@@ -124,3 +127,10 @@ var mqttClient = mqtt.connect( config.mqtt.url, {
 		;
 
 repl.addContext( { mqtt: mqttClient, config: config } );
+
+
+async main(){
+
+}
+
+main();

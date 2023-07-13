@@ -9,6 +9,8 @@ import { Scripts } from './scripts.js';
 
 export default function Ctr( config, hello, brewery ) {
 
+	const PRESENCE = "infrastructure/brewmaster/presence";
+
 	return new Promise( resolve => {
 
 		Assert.present( "config", config );
@@ -38,8 +40,8 @@ export default function Ctr( config, hello, brewery ) {
 		}
 
 		function sendStatusMqtt() {
-			
-			_mqtt( 'infrastructure/brewmaster/presence', "brewmaster" );
+
+			_mqtt( PRESENCE, "brewmaster" );
 
 			brewery.watch();
 
@@ -209,27 +211,35 @@ export default function Ctr( config, hello, brewery ) {
 
 			gotMqttData: Catch.fatal( "Ctrl/GotMqtt", function( topic, data ) {
 
+				if( topic == PRESENCE ) return;
+
 				if( !isReady() ) {
 					log.warn( "Premature mqtt data: ", topic, data );
 				}
 
 				var diff = brewery.setByMqtt( topic, data );
 
+				log.trace( "MqttDiff", diff );
+
 				if( diff ) {
 					_web( { diff: diff } );
 				}
 			} ),
 
-			onMqttMessage: function( mqtt ) {
+			filter: ( topic ) => topic == PRESENCE,
 
-				_mqtt = Catch.fatal( "Ctrl/Mqtt", mqtt );
+			setMqttCom: function( mqtt ) {
+
+				//_mqtt = Catch.fatal( "Ctrl/Mqtt", mqtt );
+				_mqtt = mqtt;
 
 				Assert.present( "config.updateIntervalMqtt", config.updateIntervalMqtt );
 
-				setInterval( Catch.fatal( "Ctrl/SendStatusMqtt", sendStatusMqtt ), config.updateIntervalMqtt );
+			//	setInterval( Catch.fatal( "Ctrl/SendStatusMqtt", sendStatusMqtt ), config.updateIntervalMqtt );
+				setInterval( sendStatusMqtt, config.updateIntervalMqtt );
 			},
 
-			onWebMessage: function( web ) {
+			setWebCom: function( web ) {
 
 				_web = Catch.fatal( "Ctrl/WS", web );
 
