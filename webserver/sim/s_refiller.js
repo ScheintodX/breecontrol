@@ -1,12 +1,10 @@
-"use strict";
+import { E } from "../E.js";
+import _ from "underscore";
 
-var HQ = require( '../helpers.js' ).mqtt;
-var E = require( '../E.js' );
+import SFloat from "./s_float.js";
 
-var SFloat = require( './s_float.js' );
-var _ = require( 'underscore' );
 
-module.exports = function( conf ) {
+export default function SRefiller( conf ) {
 
 	var parent = SFloat( conf ),
 		parentRun = parent.run
@@ -41,4 +39,4 @@ module.exports = function( conf ) {
 	} );
 
 	return self;
-};
+}

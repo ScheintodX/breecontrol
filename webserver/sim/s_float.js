@@ -1,8 +1,9 @@
-"use strict";
+import { E } from "../E.js";
+import { Mqtt as  HQ } from '../helpers.js';
+import _ from "underscore";
 
-var HQ = require( '../helpers.js' ).mqtt;
 
-module.exports = function( conf ) {
+export default function SFloat( conf ) {
 
 	var r = conf.status.range;
 
@@ -29,4 +30,4 @@ module.exports = function( conf ) {
 		}
 	}
 	return self;
-};
+}

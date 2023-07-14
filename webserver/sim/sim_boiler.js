@@ -1,17 +1,15 @@
-"use strict";
+import './patch.js';
+import { E } from "../E.js";
+import _ from "underscore";
 
-var E = require( '../E.js' );
-require( '../polyfill.js' );
-require( './patch.js' );
+import SFloat from './s_float.js';
+import SBool from './s_bool.js';
+import ABool from './a_bool.js';
+import AJacket from './a_jacket.js';
+import SInnerTemp from './s_inner_temp.js';
 
-var SFloat = require( './s_float.js' ),
-	SBool = require( './s_bool.js' ),
-	ABool = require( './a_bool.js' ),
-	AJacket = require( './a_jacket.js' ),
-	SInnerTemp = require( './s_inner_temp.js' )
-	;
 
-module.exports = function( DEVICE ) {
+export default function SimBoiler( DEVICE ) {
 
 	var self = {
 
@@ -113,4 +111,4 @@ module.exports = function( DEVICE ) {
 	};
 
 	return self;
-};
+}

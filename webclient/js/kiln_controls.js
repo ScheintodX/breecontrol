@@ -13,14 +13,13 @@ BAG.Kiln_Controls = (function($){
 			;
 
 		function notify( on, topic, value ) {
-			console.trace( "NOTIFY", on, topic, value );
+			console.log( "NOTIFY", on, topic, value );
 			_onControl( { on: on, topic: topic, value: value, device: device } );
 		}
 
 		function Control( sel, scale ) {
 
-			var $c = $secManual.find( sel )
-					;
+			var $c = $secManual.find( sel );
 
 			if( !$c.isOne() ) return undefined;
 
@@ -38,19 +37,21 @@ BAG.Kiln_Controls = (function($){
 		}
 
 		var manualControls = {
-		// Tunde
-		 	'temp': Control( 'input[name=".temp.set"]' ),
+		// Manual
+		 	'powerfactor': Control( 'input[name=".powerfactor.set"]', 100 ),
 
 		// Override
-			'extramass': Control( 'input[name=".extramass"] ', 200 ),
-			'door.override': Control( 'input[name=".door.override"] ', 100 ),
+			'extramass': Control( 'input[name=".extramass.set"] ', 0.001 ),
+			'door.override': Control( 'input[name=".door.override"] ' ),
 		};
 
 		function gotData( data ) {
 
-			if( 'devices' in data ) {
+			if( 'devices' in data && device in data.devices ) {
 
 				var kiln = data.devices[ device ];
+
+				console.log( kiln );
 
 				$e.find( 'header h1' )
 						.text( kiln.name )
@@ -64,7 +65,8 @@ BAG.Kiln_Controls = (function($){
 					var control = manualControls[ key ];
 					if( typeof( control ) == 'undefined' ) continue;
 
-					control.set( value );
+					console.log( "set", value, control );
+					control.set( value.status );
 				}
 
 			}

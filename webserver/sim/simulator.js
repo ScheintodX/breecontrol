@@ -6,25 +6,29 @@ import { E } from '../E.js';
 import './patch.js';
 
 import Config from '../config.js';
+var _config;
 
 import mqtt from 'mqtt';
+var _mqttClient;
 
 import { log } from '../logging.js';
 log.file( '/var/log/braumeister/braumeister.test' );
 
-import Boiler from './sim_boiler';
-import Gloggmaker from './sim_gloggmaker';
-import Chiller from './sim_chiller';
-import Fan from './sim_fan';
-import Pump from './sim_pump';
+import Boiler from './sim_boiler.js';
+import Gloggmaker from './sim_gloggmaker.js';
+import Chiller from './sim_chiller.js';
+import Fan from './sim_fan.js';
+import Pump from './sim_pump.js';
+import Kiln from './sim_kiln.js';
 
 var Devices = {
-	boiler1: Boiler( 'boiler1' ),
+	kiln1: Kiln( 'kiln1' ),
+	//boiler1: Boiler( 'boiler1' ),
 	//boiler2: Boiler( 'boiler2' ),
 	//gloggmaker1: Gloggmaker( 'gloggmaker1' ),
 	//chiller1: Chiller( 'chiller1' ),
-	fan1: Fan( 'fan1' ),
-	pump1: Pump( 'pump1' )
+	//fan1: Fan( 'fan1' ),
+	//pump1: Pump( 'pump1' )
 };
 
 import Repl from '../repl.js';
@@ -32,7 +36,7 @@ var repl = Repl( Devices );
 
 function emit( topic, data ) {
 
-	mqttClient.publish( config.mqtt.prefix + topic, data );
+	_mqttClient.publish( _config.mqtt.prefix + topic, data );
 }
 
 function run( sensor, device ) {
@@ -65,8 +69,8 @@ function startDevices() {
 
 process.on( 'uncaughtException', function( ex ) {
 
-	console.log( util.inspect( Devices, {showHidden:false, depth: null} ) );
-	console.log( ex.stack );
+	E.rr( ex.stack );
+	E.rr( util.inspect( Devices, {showHidden:false, depth: null} ) );
 } );
 
 log.info( "start mqtt test" );
@@ -81,7 +85,7 @@ function onConnect() {
 
 		for( var i=0; i<subs.length; i++ ) {
 
-			mqttClient.subscribe( config.mqtt.prefix + subs[ i ] );
+			_mqttClient.subscribe( _config.mqtt.prefix + subs[ i ] );
 		}
 	}
 
@@ -94,12 +98,12 @@ function onMessage( topic, data ) {
 
 	var message = data.toString();
 
-	if( ! topic.startsWith( config.mqtt.prefix ) ) {
+	if( ! topic.startsWith( _config.mqtt.prefix ) ) {
 		E.rr( "wrong prefix in: " + topic );
 	}
 
 	// remove Griessbraeu
-	topic = topic.slice( config.mqtt.prefix.length );
+	topic = topic.slice( _config.mqtt.prefix.length );
 
 	for( var dev in Devices ) {
 
@@ -118,19 +122,22 @@ function onMessage( topic, data ) {
 	}
 }
 
-var mqttClient = mqtt.connect( config.mqtt.url, {
-	username: config.mqtt.username,
-	password: config.mqtt.password
-} )
-		.on( 'connect', onConnect )
-		.on( 'message', onMessage )
-		;
+async function main(){
 
-repl.addContext( { mqtt: mqttClient, config: config } );
+	const config = await Config();
+	_config = config;
 
+	var mqttClient = mqtt.connect( config.mqtt.url, {
+		username: config.mqtt.username,
+		password: config.mqtt.password
+	} )
+			.on( 'connect', onConnect )
+			.on( 'message', onMessage )
+			;
 
-async main(){
+	_mqttClient = mqttClient;
 
+	repl.addContext( { mqtt: mqttClient, config: config } );
 }
 
 main();

@@ -1,18 +1,14 @@
-"use strict";
+import './patch.js';
+import { E } from "../E.js";
+import _ from "underscore";
 
-var E = require( '../E.js' );
-require( '../polyfill.js' );
-require( './patch.js' );
+import SFloat from './s_float.js';
+import AOnOffAuto from './a_onoffauto.js';
+import APumpController from './a_pumpcontroller.js';
+import SRefiller from './s_refiller.js';
 
-var SFloat = require( './s_float.js' ),
-	SBool = require( './s_bool.js' ),
-	ABool = require( './a_bool.js' ),
-	AOnOffAuto = require( './a_onoffauto.js' ),
-	APumpController = require( './a_pumpcontroller.js' ),
-	SRefiller = require( './s_refiller.js' )
-	;
 
-module.exports = function( DEVICE ) {
+export default function SimPump( DEVICE ) {
 
 	var self = {
 
@@ -59,6 +55,4 @@ module.exports = function( DEVICE ) {
 	}
 
 	return self;
-};
-
-
+}

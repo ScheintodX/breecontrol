@@ -1,9 +1,8 @@
-"use strict";
+import { E } from "../E.js";
+import _ from "underscore";
 
-var E = require( '../E.js' );
+import SFloat from "./s_float.js";
 
-var SFloat = require( './s_float.js' )
-	;
 
 function calcAbsoluteHumidity( t, rh ) {
 
@@ -14,7 +13,7 @@ function calcAbsoluteHumidity( t, rh ) {
 	return ah;
 }
 
-module.exports = function( conf ) {
+export default function STempHum( conf ) {
 
 	var self = {
 
@@ -73,4 +72,3 @@ module.exports = function( conf ) {
 
 	return self;
 }
-

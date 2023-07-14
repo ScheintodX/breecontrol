@@ -10,6 +10,8 @@
  */
 BAG.Kiln = (function($,Ψ){
 
+	const MAX_POWER = 18000;
+
 	// Constructor function
 	return function( elem, device, passive ) {
 
@@ -39,8 +41,9 @@ BAG.Kiln = (function($,Ψ){
 			setTimeRemaining: ψ.asHourMinSec( ψ.text( 'time_remaining' ) ),
 			setTimeElapsed: ψ.asHourMinSec( ψ.text( 'time_elapsed' ) ),
 			setHeaterPowerStatus: ψ.asUnit( ψ.text( 'heater_power_status' ), "kW", 3 ),
-			setHeaterPowerNominal: ψ.asUnit( ψ.text( 'heater_power_nominal' ), "kW", 3 ),
-			setHeaterPowerIcon: ψ.asPowerColor( ψ.fill( 'temp_heater_icon' ), 18000 ),
+			setExtramassStatus: ψ.asUnit( ψ.text( 'extramass_status' ), "kg", 3 ),
+			//setHeaterPowerStatusAbs: ψ.asUnit( ψ.text( 'heater_power_status_abs' ), "kW", 3 ),
+			setHeaterPowerIcon: ψ.asPowerColor( ψ.fill( 'temp_heater_icon' ), 1 ),
 			setDoor: ψ.visible( 'lid' ),
 			setDoorOverride: ψ.override( ψ.visible( 'lid_override' ) ),
 			setMode: ψ.oneOf( 'mode_', [ 'run', 'pause', 'stop' ] ),
@@ -65,11 +68,14 @@ BAG.Kiln = (function($,Ψ){
 					Kiln.setTempInnerNominal( kiln.temp.nominal );
 				}
 
-				if( 'power' in kiln ) {
-					console.log( kiln.power );
-					Kiln.setHeaterPowerStatus( kiln.power.status );
-					Kiln.setHeaterPowerNominal( kiln.power.nominal );
-					Kiln.setHeaterPowerIcon( kiln.power.status );
+				if( 'powerfactor' in kiln ) {
+					Kiln.setHeaterPowerStatus( kiln.powerabs.status );
+					//Kiln.setHeaterPowerStatusAbs( kiln.power.status / 10000 );
+					Kiln.setHeaterPowerIcon( kiln.powerfactor.status );
+				}
+
+				if( 'extramass' in kiln ) {
+					Kiln.setExtramassStatus( kiln.extramass.status );
 				}
 
 				if( 'script' in kiln ) {

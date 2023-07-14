@@ -1,18 +1,13 @@
-"use strict";
+import './patch.js';
+import { E } from "../E.js";
+import _ from "underscore";
 
-var E = require( '../E.js' );
-require( '../polyfill.js' );
-require( './patch.js' );
+import AOnOffAuto from './a_onoffauto.js';
+import AFanController from './a_fancontroller.js';
+import STempHum from './s_temphum.js';
 
-var SFloat = require( './s_float.js' ),
-	SBool = require( './s_bool.js' ),
-	ABool = require( './a_bool.js' ),
-	AOnOffAuto = require( './a_onoffauto.js' ),
-	AFanController = require( './a_fancontroller.js' ),
-	STempHum = require( './s_temphum.js' )
-	;
 
-module.exports = function( DEVICE ) {
+export default function SimFan( DEVICE ) {
 
 	var self = {
 
@@ -93,6 +88,4 @@ module.exports = function( DEVICE ) {
 	}
 
 	return self;
-};
-
-
+}

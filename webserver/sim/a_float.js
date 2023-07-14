@@ -1,12 +1,11 @@
-"use strict";
+import { E } from "../E.js";
+import { Mqtt as HQ } from "../helpers.js";
+import _ from "underscore";
 
-var E = require( '../E.js' );
-var HQ = require( '../helpers.js' ).mqtt;
+import SFloat from "./s_float.js";
 
-var SFloat = require( './s_float.js' );
-var _ = require( 'underscore' );
 
-module.exports = function( conf ) {
+export default function AFloat( conf ) {
 
 	var r = conf.nominal.range;
 
@@ -75,5 +74,4 @@ module.exports = function( conf ) {
 	} );
 
 	return self;
-
-};
+}

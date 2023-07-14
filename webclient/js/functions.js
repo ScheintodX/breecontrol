@@ -21,18 +21,19 @@ BAG.Function = ( function(){
 
 	function mixArray( colors, percent ) {
 
-		var rangeSize = 1 / ( colors.length-1 ); //e.g. 3 colors: 0..0.5..1
-		var rangeIndex = Math.floor( percent / rangeSize + 0.5 ) - 1;
-		var subpercent = ( percent - ( rangeIndex * rangeSize )) / rangeSize;
+		//prevent ranges fuckup
+		if( percent >= 1 ) return colors[ colors.length-1];
+		if( percent < 0 ) return colors[ 0 ];
 
-		console.log( percent, rangeSize, rangeIndex, subpercent );
+		var ranges = colors.length-1;
+		var rangeIndex = Math.floor( percent * ranges );
+		var weight = ( percent - ( rangeIndex / ranges )) * ranges;
 
 		var c1 = colors[rangeIndex];
 		var c2 = colors[rangeIndex + 1];
 
-		return mix(c1, c2, subpercent);
+		return mix(c1, c2, weight);
 	}
-
 
 	return function( svg ){
 	
@@ -84,6 +85,7 @@ BAG.Function = ( function(){
 					else {
 						var x = Math.pow( 10, scale );
 						text = Math.round( val*100*x ) / x;
+						text += " %";
 					}
 					return f( text );
 				};

@@ -27,6 +27,10 @@ var Entry = function(){
 	};
 }
 
+function now() {
+	return (Date.now() - start) / 1000;
+}
+
 const start = Date.now();
 function gotMqttData( t, v ){
 
@@ -35,8 +39,10 @@ function gotMqttData( t, v ){
 		entry = Entry();
 		Store[ t ] = entry;
 	}
+	if( entry.val != v ){
+		entry.time = now().toFixed(1);
+	}
 	entry.val = v;
-	entry.time = ((Date.now() - start) / 1000).toFixed(1);
 }
 
 async function startMqtt() {
@@ -58,10 +64,19 @@ async function main(){
 
 	setInterval( ()=> {
 		console.log("\x1b[2J");
-		console.log( Store );
+		for( var [k,e] of Object.entries( Store ) ){
+			if( now() - e.time < 5 ){
+				console.log( k, ("" + e.val).green );
+			} else if( now() - e.time < 15 ){
+				console.log( k, ("" + e.val).yellow );
+			} else {
+				console.log( k, ("" + e.val).blue );
+			}
+		}
 	}, 1000 );
 
 	log.startup( "Main", "finish" );
+	log.pause = true;
 }
 
 main();

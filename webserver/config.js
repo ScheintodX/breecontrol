@@ -25,14 +25,14 @@ export default function Config(){
 			},
 
 			devices: [
-				/*{
+				{
 					id: 'kiln1',
 					type: 'kiln',
 					name: 'Kera der Großklotz',
 					minTemp: 0,
 					maxTemp: 1300,
-					maxPower: 18000
-				},*/
+					power: 18000
+				}/*,
 				{
 					id: 'boiler1',
 					type: "boiler",

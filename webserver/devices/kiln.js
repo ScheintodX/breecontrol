@@ -18,7 +18,11 @@ export default function createKiln( config, index ) {
 				type: 'f',
 				timeout: 2500 } ),
 
-		power: InOutProxy( {
+		powerfactor: InOutProxy( {
+				type: 'f',
+				timeout: 2500 } ),
+
+		powerabs: InProxy( {
 				type: 'f',
 				timeout: 2500 } ),
 
@@ -26,14 +30,14 @@ export default function createKiln( config, index ) {
 				type: 'b',
 				timeout: 2500 } ),
 
-		extramass: InProxy( {
+		extramass: InOutProxy( {
 				type: 'f',
 				timeout: 2500 } )
 
 	} ), {
 
 		_watchTime: [
-			'temp', 'door', 'power'
+			'temp', 'door', 'powerfactor'
 		],
 
 		warn: {
@@ -99,14 +103,14 @@ export default function createKiln( config, index ) {
 
 			var result = 0;
 
-			result += self.power.status;
+			result += self.powerfactor.status * self.conf.power;
 
 			return result;
 		},
 
 		powerLimit: function( limit ) {
 
-			if( limit < self.conf.power ) self.heater.temp.set = 0;
+			if( limit < self.conf.power ) self.heater.powerfactor.set = 0;
 		}
 
 	} );

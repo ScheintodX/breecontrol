@@ -20,9 +20,12 @@ const config = {
     prefix: "braumeister/kiln1/"
 }
 
+var PWM_PERIODE = 10;
+var TEMP_OFFSET = 20;
+
 var dt = 1,
     time = 0,
-	speed = 1;
+    speed = 1;
 
 var loopH = null;
 
@@ -38,20 +41,48 @@ function gotMqttData( t, v ){
 
 	switch( t ){
 
-		case "power/set":
+		case "powerfactor/set":
 			var val = parseFloat( v );
-			if( val || val === 0 ) Kiln.P_heater = val;
+			if( val || val === 0 ){
+				Kiln.P_heater = Kiln.P_max * val;
+			}
+			break;
+
+		case "heat/set":
+			var val = parseFloat( v );
+			if( val || val === 0 ){
+				Kiln.heat=val;
+			}
 			break;
 
 		case "loss/set":
 			var val = parseFloat( v );
-			if( val || val === 0 ) Kiln.U_loss = val;
+			if( val || val === 0 ){
+				Kiln.U_loss = val;
+			}
+			break;
+
+		case "extramass/set":
+			var val = parseFloat( v );
+			if( val || val === 0 ){
+				Kiln.m_extra = val;
+			}
 			break;
 
 		case "dt/set":
 			var val = parseInt( v );
-			if( val ) dt = val;
+			if( val ){
+				dt = val;
+			}
 			break;
+
+		case "offset/set":
+			var val = parseInt( v );
+			if( val ){
+				TEMP_OFFSET = val;
+			}
+			break;
+
 
 		case "speed/set":
 			speed = parseInt( v );
@@ -70,34 +101,41 @@ const _Q = ( c, m, T ) => c * m * T,
       _T = ( c, m, Q ) => Q / ( c * m );
 
 
-var Buf = {
-	MAX: 60,
-	data: [],
-	put: function( val ){
-		this.data.push( val );
-		while( this.data.length > this.MAX ){
-			this.data.shift();
+var Buf = ( max, slice ) => {
+	var res = {
+		MAX: max,
+		SLICE: slice,
+		data: [],
+		put: function( val ){
+			this.data.push( val ); // to the end
+			while( this.data.length > this.MAX ){
+				this.data.shift(); // from the beginning
+			}
+		},
+		get avg(){
+			return this.data.slice(0,slice).reduce( (a,b) => ( a + b / this.data.length ) );
 		}
-	},
-	get avg(){
-		return this.data.reduce( (a,b)=>a+b ) / this.data.length;
-	}
+	};
+	for( var i=0; i<max; i++ ) res.put( 0 );
+	return res;
 }
 
 var Kiln = {
 
+	P_max: 18000, //kW
 	U_loss: 5, // W/K
 	m_mass: 400, //kg,
+	m_extra: 0,
 	c_spec_heat_capacity: 840, //J/(kg*K)
 	Q_heat: 0, //kWh
 	P_heater: 18000, //W
 	get T_temp() {
-		return _T( this.c_spec_heat_capacity, this.m_mass, kWh2J( this.Q_heat ) );
+		return _T( this.c_spec_heat_capacity, (this.m_mass+this.m_extra), kWh2J( this.Q_heat ) );
 	}, //K
 	set T_temp( T ){
-		this.Q_heat = J2kWh( _Q( this.c_spec_heat_capacity, this.m_mass, T ) );
+		this.Q_heat = J2kWh( _Q( this.c_spec_heat_capacity, (this.m_mass+this.m_extra), T ) );
 	},
-	buf: Buf,
+	buf: Buf( 60, 10 ), // 1min delay, 10s avg
 	tick: function( dt ){
 
 		var P_loss = this.U_loss * this.T_temp,
@@ -129,11 +167,14 @@ var Kiln = {
 	dump: function(){
 		E.cho( {
 			U: this.U_loss + " W/K",
-			m: this.m_mass + " kg",
+			m: (this.m_mass + this.m_extra) + " kg",
 			c: this.c_spec_heat_capacity + " J/(kg*K)",
 			q: this.Q_heat + " kWh",
-			t: this.T_temp + " °C"
+			t: this.T_temp + " °C",
+			T: this.buf.avg + " °C"
 		} );
+		//E.rr( this.buf.data.length, this.buf.data );
+		//E.rr( this.buf.data.slice( -this.buf.slice ) );
 	}
 };
 Kiln.T_temp = 0;
@@ -147,6 +188,16 @@ function publish( t, v ){
 	_mqtt.send( t, v );
 }
 
+function pwm( phase, time, fac ){
+	var offset = (PWM_PERIODE/3*phase),
+	    width = fac*PWM_PERIODE,
+	    result = (time+offset)%PWM_PERIODE < width;
+	return result;
+}
+function h2s( val ){
+	return val ? "1" : "0";
+}
+
 var last = 0;
 function loop(){
 
@@ -155,15 +206,22 @@ function loop(){
 
 	var now = Date.now();
 	if( now > last + 5000 ){
-		E.rr( "Time", new Date( time*1000 ).toISOString().slice(11, 19) );
-		E.rr( "Speed", speed );
 		Kiln.dump();
 		last = now;
 	}
 
-	publish( "temp/status", "" + (Kiln.heat+20).toFixed( 1 ) );
-	publish( "power/status", "" + Kiln.power.toFixed( 1 ) );
+	var fac = (Kiln.power / Kiln.P_max);
+
+	var h1 = pwm( 0, time, fac ),
+	    h2 = pwm( 1, time, fac ),
+	    h3 = pwm( 2, time, fac );
+
 	publish( "time", "" + time );
+	publish( "temp/status", "" + (Kiln.heat+TEMP_OFFSET).toFixed( 1 ) );
+	publish( "powerfactor/status", "" + fac.toFixed( 1 )  );
+	publish( "powerabs/status", "" + Kiln.power.toFixed( 1 ) );
+	publish( "heater/status", h2s( h1 ) + h2s( h2 ) + h2s( h3 ) );
+	publish( "extramass/status", Kiln.m_extra.toFixed( 1 ) );
 }
 
 async function startMqtt() {
@@ -176,7 +234,6 @@ async function startMqtt() {
 
 	return mqtt;
 }
-
 
 async function main(){
 

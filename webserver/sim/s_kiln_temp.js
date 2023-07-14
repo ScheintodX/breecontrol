@@ -4,7 +4,7 @@ import _ from "underscore";
 import SFloat from './s_float.js';
 
 
-export default function SInnerTemp( conf ) {
+export default function SKilnTemp( conf ) {
 
 	var parent = SFloat( conf ),
 		parentRun = parent.run
