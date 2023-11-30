@@ -13,7 +13,7 @@ module.exports = function( done ) {
 		updateIntervalMqtt: 1000,
 
 		mqtt: {
-			url: 'mqtt://localhost:1883/',
+			url: 'mqtt://mqtt:1883/',
 			username: 'braumeister',
 			password: 'braumeister',
 			prefix: 'griesbraeu/'

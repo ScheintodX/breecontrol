@@ -1,3 +1,6 @@
+Debian
+===============================================================================
+
 apt-get install nodejs npm
 
 adduser braumeister:nogroup
@@ -16,3 +19,7 @@ mkdir /var/log/braumeister
 chown braumeister:root "
 
 systemctl start braumeister
+
+
+Alpine
+===============================================================================
