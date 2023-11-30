@@ -1,21 +1,21 @@
 Arguments: 
-  /usr/bin/node /usr/bin/yarn upgrade
+  /usr/bin/node /usr/bin/yarn
 
 PATH: 
-  /home/flo/.local/bin:/home/flo/bin:/home/flo/workspace-mcu/arm/bin:/home/flo/workspace-mcu/openocd/bin:/home/flo/workspace-mcu/arm/bin:/home/flo/workspace-mcu/openocd/bin:/home/flo/.local/bin:/home/flo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/flo/python/pycharm/bin:/home/flo/.local/bin:/home/flo/.local/bin:/home/flo/.local/pyenv/bin:/home/flo/.r2env/versions/radare2@git/bin:/home/flo/.platformio/packages/toolchain-xtensa-esp32/bin:/home/flo/python/pycharm/bin:/home/flo/.local/bin:/home/flo/.local/bin:/home/flo/.local/pyenv/bin:/home/flo/.r2env/versions/radare2@git/bin:/home/flo/.platformio/packages/toolchain-xtensa-esp32/bin
+  /home/flo/workspace-mcu/arm/bin:/opt/openocd/bin:/home/flo/.local/bin:/home/flo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/flo/python/pycharm/bin:/home/flo/.local/bin:/home/flo/.local/bin:/home/flo/.local/pyenv/bin:/home/flo/.r2env/versions/radare2@git/bin:/home/flo/.platformio/packages/toolchain-xtensa-esp32/bin
 
 Yarn version: 
   1.22.19
 
 Node version: 
-  18.16.1
+  18.17.1
 
 Platform: 
   linux x64
 
 Trace: 
-  Error: connect ENETUNREACH 2606:4700::6810:1823:443
-      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1494:16)
+  Error: connect ENETUNREACH 2606:4700::6810:1922:443
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1495:16)
 
 npm manifest: 
   {
@@ -38,7 +38,7 @@ npm manifest:
       "mqtt": "~4",
       "nodejs-websocket": "~1.7",
       "tracer": "~1.1",
-      "underscore": "~1.13",
+      "underscore": "~1.13.2",
       "ws": "~8.13"
     },
     "notes": [
