@@ -1,8 +1,7 @@
-"use strict";
+import { E } from '../../E.js';
+import { Assert } from '../../assert.js';
+import { log } from '../../logging.js';
 
-var Assert = require( '../assert.js' ),
-    E = require( '../E.js' ),
-	log = require( '../logging.js' );
 
 function calcTime( t_src, t_dest, vol, kw, efficiency ) {
 
@@ -19,7 +18,7 @@ function calcTime( t_src, t_dest, vol, kw, efficiency ) {
 	return sec;
 }
 
-module.exports = function( args, config, env ){
+export default function( args, config, env ){
 
 	Assert.present( 'args.heat', args.heat );
 	Assert.present( 'args._from', args._from );

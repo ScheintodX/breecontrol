@@ -1,10 +1,9 @@
-"use strict";
+import { E } from '../../E.js';
+import { Assert } from '../../assert.js';
+import { log } from '../../logging.js';
 
-var Assert = require( '../assert.js' ),
-    E = require( '../E.js' )
-    ;
 
-module.exports = function( args, config, env ){
+export default function( args, config, env ){
 
 	var self = {
 
@@ -23,5 +22,4 @@ module.exports = function( args, config, env ){
 		}
 	}
 	return self;
-};
-
+}

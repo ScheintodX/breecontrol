@@ -4,7 +4,7 @@ import { Catch } from './catch.js';
 import { log } from './logging.js';
 import { Assert } from './assert.js';
 
-import { Scripts } from './scripts.js';
+import { sc_load, sc_save, sc_list } from './scripts.js';
 
 
 export default function Ctr( config, hello, brewery ) {
@@ -81,27 +81,32 @@ export default function Ctr( config, hello, brewery ) {
 
 					log.trace( 'load', data.value.load );
 
-					Scripts.load( data.value.load, function( err, Script, script ) {
+					sc_load( device.type, data.value.load )
+							.then( (data) => {
 
-						if( err ) return log.error( err );
+								console.log( data );
 
-						var TheScript = Script( script, device, config, {
+								var [Script, script] = data;
 
-							notify: function( device, what, message ){
-								log.info( device.name, what, message );
-							},
+								var TheScript = Script( script, device, config, {
 
-							time: config.script.time
+									notify: function( device, what, message ){
+										log.info( device.name, what, message );
+									},
 
-						} );
+									time: config.script.time
+								} );
 
-						device.script = TheScript.hello;
-						device._script = TheScript;
+								device.script = TheScript.hello;
+								device._script = TheScript;
 
-						sendStatusWeb();
+								sendStatusWeb();
 
-						log.info( 'load done', data.value.load );
-					} );
+								log.info( 'load done', data.value.load );
+							} )
+							.catch( err => {
+								log.error( err );
+							} );
 
 					break;
 
@@ -121,19 +126,17 @@ export default function Ctr( config, hello, brewery ) {
 
 					var saveable = device._script.save();
 
-					Scripts.save( data.value.name, saveable, function( err ) {
+					sc_save( device.type, data.value.name, saveable )
+							.catch( err => {
+								_warn( data.device, err );
+							} )
+							.then( () => {
 
-						if( err ) {
-							_warn( data.device, err );
-							return;
-						}
+								_info( "Saved" );
+								log.trace( "SAVED", data.value.name );
 
-						_info( "Saved" );
-						log.trace( "SAVED", data.value.name );
-
-						delete( hello.scripts ); // force reload
-
-					} );
+								delete( hello.scripts ); // force reload
+							} );
 
 					break;
 
@@ -253,21 +256,20 @@ export default function Ctr( config, hello, brewery ) {
 				// Load script directory listing
 				if( !( 'scripts' in hello ) ) {
 
-					log.trace( "NOSCRIPT" );
+					var devicetypes = new Set();
+					for( var key in brewery.devices ){
+						devicetypes.add( brewery.devices[ key ].conf.type );
+					}
 
-					Scripts.list( function( err, data ) {
+					log.debug( "NOSCRIPT", "LOAD", devicetypes );
 
-						if( err ) E.rr( err );
+					hello.scripts = {};
 
-						if( err ) return log.error( err );
-
-						hello.scripts = data;
-
-						log.trace( "SEND", hello );
-
-						_web( hello );
-
-					} );
+					Promise.all( Array.from( devicetypes ).map(sc_list ) )
+							.then( scripts => {
+								hello.scripts = Object.assign( {}, ...scripts ); // array to object
+								_web( hello );
+							} );
 				}
 
 				// Run available scripts from devices

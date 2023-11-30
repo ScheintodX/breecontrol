@@ -56,8 +56,6 @@ BAG.Kiln = (function($,Ψ){
 
 				var kiln = data.devices[ device ];
 
-				console.log( kiln );
-
 				if( 'door' in kiln ) {
 					Kiln.setDoor( kiln.door.status );
 					Kiln.setDoorOverride( kiln.door.override );

@@ -51,8 +51,6 @@ BAG.Kiln_Controls = (function($){
 
 				var kiln = data.devices[ device ];
 
-				console.log( kiln );
-
 				$e.find( 'header h1' )
 						.text( kiln.name )
 						;
@@ -64,9 +62,6 @@ BAG.Kiln_Controls = (function($){
 
 					var control = manualControls[ key ];
 					if( typeof( control ) == 'undefined' ) continue;
-
-					console.log( "set", value, control );
-					control.set( value.status );
 				}
 
 			}

@@ -17,7 +17,7 @@ export default function Config(){
 				client: "brewmaster",
 				username: 'braumeister',
 				password: 'braumeister',
-				prefix: 'braumeister/'
+				prefix: 'pottery/'
 			},
 
 			brewery: {
@@ -26,13 +26,13 @@ export default function Config(){
 
 			devices: [
 				{
-					id: 'kiln1',
+					id: 'kiln',
 					type: 'kiln',
 					name: 'Kera der Großklotz',
 					minTemp: 0,
 					maxTemp: 1300,
 					power: 18000
-				}/*,
+				},
 				{
 					id: 'boiler1',
 					type: "boiler",

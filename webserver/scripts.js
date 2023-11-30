@@ -3,8 +3,9 @@
  * List available scripts
  */
 
-import fs from 'fs';
-import _ from 'underscore';
+import { E } from './E.js';
+import fs from 'fs/promises';
+//import _ from 'underscore';
 import { log } from './logging.js';
 
 import { Json as JS } from './helpers.js';
@@ -15,55 +16,52 @@ var _CONFIG_ = 'scriptconfig/',
 /**
  * Save script (config) to filesystem
  */
-function save( name, data, done ) {
+export function sc_save( devicetype, name, data ) {
 
-	var file = _CONFIG_ + name + '.json',
+	var file = _CONFIG_ + devicetype + "/" + name + '.json',
 	    data = JS.stringifyPublic( data, true );
 
 	log.trace( "SAVE", file );
 
-	return fs.writeFile( file, data, "utf-8", done ); // chain done
+	return fs.writeFile( file, data, "utf-8" ); // chain done
 }
 
 /**
  * Load script (config) from filesystem
  * Then load master-script via require and return both to callback
  */
-function load( name, done ) {
+export async function sc_load( devicetype, name ) {
 
 	log.trace( "LOAD", name ); // log
 
-	var file = _CONFIG_ + name;
+	var file = _CONFIG_ + devicetype + "/" + name;
 
-	fs.readFile( file, "utf-8", function( err, data ) {
+	var data = await fs.readFile( file, "utf-8" );
 
-		if( err ) return done( err );
+	var scriptconfig = JSON.parse( data );
 
-		try {
-			var scriptconfig = JSON.parse( data );
+	var Script = await import( './' + _SCRIPT_ + devicetype + "/" + scriptconfig.script );
 
-			import( './' + _SCRIPT_ + scriptconfig.script )
-					.then( Script => done( null, Skript, scriptconfig ) );
+	var result = [Script, scriptconfig];
 
-		} catch( ex ) {
-			return done( ex );
-		}
+	E.rr( result );
 
-	} );
+	return result;
 }
 
 /**
  * List scripts (files) in script directory
  */
-function list( done ) {
+export async function sc_list( devicetype ) {
 
-	log.info( "LIST" ); // log
+	log.info( "LIST", devicetype ); // log
 
-	fs.readdir( _CONFIG_, function( err, data ) {
+	var path = _CONFIG_ + devicetype;
 
-		if( err ) return done( err );
+	try {
+		var data = await fs.readdir( path );
 
-		var result = _.map( data, function( file ) {
+		var result = data.map( ( file ) => {
 
 			if( file.startsWith( '.' ) ) return undefined;
 			if( !file.endsWith( '.json' ) ) return undefined;
@@ -73,14 +71,14 @@ function list( done ) {
 					description: "not given" };
 		} );
 
-		result = _.filter( result, function( entry ) { return (entry); } );
+		// E.rr( result );
 
-		return done( null, result );
-	} );
+		//var res = _.filter( result, function( entry ) { return (entry); } );
+		//E.rr( res );
+		return {[devicetype]:result};
+
+	} catch( e ){
+
+		return false;
+	}
 }
-
-export const Scripts = {
-	list: list,
-	load: load,
-	save: save
-};

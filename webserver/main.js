@@ -16,7 +16,6 @@ import Repl from './repl.js';
 const repl = Repl( {} );
 
 import Ctrl from './ctrl.js';
-var _ctrl = false;
 
 import Config from './config.js';
 import Websocket from './express.js';

@@ -1,5 +1,6 @@
 {
 	"name": "Helles",
+	"description": "Etwas ehrliches!",
 	"script": "5steps.js",
 	"steps": [
 		{
