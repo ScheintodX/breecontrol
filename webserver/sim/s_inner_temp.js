@@ -1,17 +1,14 @@
-"use strict";
+import { E } from "../E.js";
+import _ from "underscore";
 
-var E = require( '../E.js' );
-var HQ = require( '../helpers.js' ).mqtt;
+import SFloat from './s_float.js';
 
-var SFloat = require( './s_float.js' );
-var _ = require( 'underscore' );
 
-module.exports = function( conf ) {
+export default function SInnerTemp( conf ) {
 
 	var parent = SFloat( conf ),
 		parentRun = parent.run
 		;
-	var r = conf.status.range;
 
 	var self = _.extend( parent, {
 
@@ -49,8 +46,6 @@ module.exports = function( conf ) {
 
 				if( self.status > self.conf.max ) self.status = self.conf.max;
 				if( self.status < self.conf.min ) self.status = self.conf.min;
-
-				var jitter = self.status.jitter( conf.jitter );
 
 				self.status = self.status.jitter( conf.jitter );
 			}

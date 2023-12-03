@@ -1,6 +1,3 @@
-"use strict";
-
-var Assert = require( "./assert.js" );
 
 function splitByMqtt( topic ) {
 	return topic.split( "/" );
@@ -135,94 +132,91 @@ function toStringAutotype( val, scale ) {
 	}
 }
 
-var Helpers = {
-
-	message: {
-		setByParts: setByParts,
-		setByMqtt: function( obj, topic, value ) {
-			return setByParts( obj, splitByMqtt( topic ), value );
-		},
-		setByDot: function( obj, topic, value ) {
-			return setByParts( obj, splitByWeb( topic ), value );
-		},
-		setByAutotype: setByAutotype,
-		setByMqttAutotype: function( obj, topic, value ){
-			return setByAutotype( obj, splitByMqtt( topic ), value );
-		},
-		setByMethod: setByMethod,
-		setByMqttMethod: setByMqttMethod,
-		setByWebMethod: setByWebMethod,
-		getByParts: getByParts,
-		getByMqtt: function( obj, topic ) {
-			return getByParts( obj, splitByMqtt( topic ) );
-		},
-		getByDot: function( obj, topic ) {
-			return getByParts( obj, splitByWeb( topic ) );
-		},
-		splitByMqtt: splitByMqtt,
-		splitByWeb: splitByWeb
+export const Message = {
+	setByParts: setByParts,
+	setByMqtt: function( obj, topic, value ) {
+		return setByParts( obj, splitByMqtt( topic ), value );
 	},
-	mqtt: {
-		toString: toString,
-		toStringAutotype: toStringAutotype,
-		fromString: fromString,
+	setByDot: function( obj, topic, value ) {
+		return setByParts( obj, splitByWeb( topic ), value );
 	},
-	func: {
-		augment: function( obj, before, after ) {
+	setByAutotype: setByAutotype,
+	setByMqttAutotype: function( obj, topic, value ){
+		return setByAutotype( obj, splitByMqtt( topic ), value );
+	},
+	setByMethod: setByMethod,
+	setByMqttMethod: setByMqttMethod,
+	setByWebMethod: setByWebMethod,
+	getByParts: getByParts,
+	getByMqtt: function( obj, topic ) {
+		return getByParts( obj, splitByMqtt( topic ) );
+	},
+	getByDot: function( obj, topic ) {
+		return getByParts( obj, splitByWeb( topic ) );
+	},
+	splitByMqtt: splitByMqtt,
+	splitByWeb: splitByWeb
+};
 
-			if( typeof obj == 'function' ) {
+export const Mqtt = {
+	toString: toString,
+	toStringAutotype: toStringAutotype,
+	fromString: fromString,
+};
 
-				return function(){
+export const Func = {
+	augment: function( obj, before, after ) {
+
+		if( typeof obj == 'function' ) {
+
+			return function(){
+				var args = Array.prototype.slice.call( arguments );
+				args.unshift( obj );
+				if( before ) before.apply( this, args );
+				f.apply( this, arguments );
+				if( after ) after.apply( this, args );
+			}
+
+		} else if( typeof obj == 'object' ) {
+
+			for( var key in obj ) {
+
+				if( !( typeof key == 'function' ) ) return;
+
+				var f = obj[ key ];
+
+				obj[ key ] = function() {
+
 					var args = Array.prototype.slice.call( arguments );
-					args.unshift( obj );
-					if( before ) before.apply( this, args );
-					f.apply( this, arguments );
-					if( after ) after.apply( this, args );
+					args.unshift( f );
+					if( before ) before.apply( obj, args );
+					f.apply( obj, arguments );
+					if( after ) after.apply( obj, args );
 				}
 
-			} else if( typeof obj == 'object' ) {
-
-				for( var key in obj ) {
-
-					if( !( typeof key == 'function' ) ) return;
-
-					var f = obj[ key ];
-
-					obj[ key ] = function() {
-
-						var args = Array.prototype.slice.call( arguments );
-						args.unshift( f );
-						if( before ) before.apply( obj, args );
-						f.apply( obj, arguments );
-						if( after ) after.apply( obj, args );
-					}
-
-				}
-			} else throw new Error( "Cannot augment " + (typeof obj) );
-			return obj;
-		},
-		trace: function( func, before, after ) {
-			return Helpers.func.augment( func,
-					function() {
-						E.rr( arguments );
-					},
-					function() {
-						E.rr( "done" );
-					}
-			)
-
-		}
+			}
+		} else throw new Error( "Cannot augment " + (typeof obj) );
+		return obj;
 	},
+	trace: function( func, before, after ) {
+		return Helpers.func.augment( func,
+				function() {
+					E.rr( arguments );
+				},
+				function() {
+					E.rr( "done" );
+				}
+		)
 
-	json: {
-		stringifyPublic: function( data, pretty ) {
-
-			return JSON.stringify( data, function( key, val ) {
-			
-				return key.startsWith( '_' ) ? undefined : val;
-			}, pretty ? '\t' : undefined );
-		}
 	}
 };
 
-module.exports = Helpers;
+export const Json = {
+	stringifyPublic: function( data, pretty ) {
+
+		return JSON.stringify( data, function( key, val ) {
+		
+			return key.startsWith( '_' ) ? undefined : val;
+		}, pretty ? '\t' : undefined );
+	}
+};

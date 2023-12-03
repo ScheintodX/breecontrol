@@ -1,19 +1,14 @@
-"use strict";
+import { E } from '../../E.js';
+import { Assert } from '../../assert.js';
+import { log } from '../../logging.js';
 
-var E = require( '../E.js' ),
-	log = require( '../logging.js' ),
-	Assert = require( '../assert.js' )
-	;
+import SC_heat from './sc_heat.js';
+import SC_hold from './sc_hold.js';
+import SC_pause from './sc_pause.js';
+import SC_notify from './sc_notify.js';
+import SC_stop from './sc_stop.js';
 
-var SC = {
-	heat: require( './sc_heat.js' ),
-	hold: require( './sc_hold.js' ),
-	pause: require( './sc_pause.js' ),
-	notify: require( './sc_notify.js' ),
-	stop: require( './sc_stop.js' )
-};
-
-module.exports = function( script, boiler, config, env ) {
+export default function( script, boiler, config, env ) {
 
 	var _run,
 		_idx,
@@ -185,29 +180,29 @@ module.exports = function( script, boiler, config, env ) {
 			_run = [];
 
 			// preheat
-			_run.push( SC[ 'notify' ]( { what: 'run' }, config, env ) );
-			_run.push( SC[ 'heat' ]( steps[ 0 ], config, env ) );
+			_run.push( SC_notify( { what: 'run' }, config, env ) );
+			_run.push( SC_heat( steps[ 0 ], config, env ) );
 
 			// pause after preheat
-			_run.push( SC[ 'notify' ]( { what: 'ready', msg: 'preheat done' }, config, env ) );
-			_run.push( SC[ 'pause' ]( null, config, env ) );
+			_run.push( SC_notify( { what: 'ready', msg: 'preheat done' }, config, env ) );
+			_run.push( SC_pause( null, config, env ) );
 
-			_run.push( SC[ 'notify' ]( { what: 'run' }, config, env ) );
+			_run.push( SC_notify( { what: 'run' }, config, env ) );
 			for( var i=1; i < 4; i++ ) {
 
 				var step = script.steps[ i ];
 
-				var sc_heat = SC[ 'heat' ]( step, config, env );
+				var sc_heat = SC_heat( step, config, env );
 				_run.push( sc_heat );
 
-				var sc_hold = SC[ 'hold' ]( step, config, env );
+				var sc_hold = SC_hold( step, config, env );
 				_run.push( sc_hold );
 			}
 
 			// postheat
-			_run.push( SC[ 'heat' ]( steps[ 4 ], config, env ) );
+			_run.push( SC_heat( steps[ 4 ], config, env ) );
 
-			_run.push( SC[ 'notify' ]( { what: 'done' }, config, env ) );
+			_run.push( SC_notify( { what: 'done' }, config, env ) );
 
 			// go to first step but don't start
 			self.stepTo( 0 );
@@ -226,6 +221,4 @@ module.exports = function( script, boiler, config, env ) {
 	};
 
 	return self.parse( script );
-};
-
-module.exports.version = 1;
+}

@@ -20,7 +20,6 @@ BAG.Com = (function(){
 
 			setTimeout( reconnect, 2000 );
 		}
-
 	}
 
 	function gotOpen( what ) {
@@ -49,11 +48,11 @@ BAG.Com = (function(){
 	function connect() {
 
 		//_websocket = new WebSocket( BAG.Config.com.url );
-		
+
 		// With Apache and WS on dedicated port
 		//_websocket = new WebSocket( 'ws://' + location.host + ':' + BAG.Config.ws.port + '/' );
 		// With WS on same port using upgrade
-		_websocket = new WebSocket( 'ws://' + location.host + '/ws' );
+		_websocket = new WebSocket( 'wss://' + location.host + '/ws' );
 		_websocket.onmessage = gotData;
 		_websocket.onopen = gotOpen;
 		_websocket.gotclose = gotClose;
@@ -62,7 +61,7 @@ BAG.Com = (function(){
 
 	function reconnect() {
 
-		if( _websocket.readystate < 2 ) 
+		if( _websocket.readystate < 2 )
 				console.warn( "already connecting/-ted" );
 
 		connect();
@@ -98,7 +97,7 @@ BAG.Com = (function(){
 			switch( typeof data ) {
 				case "undefined": data = "*empty*"; break;
 				case "function": throw "Cannot send functions, sorry!";
-				case "object": 
+				case "object":
 					data = JSON.stringify( data );
 					break;
 				case "string": break;

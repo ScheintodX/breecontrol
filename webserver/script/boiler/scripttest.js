@@ -1,9 +1,7 @@
-"use strict";
+import { E } from '../../E.js';
 
-var Repl = require( 'repl' );
-var S_5steps = require( './5steps.js' );
-
-var E = require( '../E.js' );
+import Repl from 'repl';
+import S_5steps from './5steps.js';
 
 
 var _script = {

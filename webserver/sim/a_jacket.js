@@ -1,13 +1,11 @@
-"use strict";
+import { E } from "../E.js";
+import _ from "underscore";
 
-var E = require( '../E.js' );
-
-var SBool = require( './s_bool.js' ),
-	AFloat = require( './a_float.js' )
-	;
+import SBool from "./s_bool.js";
+import AFloat from "./a_float.js";
 
 
-module.exports = function( conf ) {
+export default function AJacket( conf ) {
 
 	var self = {
 

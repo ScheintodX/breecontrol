@@ -79,7 +79,6 @@ BAG.Ctrl = (function($){
 			controls: controls,
 
 			gotData: gotData,
-
 			gotControl: gotControl,
 
 			onCom: function( com ) {

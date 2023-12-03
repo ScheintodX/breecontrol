@@ -1,5 +1,4 @@
-"use strict";
-require( 'colors' );
+import 'colors';
 
 function stack( depth ) {
 
@@ -15,13 +14,13 @@ function stack( depth ) {
 	}
 }
 
-module.exports = {
+export const E = {
 
 	rr: function(){
 
 		var args = Array.prototype.slice.call( arguments ); //clone
 
-		args.unshift( stack( 4 ).red );
+		args.unshift( stack( 3 ).red );
 
 		console.log.apply( console, args );
 	},
@@ -30,7 +29,7 @@ module.exports = {
 
 		var args = Array.prototype.slice.call( arguments ); //clone
 
-		args.unshift( stack( 4 ).green );
+		args.unshift( stack( 3 ).green );
 
 		console.log.apply( console, args );
 	}

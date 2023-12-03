@@ -1,282 +1,297 @@
-"use strict";
+import { E } from './E.js';
+import { Catch } from './catch.js';
 
-var E = require( './E.js' );
-var Catch = require( './catch.js' );
-var Dot = require( 'dot-object' ),
-	Dash = new Dot( '/' );
+import { log } from './logging.js';
+import { Assert } from './assert.js';
 
-var log = require( './logging.js' );
-var Assert = require( './assert.js' );
-
-var Scripts = require( './scripts.js' );
+import { sc_load, sc_save, sc_list } from './scripts.js';
 
 
-module.exports = function( config, hello, brewery ) {
+export default function Ctr( config, hello, brewery ) {
 
-	Assert.present( "config", config );
-	Assert.present( "hello", hello );
-	Assert.present( "brewery", brewery );
+	const PRESENCE = "infrastructure/brewmaster/presence";
 
-	var _mqtt, _web;
+	return new Promise( resolve => {
 
-	function _msg( device, level, text ) {
+		Assert.present( "config", config );
+		Assert.present( "hello", hello );
+		Assert.present( "brewery", brewery );
 
-		return _web( {
-			message: {
-				device: device, 
-				level: level,
-				messages: [
-					{ level: level, text: text }
-				]
-			}
-		} );
-	}
+		var _mqtt, _web;
 
-	function _warn( device, text ) {
-		return _msg( device, 'warn', text );
-	}
-	function _info( device, text ) {
-		return _msg( 'info', text );
-	}
+		function _msg( device, level, text ) {
 
-	function sendStatusMqtt() {
-		
-		_mqtt( 'infrastructure/brewmaster/presence', "brewmaster" );
+			return _web( {
+				message: {
+					device: device, 
+					level: level,
+					messages: [
+						{ level: level, text: text }
+					]
+				}
+			} );
+		}
 
-		brewery.watch();
+		function _warn( device, text ) {
+			return _msg( device, 'warn', text );
+		}
+		function _info( device, text ) {
+			return _msg( 'info', text );
+		}
 
-		brewery.publish( _mqtt );
-	}
+		function sendStatusMqtt() {
 
-	function sendStatusWeb() {
+			_mqtt( PRESENCE, "brewmaster" );
 
-		_web( brewery.asJson() );
-	}
+			brewery.watch();
 
-	function gotWebDataSet( data ) {
+			brewery.publish( _mqtt );
+		}
 
-		var val = data.value,
-			topic = data.topic
-			;
+		function sendStatusWeb() {
 
-		var diff = brewery.setByWeb( topic, val );
+			_web( brewery.asJson() );
+		}
 
-		log.trace( JSON.stringify( diff ) );
+		function gotWebDataSet( data ) {
 
-		if( diff ) brewery.publish( _mqtt );
-	}
+			var val = data.value,
+				topic = data.topic
+				;
 
-	function gotWebDataLoadSave( data ) {
+			var diff = brewery.setByWeb( topic, val );
 
-		Assert.present( 'data.device', data.device );
-		Assert.present( 'data.topic', data.topic );
+			log.trace( JSON.stringify( diff ) );
 
-		var device = brewery.devices[ data.device ];
+			if( diff ) brewery.publish( _mqtt );
+		}
 
-		if( ! device ) throw new Error( "No device found" );
+		function gotWebDataLoadSave( data ) {
 
-		switch( data.topic ) {
+			Assert.present( 'data.device', data.device );
+			Assert.present( 'data.topic', data.topic );
 
-			case "load": 
+			var device = brewery.devices[ data.device ];
 
-				log.trace( 'load', data.value.load );
+			if( ! device ) throw new Error( "No device found" );
 
-				Scripts.load( data.value.load, function( err, Script, script ) {
+			switch( data.topic ) {
 
-					if( err ) return log.error( err );
+				case "load": 
 
-					var TheScript = Script( script, device, config, {
+					log.trace( 'load', data.value.load );
 
-						notify: function( device, what, message ){
-							log.info( device.name, what, message );
-						},
+					sc_load( device.type, data.value.load )
+							.then( (data) => {
 
-						time: config.script.time
+								console.log( data );
 
-					} );
+								var [Script, script] = data;
+
+								var TheScript = Script( script, device, config, {
+
+									notify: function( device, what, message ){
+										log.info( device.name, what, message );
+									},
+
+									time: config.script.time
+								} );
+
+								device.script = TheScript.hello;
+								device._script = TheScript;
+
+								sendStatusWeb();
+
+								log.info( 'load done', data.value.load );
+							} )
+							.catch( err => {
+								log.error( err );
+							} );
+
+					break;
+
+				case "save":
+
+					log.trace( "SAVE", data.value.name );
+
+					if( !device.script ) {
+						_warn( data.device, 'No script available' );
+						return;
+					}
+
+					var TheScript = device._script.parse( data.value );
 
 					device.script = TheScript.hello;
 					device._script = TheScript;
 
-					sendStatusWeb();
+					var saveable = device._script.save();
 
-					log.info( 'load done', data.value.load );
-				} );
+					sc_save( device.type, data.value.name, saveable )
+							.catch( err => {
+								_warn( data.device, err );
+							} )
+							.then( () => {
 
-				break;
+								_info( "Saved" );
+								log.trace( "SAVED", data.value.name );
 
-			case "save":
+								delete( hello.scripts ); // force reload
+							} );
 
-				log.trace( "SAVE", data.value.name );
+					break;
 
-				if( !device.script ) {
-					_warn( data.device, 'No script available' );
-					return;
-				}
+				case "set":
 
-				var TheScript = device._script.parse( data.value );
+					log.trace( "SET" );
 
-				device.script = TheScript.hello;
-				device._script = TheScript;
-
-				var saveable = device._script.save();
-
-				Scripts.save( data.value.name, saveable, function( err ) {
-
-					if( err ) {
-						_warn( data.device, err );
+					if( !device.script ) {
+						_warn( data.device, 'No script available' );
 						return;
 					}
 
-					_info( "Saved" );
-					log.trace( "SAVED", data.value.name );
+					var TheScript = device._script.parse( data.value );
 
-					delete( hello.scripts ); // force reload
+					device.script = TheScript.hello;
+					device._script = TheScript;
 
-				} );
+					log.info( "SET done", device.script );
 
-				break;
+					break;
 
-			case "set":
+				default: 
+					throw new Error( "Unknown action: " + data.topic );
 
-				log.trace( "SET" );
+			}
 
-				if( !device.script ) {
-					_warn( data.device, 'No script available' );
-					return;
-				}
+		}
 
-				var TheScript = device._script.parse( data.value );
+		function gotWebDataRunStop( data ) {
 
-				device.script = TheScript.hello;
-				device._script = TheScript;
+			Assert.present( 'data.device', data.device );
 
-				log.info( "SET done", device.script );
+			var device = brewery.devices[ data.device ];
 
-				break;
+			Assert.present( 'device', device );
 
-			default: 
+			if( [ 'start', 'pause', 'resume', 'stop', 'next', 'prev' ].indexOf( data.topic ) >= 0 ){
+
+				var script = device._script;
+
+				Assert.present( 'script', script );
+
+				script[ data.topic ]();
+
+			} else {
 				throw new Error( "Unknown action: " + data.topic );
-
+			}
 		}
 
-	}
+		function isReady() {
 
-	function gotWebDataRunStop( data ) {
-
-		Assert.present( 'data.device', data.device );
-
-		var device = brewery.devices[ data.device ];
-
-		Assert.present( 'device', device );
-
-		if( [ 'start', 'pause', 'resume', 'stop', 'next', 'prev' ].indexOf( data.topic ) >= 0 ){
-
-			var script = device._script;
-
-			Assert.present( 'script', script );
-
-			script[ data.topic ]();
-
-		} else {
-			throw new Error( "Unknown action: " + data.topic );
+			return _mqtt && _web;
 		}
-	}
 
-	function isReady() {
+		var self = {
 
-		return _mqtt && _web;
-	}
+			isReady: isReady,
 
-	var self = {
+			gotWebData: Catch.fatal( "Ctrl/gotWeb", function( data ) {
 
-		gotWebData: Catch.fatal( "Ctrl/gotWeb", function( data ) {
+				log.trace( "WebData", data );
 
-			log.trace( "WebData", data );
-
-			if( !isReady() ) {
-				log.warn( "Premature web data: ", data );
-			}
-
-			switch( data.on ) {
-				case "set": return gotWebDataSet( data ); break;
-				case "loadsave": gotWebDataLoadSave( data ); break;
-				case "runstop": gotWebDataRunStop( data ); break;
-				default: throw new Error( "Unknown action: " + data.on );
-			}
-
-		} ),
-
-		gotMqttData: Catch.fatal( "Ctrl/GotMqtt", function( topic, data ) {
-
-			if( !isReady() ) {
-				log.warn( "Premature mqtt data: ", topic, data );
-			}
-
-			var diff = brewery.setByMqtt( topic, data );
-
-			if( diff ) {
-				_web( { diff: diff } );
-			}
-		} ),
-
-		onMqttMessage: function( mqtt ) {
-
-			_mqtt = Catch.fatal( "Ctrl/Mqtt", mqtt );
-
-			Assert.present( "config.updateIntervalMqtt", config.updateIntervalMqtt );
-
-			setInterval( Catch.fatal( "Ctrl/SendStatusMqtt", sendStatusMqtt ), config.updateIntervalMqtt );
-		},
-
-		onWebMessage: function( web ) {
-
-			_web = Catch.fatal( "Ctrl/WS", web );
-
-			Assert.present( "config.updateIntervalWeb", config.updateIntervalWeb );
-
-			setInterval( Catch.fatal( "Ctrl/SendStatusWeb", sendStatusWeb ), config.updateIntervalWeb );
-		},
-
-		run: function() {
-
-			// Load script directory listing
-			if( !( 'scripts' in hello ) ) {
-
-				log.trace( "NOSCRIPT" );
-
-				Scripts.list( function( err, data ) {
-
-					if( err ) E.rr( err );
-
-					if( err ) return log.error( err );
-
-					hello.scripts = data;
-
-					log.trace( "SEND", hello );
-
-					_web( hello );
-
-				} );
-			}
-
-			// Run available scripts from devices
-			for( var key in brewery.devices ) {
-
-				var device = brewery.devices[ key ];
-
-				if( device._script ){
-					device._script.run();
+				if( !isReady() ) {
+					log.warn( "Premature web data: ", data );
 				}
+
+				switch( data.on ) {
+					case "set": return gotWebDataSet( data ); break;
+					case "loadsave": gotWebDataLoadSave( data ); break;
+					case "runstop": gotWebDataRunStop( data ); break;
+					default: throw new Error( "Unknown action: " + data.on );
+				}
+
+			} ),
+
+			gotMqttData: Catch.fatal( "Ctrl/GotMqtt", function( topic, data ) {
+
+				if( topic == PRESENCE ) return;
+
+				if( !isReady() ) {
+					log.warn( "Premature mqtt data: ", topic, data );
+				}
+
+				var diff = brewery.setByMqtt( topic, data );
+
+				log.trace( "MqttDiff", diff );
+
+				if( diff ) {
+					_web( { diff: diff } );
+				}
+			} ),
+
+			filter: ( topic ) => topic == PRESENCE,
+
+			setMqttCom: function( mqtt ) {
+
+				//_mqtt = Catch.fatal( "Ctrl/Mqtt", mqtt );
+				_mqtt = mqtt;
+
+				Assert.present( "config.updateIntervalMqtt", config.updateIntervalMqtt );
+
+			//	setInterval( Catch.fatal( "Ctrl/SendStatusMqtt", sendStatusMqtt ), config.updateIntervalMqtt );
+				setInterval( sendStatusMqtt, config.updateIntervalMqtt );
+			},
+
+			setWebCom: function( web ) {
+
+				_web = Catch.fatal( "Ctrl/WS", web );
+
+				Assert.present( "config.updateIntervalWeb", config.updateIntervalWeb );
+
+				setInterval( Catch.fatal( "Ctrl/SendStatusWeb", sendStatusWeb ), config.updateIntervalWeb );
+			},
+
+			run: function() {
+
+				// Load script directory listing
+				if( !( 'scripts' in hello ) ) {
+
+					var devicetypes = new Set();
+					for( var key in brewery.devices ){
+						devicetypes.add( brewery.devices[ key ].conf.type );
+					}
+
+					log.debug( "NOSCRIPT", "LOAD", devicetypes );
+
+					hello.scripts = {};
+
+					Promise.all( Array.from( devicetypes ).map(sc_list ) )
+							.then( scripts => {
+								hello.scripts = Object.assign( {}, ...scripts ); // array to object
+								_web( hello );
+							} );
+				}
+
+				// Run available scripts from devices
+				for( var key in brewery.devices ) {
+
+					var device = brewery.devices[ key ];
+
+					if( device._script ){
+						device._script.run();
+					}
+				}
+
+				//sendStatusMqtt();
+			},
+
+			start: function() {
+
+				setInterval( Catch.fatal( "Ctrl/Run", self.run ), config.updateIntervalCtrl );
 			}
-		},
+		};
 
-		start: function() {
-
-			setInterval( Catch.fatal( "Ctrl/Run", self.run ), config.updateIntervalCtrl );
-		}
-	};
-
-	return self;
-};
+		return resolve( self );
+	} );
+}
 

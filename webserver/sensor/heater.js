@@ -1,12 +1,6 @@
-"use strict";
+import InOut from './inout_proxy.js';
 
-var E = require( '../E.js' );
-var MQTT = require( '../helpers.js' ).mqtt;
-var _ = require( 'underscore' );
-
-var InOut = require( './inout_proxy.js' );
-
-module.exports = function( conf, defaults ) {
+export default function( conf, defaults ) {
 
 	var self = InOut( conf, defaults );
 

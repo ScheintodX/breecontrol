@@ -1,21 +1,19 @@
-"use strict";
+//GREEN } from './colors.js';
+import 'colors';
 
-require( 'colors' );
-
-var fs = require( 'fs' );
+import fs from 'fs';
 
 //This is blocking because we want logging "just to be there"
 
-var FILE = null;
-var pause = false;
+import Tracer from 'tracer';
 
-var log = require( 'tracer' ).colorConsole( {
+export const log = Tracer.colorConsole( {
 	level: 'info',
 	inspectOpt: { depth: 3 },
 	transport : function( data ) {
-		if( pause ) return;
-		if( FILE ) {
-			fs.open( FILE, 'a', '0666', function( err, id ) {
+		if( log.pause ) return;
+		if( log.FILE ) {
+			fs.open( log.FILE, 'a', '0666', function( err, id ) {
 				if( err ) throw new Error( err ); //fail fast!
 				fs.write( id, data.output+"\n", null, 'utf8', function( err ) {
 					fs.close( id );
@@ -27,6 +25,9 @@ var log = require( 'tracer' ).colorConsole( {
 		}
 	}
 } );
+
+log.FILE = null;
+log.pause = false;
 
 log.startup = function( part, state ) {
 	console.log( part + ' ' + state.green );
@@ -45,13 +46,7 @@ log.ex = function( ex ) {
 	}
 }
 
-module.exports = log;
-module.exports.file = function( file ) {
-	FILE = file;
-	return log;
-}
-
-module.exports.pause = function( value ) {
-	pause = value;
+log.file = function( file ) {
+	log.FILE = file;
 	return log;
 }

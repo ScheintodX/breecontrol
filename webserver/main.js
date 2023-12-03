@@ -1,136 +1,111 @@
 #!/usr/bin/nodejs
 
-require( './polyfill.js' );
-require( 'colors' );
-var util = require( 'util' );
-var async = require( 'async' );
+import 'colors';
 
-var E = require( './E.js' );
-var log = require( './logging.js' ).file( '/var/log/braumeister/braumeister.log' );
-var Catch = require( './catch.js' ).log( log );
-var Assert = require( './assert.js' );
+import { log } from './logging.js';
+log.file( '/var/log/braumeister/braumeister.log' );
 
-var repl = require( './repl.js' )( {} );
+import { E } from './E.js';
 
-//var Websocket = require( './websocket.js' ),
-var Websocket = require( './express.js' ),
-    websocket = false;
-var Mqtt = require( './mqtt.js' ),
-    mqtt = false;
+import { Catch } from './catch.js'
+Catch.log( log );
 
-var Config = require( './config.js' ),
-    config = false,
-	hello = false;
+import { Assert } from './assert.js';
 
-var Devices = require( './devices.js' ),
-    devices = false,
-	Brewery = require( './brewery.js' ),
-	brewery = false;
+import Repl from './repl.js';
+const repl = Repl( {} );
 
-var Ctrl = require( './ctrl.js' ),
-    ctrl = false;
+import Ctrl from './ctrl.js';
+
+import Config from './config.js';
+import Websocket from './express.js';
+import Mqtt from './mqtt.js';
+import Brewery from './brewery.js';
+
+var hello;
 
 
-function initConfig( done ) {
+async function initConfig() {
 
-	Config( Catch.ExitOn( "Config", function( err, data ) {
+	const config = await Config();
 
-		config = data;
-		hello = {
-			config: {
-				devices: config.devices,
-			}
+	Assert.present( 'config', config );
+
+	hello = {
+		config: {
+			devices: config.devices,
 		}
-		repl.addContext( { config: config, hello: hello } );
+	}
+	repl.addContext( { config: config, hello: hello } );
 
-		log.startup( "config", "READY" );
+	log.startup( "config", "READY" );
 
-		return done();
-
-	} ) );
+	return config;
 }
 
-function initBoilers( done ) {
+async function initBrewery( config ) {
 
-	Devices.createAll( config.devices, Catch.ExitOn( "Devices", function( err, data ) {
-	
-		Assert.present( 'data', data );
+	const brewery = await Brewery( config );
 
-		devices = data;
+	repl.addContext( {
+			brewery: brewery,
+			devices: brewery.devices,
+	} );
 
-		brewery = Brewery( devices );
-		repl.addContext( { brewery: brewery } );
-		repl.addContext( {
-				brewery: brewery,
-				devices: devices,
-		} );
-		repl.addContext( brewery.devices );
+	for( const [name,device] of Object.entries( brewery.devices ) ){
+		repl.addContext( name, device );
+	}
 
-		log.startup( "devices", "READY" );
+	log.startup( "brewery", "READY" );
 
-		return done();
-	
-	} ) );
+	return brewery;
 }
 
-function startWebsocket( done ) {
+async function startMqtt( config, ctrl, brewery ) {
 
-	Websocket( ctrl.gotWebData, hello, config.ws, Catch.ExitOn( "Websockets", function( err, data ) {
+	const mqtt = await Mqtt( ctrl.gotMqttData, config.mqtt, brewery.subscribe, ctrl.filter );
+			
+	Assert.present( 'mqtt', mqtt );
 
-		Assert.present( 'data', data );
+	ctrl.setMqttCom( mqtt.send );
 
-		websocket = data;
+	log.startup( "mqtt", "STARTED" );
 
-		ctrl.onWebMessage( websocket.send );
-
-		log.startup( "websockets", "STARTED" );
-
-		return done();
-	} ) );
+	return mqtt;
 }
 
-function startMqtt( done ) {
+async function startWebsocket( config, ctrl ) {
 
-	Mqtt( ctrl.gotMqttData, config.mqtt, brewery.subscribe,
-			Catch.ExitOn( "Mqtt", function( err, data ) {
+	const websocket = await Websocket( ctrl.gotWebData, hello, config.ws );
 
-		Assert.present( 'data', data );
+	Assert.present( 'websocket', websocket );
 
-		mqtt = data;
+	ctrl.setWebCom( websocket.send );
 
-		ctrl.onMqttMessage( mqtt.send );
+	log.startup( "websockets", "STARTED" );
 
-		log.startup( "mqtt", "STARTED" );
-
-		return done();
-	} ) );
+	return websocket;
 }
 
-function stateReady( err ) {
+async function main(){
 
-	if( err ) throw err;
+	log.startup( "Startup...", "" );
 
-	ctrl = Ctrl( config, hello, brewery );
+	const config = await initConfig();
+	const brewery = await initBrewery( config );
+
+	const ctrl = await Ctrl( config, hello, brewery );
 	repl.addContext( { ctrl: ctrl } );
 
-	async.parallel( [ startWebsocket, startMqtt ], startupDone );
-}
-
-function startupDone( err ) {
-
-	if( err ) {
-		log.failure( "Startup", err );
-		throw err;
-	}
+	await Promise.all( [
+		startMqtt( config, ctrl, brewery ),
+		startWebsocket( config, ctrl ) ] );
 
 	ctrl.start();
 
 	log.startup( "Startup", "DONE" );
 }
 
+
 E.cho( "Startup" );
-log.startup( "Startup...", "" );
-
-// === Start Startup ===
-async.series( [ initConfig, initBoilers ], stateReady );
-
+main();

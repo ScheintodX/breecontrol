@@ -1,6 +1,5 @@
-"use strict";
+import { Mqtt as H } from "../helpers.js";
 
-var H = require( '../helpers.js' ).mqtt;
 
 var MESSAGES = [
 
@@ -74,6 +73,7 @@ MESSAGES.find = function( topic ) {
 	}
 }
 
+/*
 MESSAGES.info = function() {
 	MESSAGES.forEach( function( msg ) {
 
@@ -81,6 +81,6 @@ MESSAGES.info = function() {
 
 	} );
 }
+*/
 
-
-module.exports = MESSAGES;
+export default MESSAGES;

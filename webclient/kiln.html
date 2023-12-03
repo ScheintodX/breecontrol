@@ -1,0 +1,87 @@
+<header>
+	<h1>KILN: SCRIPT</h1>
+	<h2></h2>
+	<button class="manual">Manual</button>
+	<button class="script">Script</button>
+</header>
+
+<object class="kiln" data="kiln.svg"></object>
+
+<div class="runstopinfo"></div>
+
+<section class="info"></section>
+
+<section class="manual">
+
+	<h2>Manual</h2>
+	
+	<h3>On / Off</h3>
+
+	<label>
+		<h6>Power / %</h6>
+		<input class="powerfactor" type="number" min="0" max="100" step="5" name=".powerfactor.set"/>
+	</label>
+
+
+	<h3>Tuning</h3>
+
+	<label>
+		<h6>Extra Mass</h6>
+		<input class="mass" type="number" min="0" max="100" step="5" name=".extramass.set"/>
+	</label>
+
+
+	<h3>Sensors override</h3>
+
+	<label>
+		<h6>Door Closed</h6>
+		<input type="checkbox" name=".door.override" />
+	</label>
+
+</section><!--/.manual-->
+
+<section class="script">
+
+	<!--<object class="chart" data=""></object>-->
+
+	<section class="runstop">
+
+		<h2>Control</h2>
+
+		<div class="buttongroup">
+			<button name="start">Start</button>
+			<button name="pause">Pause</button>
+			<button name="resume">Resume</button>
+			<button name="stop">Stop</button>
+		</div>
+
+		<div class="buttongroup">
+			<button name="prev">Prev</button>
+			<button name="next">Next</button>
+		</div>
+
+	</section><!--/.runstop-->
+
+	<section class="program">
+
+		<h2>Programm</h2>
+
+		<div class="ctrl_program"></div>
+
+		<div class="buttongroup">
+			<button name="set">Set</button>
+			<button name="save">Save</button>
+		</div>
+
+	</section><!--/.program-->
+
+	<section class="loadsave">
+
+		<label class="load">Load
+			<select name="load"></select>
+			<button name="load">Load</button>
+		</label>
+
+	</section>
+
+</section><!--/.script-->

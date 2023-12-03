@@ -1,5 +1,6 @@
 {
 	"name": "All-In Beer",
+	"description": "The more the better!",
 	"script": "5steps.js",
 	"steps": [
 		{

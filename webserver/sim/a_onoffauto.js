@@ -1,12 +1,11 @@
-"use strict";
+import { E } from "../E.js";
+import { Mqtt as  HQ } from '../helpers.js';
+import _ from "underscore";
 
-var HQ = require( '../helpers.js' ).mqtt;
-var E = require( '../E.js' );
+import SOnOffAuto from './s_onoffauto.js';
 
-var SOnOffAuto = require( './s_onoffauto.js' );
-var _ = require( 'underscore' );
 
-module.exports = function( conf ) {
+export default function AOnOffAuto( conf ) {
 
 	var parent = SOnOffAuto( conf ),
 		parentRun = parent.run
@@ -43,4 +42,4 @@ module.exports = function( conf ) {
 	} );
 
 	return self;
-};
+}

@@ -1,13 +1,18 @@
-var repl = require('repl')
-var net = require('net')
+import repl from 'repl';
+import net from 'net';
 
-module.exports = function( context, port ) {
+var help = {
+
+	A: "B"
+};
+
+export default function Repl( context, port ) {
 
 	var r;
 
 	function addContext( context, value ) {
 		if( arguments.length == 1 ) {
-			for( key in context ) {
+			for( const key in context ) {
 				r.context[ key ] = context[ key ];
 			}
 		} else if( arguments.length == 2 ) {
@@ -20,7 +25,9 @@ module.exports = function( context, port ) {
 	if( port ) {
 
 		net.createServer( function( socket ) {
+
 			console.log( "start repl server on " + port );
+
 			r = repl.start( {
 				prompt: '[' + process.pid + '] ' +socket.remoteAddress+':'+socket.remotePort+'> ',
 				input: socket,
@@ -43,6 +50,8 @@ module.exports = function( context, port ) {
 
 		addContext( context );
 	}
+
+	addContext( help );
 
 	r.addContext = addContext;
 

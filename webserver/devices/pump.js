@@ -1,20 +1,8 @@
-"use strict";
+import InProxy from '../sensor/in_proxy.js';
+import InOutProxy from '../sensor/inout_proxy.js';
+import Combined from '../sensor/combined.js';
 
-require( './polyfill.js' );
-
-var E = require( './E.js' );
-
-var H = require( './helpers.js' );
-
-var log = require( './logging.js' );
-
-var InProxy = require( './sensor/in_proxy.js' ),
-	OutProxy = require( './sensor/out_proxy.js' ),
-	InOutProxy = require( './sensor/inout_proxy.js' ),
-	Combined = require( './sensor/combined.js' )
-	;
-
-function createPump( index, config ) {
+export default function createPump( config, index ) {
 
 	var self = Object.assign( {
 
@@ -66,7 +54,3 @@ function createPump( index, config ) {
 
 	return self;
 };
-
-module.exports = {};
-
-module.exports.create = createPump;

@@ -1,71 +1,93 @@
-"use strict";
+import { E } from './E.js';
+import { Assert } from './assert.js';
+import { log } from './logging.js';
 
-var E = require( './E.js' );
+import mqtt from 'mqtt';
 
-var Assert = require( './assert.js' );
-var log = require( './logging.js' );
+// Scream server example: "hi" -> "HI!!!"
 
-var mqtt = require( 'mqtt' );
+function arrayze( val ){
 
-var Dot = require( 'dot-object' ),
-	dash = new Dot( '/' );
+	if( !val ) val = [];
+	if( ! Array.isArray( val ) ){
+		val = [ val ];
+	}
+	return val;
+}
 
+export default function Mqtt( onData, config, subscribe, filter ) {
 
-// Scream server example: "hi" -> "HI!!!" 
+	return new Promise( (resolve, reject) => {
 
-module.exports = function( onData, config, subscribe, done ) {
+		Assert.present( 'onData', onData );
+		Assert.present( 'config', config );
 
-	Assert.present( 'onData', onData );
-	Assert.present( 'config', config );
-	Assert.present( 'done', done );
+		subscribe = arrayze( subscribe );
+		filter = arrayze( filter );
 
-	log.trace( "MQTT starting" );
+		log.info( "MQTT starting" );
+		log.info( config.url, config.username );
 
-	var _onData = false;
+		var started = false;
+		var _onData = onData;
 
-	_onData = onData;
+		var mqttClient = mqtt.connect( config.url, {
+				clientId: config.client,
+				username: config.username,
+				password: config.password
+		} );
 
-	var mqttClient = mqtt.connect( config.url, {
-			username: config.username,
-			password: config.password
+		mqttClient.on( 'connect', function () {
+			log.info( "MQTT Connect" );
+			log.trace( arguments );
+			subscribe.forEach( s => {
+				s( function( topic ) {
+					var t = config.prefix + topic;
+					log.startup( "SUBSCRIBE", t );
+					mqttClient.subscribe( t ) }
+				);
+			} );
+			log.trace( "MQTT STARTED" );
+			if( !started ){
+				started = true;
+				resolve( __mqtt );
+			}
+		});
+		mqttClient.on( 'disconnect', function () {
+			E.rr( "DISCo" );
+		});
+
+		mqttClient.on( 'message', function( topic, message ) {
+
+			if( ! topic.startsWith( config.prefix ) ) {
+				log.warn( 'wrong prefix in: ' + topic );
+				return;
+			}
+
+			topic = topic.slice( config.prefix.length );
+
+			for( const f of filter){
+				if( f( topic, message ) ) return;
+			}
+
+			log.info( 'Q<', topic, message.toString() );
+
+			_onData( topic, message.toString() );
+		});
+
+		mqttClient.on( 'error', function( err ){
+
+			throw( err );
+		});
+
+		var __mqtt = {
+
+			send: function( topic, data ) {
+
+				log.trace( "Q>", topic, data );
+
+				mqttClient.publish( config.prefix + topic, data );
+			}
+		};
 	} );
-
-	mqttClient.on( 'connect', function () {
-		log.trace( "MQTT Connect" );
-		subscribe( function( topic ) {
-			log.info( "SUBSCRIBE: " + topic );
-			mqttClient.subscribe( config.prefix + topic ) }
-		);
-		log.trace( "MQTT STARTED" );
-		return done( null, __mqtt );
-	});
-
-	mqttClient.on( 'message', function( topic, message ) {
-
-		log.trace( 'MQTT <recv', topic, message.toString() );
-
-		if( ! topic.startsWith( config.prefix ) ) {
-			log.warn( 'wrong prefix in: ' + topic );
-			return;
-		}
-
-		topic = topic.slice( config.prefix.length );
-
-		_onData( topic, message.toString() );
-	});
-
-	mqttClient.on( 'error', function( err ){
-
-		throw( err );
-	});
-
-	var __mqtt = {
-
-		send: function( topic, data ) {
-
-			log.trace( "MQTT send>", topic, data );
-
-			mqttClient.publish( config.prefix + topic, data );
-		}
-	};
 };

@@ -1,0 +1,21 @@
+{
+	"name": "Schrühbrand",
+	"description": "Vorsichtiger Schrühbrand",
+	"script": "3steps.js",
+	"steps": [
+		{
+			"powerfactor": 0.2,
+			"heat": 200,
+			"hold": 3600
+		},
+		{
+			"heat": 600,
+			"powerfactor": 0.3
+		},
+		{
+			"heat": 960,
+			"powerfactor": 1.0,
+			"hold": 900
+		}
+	]
+}

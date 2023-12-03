@@ -2,12 +2,9 @@
 
 BAG.Script = (function($,BAG){
 
-	return function( elem, device ) {
+	return function( elem, type, device ) {
 
 		var _onControl = false;
-
-		var oldSteps,
-		    oldCurrent;
 
 		var curChart = false,
 			curControls = false
@@ -29,6 +26,7 @@ BAG.Script = (function($,BAG){
 		function notify( on, topic, value ) {
 
 			console.trace( "NOTIFY", on, topic, value );
+
 			_onControl( { on: on, topic: topic, value: value, device: device } );
 		}
 
@@ -192,18 +190,21 @@ BAG.Script = (function($,BAG){
 
 				var scripts = data.scripts;
 
-				var $options = $.map( scripts, function( script ){
-					return $('<option/>')
-							.val( script.file )
-							.text( script.name )
-							;
-				} )
+				if( type in scripts ) {
 
-				$elem.find( 'section.loadsave select' )
-						.empty()
-						.append( $("<option>--</option>" ) )
-						.append( $options );
-						;
+					var $options = $.map( scripts[type], function( script ){
+						return $('<option/>')
+								.val( script.file )
+								.text( script.name )
+								;
+					} )
+
+					$elem.find( 'section.loadsave select' )
+							.empty()
+							.append( $("<option>--</option>" ) )
+							.append( $options );
+							;
+				}
 			}
 
 			if( curChart && curChart !== true ){
