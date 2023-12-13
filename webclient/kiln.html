@@ -14,25 +14,31 @@
 <section class="manual">
 
 	<h2>Manual</h2>
-	
-	<h3>On / Off</h3>
 
+	<h3>System</h3>
+	<label>
+		<h6>System</h6>
+		<input type="checkbox" name=".system.set" />
+	</label>
+
+
+	<h3>Temperature</h3>
 	<label>
 		<h6>Power / %</h6>
-		<input class="powerfactor" type="number" min="0" max="100" step="5" name=".powerfactor.set"/>
+		<input class="powerfactor" type="number"
+				min="0" max="100" step="5" name=".powerfactor.set"/>
 	</label>
 
 
 	<h3>Tuning</h3>
-
 	<label>
 		<h6>Extra Mass</h6>
-		<input class="mass" type="number" min="0" max="100" step="5" name=".extramass.set"/>
+		<input class="extramass" type="number"
+				min="0" max="100" step="5" name=".extramass.set"/>
 	</label>
 
 
 	<h3>Sensors override</h3>
-
 	<label>
 		<h6>Door Closed</h6>
 		<input type="checkbox" name=".door.override" />

@@ -70,7 +70,7 @@ BAG.Boiler = (function($,Ψ){
 						.setAttribute( 'transform', 'translate( 0, ' + move + ' )' )
 						;
 				*/
-				
+
 				// Using jQuery and Velocity
 				$svg('fill_content')
 						.velocity( { translateY: move }, { duration: 500 } )

@@ -1,6 +1,15 @@
 import { Mqtt } from '../helpers.js';
 import _ from 'underscore';
+import { E } from '../E.js';
 
+/**
+ * Stores a value set by mqtt via the "status" topic
+ *
+ * The value can be shown in the webapp
+ *
+ * This value publishes nothing but it can be overridden.
+ * This is usefull eg for activating function
+ */
 export default function( conf, defaults ) {
 
 	defaults = defaults || {};

@@ -59,7 +59,7 @@ export const E = {
 	x: function(){
 		var args = Array.prototype.slice.call( arguments );
 
-		args.unshift( stack( 2, 3 ).red );
+		args.unshift( stack( 2, 4 ).red );
 
 		console.log.apply( console, args );
 	}

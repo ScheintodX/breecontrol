@@ -40,13 +40,17 @@ BAG.Kiln = (function($,Ψ){
 			setTempInnerNominal: ψ.asDegree( ψ.text( 'temp_inner_nominal' ) ),
 			setTimeRemaining: ψ.asHourMinSec( ψ.text( 'time_remaining' ) ),
 			setTimeElapsed: ψ.asHourMinSec( ψ.text( 'time_elapsed' ) ),
-			setHeaterPowerStatus: ψ.asUnit( ψ.text( 'heater_power_status' ), "kW", 3 ),
 			setExtramassStatus: ψ.asUnit( ψ.text( 'extramass_status' ), "kg", 3 ),
-			//setHeaterPowerStatusAbs: ψ.asUnit( ψ.text( 'heater_power_status_abs' ), "kW", 3 ),
+			setHeaterPowerStatus: ψ.asUnit( ψ.text( 'heater_power_status' ), "%", -2 ),
 			setHeaterPowerIcon: ψ.asPowerColor( ψ.fill( 'temp_heater_icon' ), 1 ),
 			setDoor: ψ.visible( 'lid' ),
 			setDoorOverride: ψ.override( ψ.visible( 'lid_override' ) ),
 			setMode: ψ.oneOf( 'mode_', [ 'run', 'pause', 'stop' ] ),
+
+			setSystem: ψ.ifchanged( function( on ) {
+				//svg('system').style.opacity = (on ? .8 : .2);
+			} ),
+
 
 			gotData: function( data ) {
 
@@ -56,6 +60,12 @@ BAG.Kiln = (function($,Ψ){
 
 				var kiln = data.devices[ device ];
 
+				console.log( kiln );
+
+				if( 'system' in kiln ) {
+					Kiln.setSystem( kiln.system.status );
+				}
+
 				if( 'door' in kiln ) {
 					Kiln.setDoor( kiln.door.status );
 					Kiln.setDoorOverride( kiln.door.override );
@@ -63,13 +73,15 @@ BAG.Kiln = (function($,Ψ){
 
 				if( 'temp' in kiln ) {
 					Kiln.setTempInnerStatus( kiln.temp.status );
-					Kiln.setTempInnerNominal( kiln.temp.nominal );
+					//Kiln.setTempInnerNominal( kiln.temp.nominal );
 				}
 
 				if( 'powerfactor' in kiln ) {
-					Kiln.setHeaterPowerStatus( kiln.powerabs.status );
-					//Kiln.setHeaterPowerStatusAbs( kiln.power.status / 10000 );
-					Kiln.setHeaterPowerIcon( kiln.powerfactor.status );
+					Kiln.setHeaterPowerStatus( kiln.powerfactor.status );
+				}
+
+				if( 'heater' in kiln ) {
+					Kiln.setHeaterPowerIcon( kiln.heater.status );
 				}
 
 				if( 'extramass' in kiln ) {
@@ -97,18 +109,6 @@ BAG.Kiln = (function($,Ψ){
 		$elem.on( 'load', function() {
 
 			_svg = $elem.get( 0 ).contentDocument;
-
-			// Animate stuff
-			/*
-			$svg('fill_content_anim')
-					.expectOne()
-					.velocity( { translateY: [0, 5] }, { duration: 2000, loop: true } )
-					;
-			$svg('beer')
-					.expectOne()
-					.velocity( { fill: ['#f4da00','#f4d000'] }, { duration: 375, loop: true } )
-					;
-					*/
 
 		} );
 

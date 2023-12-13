@@ -1,9 +1,25 @@
 import { Message as HM } from '../helpers.js';
 
 import InProxy from '../sensor/in_proxy.js';
+import OutProxy from '../sensor/out_proxy.js';
 import InOutProxy from '../sensor/inout_proxy.js';
 import Combined from '../sensor/combined.js';
+import TestValue from '../sensor/test_value.js';
+//import ValueX from '../sensor/value.js";
 
+import { E } from '../E.js';
+
+/**
+ * +-------+----+   +--------------+
+ * | door> |    |   | >powerfactor |
+ * +-------+    |   |              |
+ * |            |   |              |
+ * |  TEMP>     |   |              |
+ * |            |   +--------------+
+ * +------------+
+ * | heater>    |
+ * +------------+
+ */
 export default function createKiln( config, index ) {
 
 	var self = Object.assign( {
@@ -14,30 +30,45 @@ export default function createKiln( config, index ) {
 
 	}, Combined( {
 
-		temp: InProxy( {
+		// Temperatur of the Kiln
+		// Can be set to a wanted temperature
+		temp: InOutProxy( {
 				type: 'f',
-				timeout: 2500 } ),
+				timeout: 10000 },
+			{ set: 0 } ),
 
-		powerfactor: InOutProxy( {
-				type: 'f',
-				timeout: 2500 } ),
+		// Temperatur of the Kiln
+		// Can be set to a wanted temperature
+		heater: InProxy( {
+				type: 'b',
+				timeout: 5000 } ),
 
-		powerabs: InProxy( {
-				type: 'f',
-				timeout: 2500 } ),
+		// Temperatur of the Kiln
+		// Can be set to a wanted temperature
+		system: InOutProxy( {
+				type: 'b',
+				timeout: 5000 } ),
 
+		// Door status
+		// Can only be read from mqtt
 		door: InProxy( {
 				type: 'b',
-				timeout: 2500 } ),
+				timeout: 1000 } ),
 
-		extramass: InOutProxy( {
-				type: 'f',
-				timeout: 2500 } )
+		// Power factor 0..1
+		// Percentage the kiln is turned on
+		powerfactor: InOutProxy( {
+				type: 'f' } ),
+
+		// Value set by the web
+		/*
+		extramass: ValueX( {
+			type: 'f' }, { value: 100 } )*/
 
 	} ), {
 
 		_watchTime: [
-			'temp', 'door', 'powerfactor'
+			'temp', 'door'//, 'test'
 		],
 
 		warn: {
@@ -75,27 +106,31 @@ export default function createKiln( config, index ) {
 
 				var name = self._watchTime[ i ];
 				var w = HM.getByDot( self, name );
-
 				var age = now - w._time;
 
 				if( ! w._time || age > w._conf.timeout ) {
+					//E.rr( `{name}: TIMEOUT` );
 					w.status = undefined;
 					if( ! w._conf.mine ) w.nominal = undefined;
 				}
 			}
 
-			
+
 			// ============ Control Temperature ============
 			// Monitor the kiln temperature and regulate
 			// the jacket accordingly
-			
+			//
+
+			//E.x( "Temp", self.temp.status, self.temp.override, self.temp._time );
+			//E.x( "Door", self.door.status, self.door.override, self.door._time );
+
 			//self.temp.run( self, self.warn );
 
 
 			// ============ Security section ===============
 			// Check for things which shouldn't happen and
 			// correct the values. Send warnings.
-			
+
 			//self.heater.temp.watch( self, self.warn );
 		},
 

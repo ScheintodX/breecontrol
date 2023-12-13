@@ -37,10 +37,14 @@ BAG.Kiln_Controls = (function($){
 		}
 
 		var manualControls = {
-		// Manual
+
+			// System
+			'system.nominal': Control( 'input[name=".system.set" ]' ),
+
+			// Temperature
 		 	'powerfactor': Control( 'input[name=".powerfactor.set"]', 100 ),
 
-		// Override
+			// Override
 			'extramass': Control( 'input[name=".extramass.set"] ', 0.001 ),
 			'door.override': Control( 'input[name=".door.override"] ' ),
 		};
@@ -50,6 +54,8 @@ BAG.Kiln_Controls = (function($){
 			if( 'devices' in data && device in data.devices ) {
 
 				var kiln = data.devices[ device ];
+
+				console.log( kiln );
 
 				$e.find( 'header h1' )
 						.text( kiln.name )
@@ -62,6 +68,8 @@ BAG.Kiln_Controls = (function($){
 
 					var control = manualControls[ key ];
 					if( typeof( control ) == 'undefined' ) continue;
+
+					console.log( value, control );
 				}
 
 			}

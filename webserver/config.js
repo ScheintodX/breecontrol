@@ -32,8 +32,7 @@ export default function Config(){
 					minTemp: 0,
 					maxTemp: 1300,
 					power: 18000
-				},
-				{
+				}/*, {
 					id: 'boiler1',
 					type: "boiler",
 					name: "Bernd der Bottich",
@@ -44,7 +43,7 @@ export default function Config(){
 					power: 9000, // W
 					upper: { minTemp: 0, maxTemp: 450 },
 					lower: { minTemp: 0, maxTemp: 450 }
-				}/*, {
+				}, {
 					id: 'fan1',
 					type: 'fan',
 					name: 'Soeder',

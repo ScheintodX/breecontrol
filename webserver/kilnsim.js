@@ -15,9 +15,9 @@ const config = {
     //url: "mqtt://mqtt.flo.axon-e.de:1883",
     client: "kilnsim",
     url: "mqtt://localhost:1883",
-    username: "lakai",
-    password: "lakai",
-    prefix: "braumeister/kiln1/"
+    username: "braumeister",
+	password: '3oropMLRr7PvFpFEhHVijqDH',
+	prefix: 'pottery/kiln/'
 }
 
 var PWM_PERIODE = 10;
@@ -227,8 +227,6 @@ function loop(){
 async function startMqtt() {
 
 	var mqtt = await Mqtt( gotMqttData, config, x => x( "+/set" ) );
-
-	Assert.present( 'mqtt', mqtt );
 
 	log.startup( "mqtt", "STARTED" );
 

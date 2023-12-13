@@ -1,0 +1,39 @@
+mqtt:
+  host: 127.0.0.1
+  port: 1883
+  username: influx
+  password: JYecHVPQcUmHAG44Yg39PyiQ
+
+influxdb:
+  host: 127.0.0.1
+  port: 8086
+  database: kiln
+
+points:
+  - measurement: temp
+    topic: brewery/+/temp/status
+    fields:
+      value: $.payload
+    tags:
+      id: $.topic[1]
+
+  - measurement: temp_nominal
+    topic: brewery/+/temp/nominal
+    fields:
+      value: $.payload
+    tags:
+      id: $.topic[1]
+
+  - measurement: power
+    topic: brewery/+/abspower/status
+    fields:
+      value: $.payload
+    tags:
+      id: $.topic[1]
+
+  - measurement: heater
+    topic: brewery/+/heater/status
+    fields:
+      value: $.payload
+    tags:
+      id: $.topic[1]

@@ -1,6 +1,14 @@
 import { Mqtt } from '../helpers.js';
 import _ from 'underscore';
+import { E } from '../E.js';
 
+/**
+ * Stores a value set by web
+ *
+ * The value is published to mqtt via "set" topic
+ *
+ * The value is stored in the "set" member variable
+ */
 export default function( conf, defaults ) {
 
 	defaults = defaults || {};
@@ -15,7 +23,9 @@ export default function( conf, defaults ) {
 			self.set = val;
 		},
 		setByWeb: function( topic, val ) {
-			if( topic == 'set' ) self.set = val;
+			if( topic == 'set' ){
+				self.set = val;
+			}
 		},
 		publish: function( emit ) {
 			if( typeof self.set != 'undefined' )

@@ -5,7 +5,7 @@ export default function( conf, sensors ) {
 		conf = {};
 	}
 
-	var self = Object.assign( 
+	var self = Object.assign(
 		sensors,
 		{
 			_conf: conf,
@@ -21,6 +21,7 @@ export default function( conf, sensors ) {
 					if( !( 'publish' in sensor ) ) continue;
 
 					sensor.publish( function( topic, data ) {
+						//console.log( key + '/' + topic, data );
 						emit( key + '/' + topic, data );
 					} );
 				}
@@ -41,7 +42,7 @@ export default function( conf, sensors ) {
 					} )
 				}
 			}
-			
+
 		}
 	);
 
