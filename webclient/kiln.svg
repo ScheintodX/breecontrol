@@ -128,13 +128,13 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter3998"
-       x="-0.049905314"
-       y="-0.050384701"
-       width="1.0998108"
-       height="1.1007694">
+       x="-0.12304395"
+       y="-0.12421545"
+       width="1.2460881"
+       height="1.2484309">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="0.64739991"
+         stdDeviation="1.9013427"
          id="feGaussianBlur4000" />
     </filter>
   </defs>
@@ -145,9 +145,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568543"
-     inkscape:cx="272.50127"
-     inkscape:cy="167.84947"
+     inkscape:zoom="2.8284272"
+     inkscape:cx="252.6139"
+     inkscape:cy="108.71767"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
