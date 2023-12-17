@@ -4,17 +4,15 @@ import InProxy from '../sensor/in_proxy.js';
 import OutProxy from '../sensor/out_proxy.js';
 import InOutProxy from '../sensor/inout_proxy.js';
 import Combined from '../sensor/combined.js';
-import TestValue from '../sensor/test_value.js';
-//import ValueX from '../sensor/value.js";
+import WebValue from '../sensor/web_value.js';
 
 import { E } from '../E.js';
 
 /**
- * +-------+----+   +--------------+
- * | door> |    |   | >powerfactor |
- * +-------+    |   |              |
- * |            |   |              |
- * |  TEMP>     |   |              |
+ * +------------+   +--------------+
+ * | (door>)    |   | >system      |
+ * |            |   | >powerfactor |
+ * |    TEMP>   |   |              |
  * |            |   +--------------+
  * +------------+
  * | heater>    |
@@ -30,9 +28,11 @@ export default function createKiln( config, index ) {
 
 	}, Combined( {
 
+		debug: false,
+
 		// Temperatur of the Kiln
 		// Can be set to a wanted temperature
-		temp: InOutProxy( {
+		temp: InProxy( {
 				type: 'f',
 				timeout: 10000 },
 			{ set: 0 } ),
@@ -51,24 +51,25 @@ export default function createKiln( config, index ) {
 
 		// Door status
 		// Can only be read from mqtt
+		/*
 		door: InProxy( {
 				type: 'b',
-				timeout: 1000 } ),
+				timeout: 1000 } ), */
 
 		// Power factor 0..1
 		// Percentage the kiln is turned on
 		powerfactor: InOutProxy( {
-				type: 'f' } ),
+			type: 'f',
+			scale: 2 } ),
 
 		// Value set by the web
-		/*
-		extramass: ValueX( {
-			type: 'f' }, { value: 100 } )*/
+		extramass: WebValue( {
+			type: 'f' }, { set: 40000 } )
 
 	} ), {
 
 		_watchTime: [
-			'temp', 'door'//, 'test'
+			'temp'//, 'door', 'test'
 		],
 
 		warn: {
@@ -106,9 +107,8 @@ export default function createKiln( config, index ) {
 
 				var name = self._watchTime[ i ];
 				var w = HM.getByDot( self, name );
-				var age = now - w._time;
 
-				if( ! w._time || age > w._conf.timeout ) {
+				if( ! w._time || (now - w._time) > w._conf.timeout ) {
 					//E.rr( `{name}: TIMEOUT` );
 					w.status = undefined;
 					if( ! w._conf.mine ) w.nominal = undefined;

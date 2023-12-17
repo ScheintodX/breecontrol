@@ -29,6 +29,7 @@ export default function( conf, initial ) {
 		} ),
 
 		status: undefined,
+		nominal: undefined,
 
 		set: undefined,
 
@@ -37,24 +38,24 @@ export default function( conf, initial ) {
 		},
 
 		setByWeb: function( topic, val ) {
-			if( topic != 'status' && topic in self ) {
+			if( topic != 'status' && topic != 'nominal' && topic in self ) {
 				self[ topic ] = val;
 			}
 		},
 		setByMqtt: function( topic, data ) {
-			if( topic == 'status' ) {
+
+			if( topic == 'status' || topic == 'nominal' ) {
 				self[ topic ] = Mqtt.fromString( data, self._conf.type );
 				self._time = new Date();
 			}
 		},
 		subscribe: function( emit ) {
 			emit( 'status' );
+			emit( 'nominal' );
 		},
 		publish: function( emit ) {
 			if( typeof self.set != 'undefined' ) {
-				var as = Mqtt.toString( self.set, self._conf.type, self._conf.scale );
-				E.rr( as, self.set, self._conf.scale );
-				emit( 'set', as );
+				emit( 'set', Mqtt.toString( self.set, self._conf.type, self._conf.scale ) );
 			}
 		}
 

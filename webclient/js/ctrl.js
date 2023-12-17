@@ -43,7 +43,9 @@ BAG.Ctrl = (function($){
 
 			$.each( controls, function( name, control ) {
 
-				if( control.gotData ) control.gotData( data );
+				if( control.gotData ){
+					control.gotData( data );
+				}
 
 			} );
 

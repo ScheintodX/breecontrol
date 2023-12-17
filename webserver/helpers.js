@@ -215,7 +215,7 @@ export const Json = {
 	stringifyPublic: function( data, pretty ) {
 
 		return JSON.stringify( data, function( key, val ) {
-		
+
 			return key.startsWith( '_' ) ? undefined : val;
 		}, pretty ? '\t' : undefined );
 	}

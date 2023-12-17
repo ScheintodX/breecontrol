@@ -42,15 +42,15 @@ BAG.Kiln = (function($,Ψ){
 			setTimeElapsed: ψ.asHourMinSec( ψ.text( 'time_elapsed' ) ),
 			setExtramassStatus: ψ.asUnit( ψ.text( 'extramass_status' ), "kg", 3 ),
 			setHeaterPowerStatus: ψ.asUnit( ψ.text( 'heater_power_status' ), "%", -2 ),
-			setHeaterPowerIcon: ψ.asPowerColor( ψ.fill( 'temp_heater_icon' ), 1 ),
+			setHeaterPowerBar: ψ.asPowerColor( ψ.fill( 'temp_heater_icon' ), 1 ),
+			setHeaterPowerIcon: ψ.visible( 'icon_heating' ),
+			/*
 			setDoor: ψ.visible( 'lid' ),
 			setDoorOverride: ψ.override( ψ.visible( 'lid_override' ) ),
+			*/
 			setMode: ψ.oneOf( 'mode_', [ 'run', 'pause', 'stop' ] ),
 
-			setSystem: ψ.ifchanged( function( on ) {
-				//svg('system').style.opacity = (on ? .8 : .2);
-			} ),
-
+			setSystem: ψ.visible( 'system_icon' ),
 
 			gotData: function( data ) {
 
@@ -61,15 +61,17 @@ BAG.Kiln = (function($,Ψ){
 				var kiln = data.devices[ device ];
 
 				console.log( kiln );
+				//console.log(`System: ${kiln.system ? kiln.system.status : 'N/A'}, Temp: ${kiln.temp ? kiln.temp.status : 'N/A'}, Power Factor: ${kiln.powerfactor ? kiln.powerfactor.status : 'N/A'}, Heater: ${kiln.heater ? kiln.heater.status : 'N/A'}, Extra Mass: ${kiln.extramass ? kiln.extramass.status : 'N/A'}`);
 
 				if( 'system' in kiln ) {
 					Kiln.setSystem( kiln.system.status );
 				}
 
+				/*
 				if( 'door' in kiln ) {
 					Kiln.setDoor( kiln.door.status );
 					Kiln.setDoorOverride( kiln.door.override );
-				}
+				}*/
 
 				if( 'temp' in kiln ) {
 					Kiln.setTempInnerStatus( kiln.temp.status );
@@ -81,11 +83,12 @@ BAG.Kiln = (function($,Ψ){
 				}
 
 				if( 'heater' in kiln ) {
+					Kiln.setHeaterPowerBar( kiln.heater.status );
 					Kiln.setHeaterPowerIcon( kiln.heater.status );
 				}
 
 				if( 'extramass' in kiln ) {
-					Kiln.setExtramassStatus( kiln.extramass.status );
+					Kiln.setExtramassStatus( kiln.extramass.set );
 				}
 
 				if( 'script' in kiln ) {

@@ -19,17 +19,15 @@ BAG.Boiler_Controls = (function($){
 
 		function Control( sel, scale ) {
 
-			var $c = $secManual.find( sel )
-					;
+			var $c = $secManual.find( sel );
 
 			if( !$c.isOne() ) return undefined;
 
 			// topic (for notify) is taken from button name.
 			var topic = $c.attr('name');
 
-			var control = BAG.Button( $c, topic, scale )
-					.onNotify( notify )
-					;
+			var control = BAG.Control( $c, topic, scale )
+					.onNotify( notify );
 
 			if( topic.match( /\.override$/ ) )
 					control = control.override();
@@ -57,15 +55,8 @@ BAG.Boiler_Controls = (function($){
 
 				var boiler = data.devices[ device ];
 
-				/*
-				if( name == "Pete the Preserver" ){
-					console.log( boiler );
-				}
-				*/
-
 				$e.find( 'header h1' )
-						.text( boiler.name )
-						;
+						.text( boiler.name );
 
 				for( var key in manualControls ) {
 

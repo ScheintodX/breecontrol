@@ -13,6 +13,7 @@ import { E } from '../E.js';
  */
 export default function( conf, defaults ) {
 
+	/*
 	defaults = defaults || {};
 
 	var self = _.defaults( {
@@ -28,4 +29,8 @@ export default function( conf, defaults ) {
 	}, defaults );
 
 	return self;
+	*/
+	return {
+		setByWeb: function( topic, val ) {}
+	}
 };

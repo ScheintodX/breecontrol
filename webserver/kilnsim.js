@@ -41,6 +41,11 @@ function gotMqttData( t, v ){
 
 	switch( t ){
 
+		case "system/set":
+			var val = parseFloat( v );
+			Kiln.system = !!val;
+			break;
+
 		case "powerfactor/set":
 			var val = parseFloat( v );
 			if( val || val === 0 ){
@@ -122,6 +127,7 @@ var Buf = ( max, slice ) => {
 
 var Kiln = {
 
+	system: false,
 	P_max: 18000, //kW
 	U_loss: 5, // W/K
 	m_mass: 400, //kg,
@@ -166,6 +172,7 @@ var Kiln = {
 
 	dump: function(){
 		E.cho( {
+			X: this.system,
 			U: this.U_loss + " W/K",
 			m: (this.m_mass + this.m_extra) + " kg",
 			c: this.c_spec_heat_capacity + " J/(kg*K)",
@@ -216,9 +223,10 @@ function loop(){
 	    h2 = pwm( 1, time, fac ),
 	    h3 = pwm( 2, time, fac );
 
+	publish( "system/status", Kiln.system ? "1" : "0" );
 	publish( "time", "" + time );
 	publish( "temp/status", "" + (Kiln.heat+TEMP_OFFSET).toFixed( 1 ) );
-	publish( "powerfactor/status", "" + fac.toFixed( 1 )  );
+	publish( "powerfactor/status", "" + fac.toFixed( 3 )  );
 	publish( "powerabs/status", "" + Kiln.power.toFixed( 1 ) );
 	publish( "heater/status", h2s( h1 ) + h2s( h2 ) + h2s( h3 ) );
 	publish( "extramass/status", Kiln.m_extra.toFixed( 1 ) );

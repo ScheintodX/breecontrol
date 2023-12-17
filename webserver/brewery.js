@@ -97,14 +97,7 @@ export default async function Brewery( config ) {
 
 			topic = HM.splitByWeb( topic );
 
-			console.log( topic );
-			console.log( self.devices );
-
 			if( topic[0] in self.devices ){
-
-				console.log( "SET " + topic + " " + value, typeof value );
-
-				log.info( "SET " + topic + " " + value, typeof value );
 
 				return doSupervised( function() {
 
@@ -134,6 +127,7 @@ export default async function Brewery( config ) {
 
 					dev.publish( function( topic, data ) {
 
+						E.rr( topic, data );
 						emit( device + '/' + topic, data );
 					} );
 				}

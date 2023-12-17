@@ -21,7 +21,6 @@ export default function( conf, sensors ) {
 					if( !( 'publish' in sensor ) ) continue;
 
 					sensor.publish( function( topic, data ) {
-						//console.log( key + '/' + topic, data );
 						emit( key + '/' + topic, data );
 					} );
 				}

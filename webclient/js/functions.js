@@ -36,7 +36,7 @@ BAG.Function = ( function(){
 	}
 
 	return function( svg ){
-	
+
 		var ψ = {
 
 			ifchanged: function( f ) {
@@ -69,7 +69,7 @@ BAG.Function = ( function(){
 						text = Math.round( val*x ) / x;
 					}
 					return f( text );
-					
+
 				}
 			},
 
@@ -180,6 +180,7 @@ BAG.Function = ( function(){
 				];
 
 				return function( power ){
+					if( !power ) power = 0;
 					var percent = power/max;
 					var color = mixArray( colors, percent );
 					return f( color );
@@ -248,7 +249,7 @@ BAG.Function = ( function(){
 			override: function( f ) {
 				return function( value ) {
 					var isOverride = (
-							typeof value != 'undefined' 
+							typeof value != 'undefined'
 							&& value !== null
 							&& value != 'off'
 					);
@@ -259,7 +260,7 @@ BAG.Function = ( function(){
 		};
 
 		return ψ;
-		
+
 	};
 
 } )();

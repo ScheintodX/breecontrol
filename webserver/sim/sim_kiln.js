@@ -38,15 +38,15 @@ export default function SimKiln( DEVICE ) {
 			jitter: .5,
 			min: 0.5,
 			max: 99.7
-		} ),
+		} )/*,
 
-		lid: SBool( {
+		door: SBool( {
 			topic: DEVICE + '/door',
 			status: { initial: true },
 			freq: .5,
 			iv: 300,
 			mode: 'simple'
-		} )
+		} )*/
 	};
 
 	return self;

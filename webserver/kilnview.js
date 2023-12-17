@@ -14,7 +14,7 @@ const config = {
 var Kiln = {
 	temp: 20,
 	powerfactor: 0,
-	door: true,
+	//door: true,
 	heater: false
 };
 
@@ -54,7 +54,7 @@ function display() {
 			`+----------------------+\n` +
 			`| ${fmt('Temp', Kiln.temp + '°C' )} |\n` +
 			`| ${fmt('Power', Kiln.powerfactor )} |\n` +
-			`| ${fmt('Door', Kiln.door ? 'Closed' : 'Open' )} |\n` +
+			//`| ${fmt('Door', Kiln.door ? 'Closed' : 'Open' )} |\n` +
 			`| ${fmt('Heater', Kiln.heater ? 'On' : 'Off' )} |\n` +
 			`+----------------------+` );
 }

@@ -1,6 +1,6 @@
 "use strict";
 
-BAG.Button = function($){
+BAG.Control = function($){
 
 	function InputCheckbox( $e, topic ) {
 
@@ -19,38 +19,13 @@ BAG.Button = function($){
 			topic: topic,
 			trigger: trigger,
 			set: function( val ) {
-				var checked = (val==1);
+				var checked = !!(val.set);
 				$e.prop( {
 					checked: checked,
 					disabled: false
 				} );
 				return self;
 			},
-		} ) );
-
-		return self;
-	}
-
-	function InputSelect( $e, topic ) {
-
-		function trigger() {
-			console.log( "notify", $e.val() );
-			self.notify( 'manual', topic, $e.val() );
-		}
-
-		$e.on( 'change', function( val ) {
-
-			trigger();
-			return false;
-		} );
-
-		var self = Notifyable( Overridable( {
-			$e: $e,
-			topic: topic,
-			trigger: trigger,
-			set: function( val ) {
-				$e.val( val );
-			}
 		} ) );
 
 		return self;
@@ -88,6 +63,7 @@ BAG.Button = function($){
 				if( typeof val == 'undefined' ){
 					$e.val( '' );
 				} else {
+					val = val.set;
 					$e.val( val * scale );
 				}
 				return self;
@@ -97,8 +73,32 @@ BAG.Button = function($){
 		return self;
 	}
 
+	function InputSelect( $e, topic ) {
+
+		function trigger() {
+			self.notify( 'manual', topic, $e.val() );
+		}
+
+		$e.on( 'change', function( val ) {
+
+			trigger();
+			return false;
+		} );
+
+		var self = Notifyable( Overridable( {
+			$e: $e,
+			topic: topic,
+			trigger: trigger,
+			set: function( val ) {
+				$e.val( val );
+			}
+		} ) );
+
+		return self;
+	}
+
 	function Notifyable( what ) {
-		
+
 		what.notify = false,
 		what.onNotify = function( callback ){
 			what.notify = callback;
@@ -157,8 +157,8 @@ BAG.Button = function($){
 	}
 
 	var self = function( $e, topic, scale ) {
-		var type = $e.attr( 'type' );
 		var tag = $e.prop( 'nodeName' );
+		var type = $e.attr( 'type' );
 		switch( tag ) {
 			case 'INPUT':
 			switch( type ){
@@ -173,7 +173,7 @@ BAG.Button = function($){
 			default:
 				console.warn( "Unknown: " + tag );
 		}
-	
+
 	}
 	self.InputCheckbox = InputCheckbox;
 	self.InputNumber = InputNumber;

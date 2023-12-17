@@ -38,7 +38,7 @@ function sendToAll( data ) {
 
 		if( client.readyState != client.OPEN ){
 
-			E.rr( "Clinet not ready" );
+			E.rr( "WS Client not ready" );
 
 		} else {
 			client.send( text, onSendError );
@@ -112,7 +112,7 @@ function startHttpServer( server, app, port ){
 
 
 export default async function Websocket( onData, hello, config ) {
-	
+
 	Assert.present( 'onData', onData );
 	Assert.present( 'config', config );
 

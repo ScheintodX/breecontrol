@@ -23,7 +23,7 @@ export default function Ctr( config, hello, brewery ) {
 
 			return _web( {
 				message: {
-					device: device, 
+					device: device,
 					level: level,
 					messages: [
 						{ level: level, text: text }
@@ -77,7 +77,7 @@ export default function Ctr( config, hello, brewery ) {
 
 			switch( data.topic ) {
 
-				case "load": 
+				case "load":
 
 					log.trace( 'load', data.value.load );
 
@@ -158,7 +158,7 @@ export default function Ctr( config, hello, brewery ) {
 
 					break;
 
-				default: 
+				default:
 					throw new Error( "Unknown action: " + data.topic );
 
 			}
@@ -233,13 +233,13 @@ export default function Ctr( config, hello, brewery ) {
 
 			setMqttCom: function( mqtt ) {
 
-				//_mqtt = Catch.fatal( "Ctrl/Mqtt", mqtt );
-				_mqtt = mqtt;
+				_mqtt = Catch.fatal( "Ctrl/Mqtt", mqtt );
+				//_mqtt = mqtt;
 
 				Assert.present( "config.updateIntervalMqtt", config.updateIntervalMqtt );
 
-			//	setInterval( Catch.fatal( "Ctrl/SendStatusMqtt", sendStatusMqtt ), config.updateIntervalMqtt );
-				setInterval( sendStatusMqtt, config.updateIntervalMqtt );
+				setInterval( Catch.fatal( "Ctrl/SendStatusMqtt", sendStatusMqtt ), config.updateIntervalMqtt );
+				//setInterval( sendStatusMqtt, config.updateIntervalMqtt );
 			},
 
 			setWebCom: function( web ) {

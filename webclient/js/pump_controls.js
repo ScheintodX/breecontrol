@@ -27,7 +27,7 @@ BAG.Pump_Controls = (function($){
 			// topic (for notify) is taken from button name.
 			var topic = $c.attr('name');
 
-			var control = BAG.Button( $c, topic, scale )
+			var control = BAG.Control( $c, topic, scale )
 					.onNotify( notify )
 					;
 
