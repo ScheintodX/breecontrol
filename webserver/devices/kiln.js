@@ -47,7 +47,7 @@ export default function createKiln( config, index ) {
 		// Can be set to a wanted temperature
 		system: InOutProxy( {
 				type: 'b',
-				timeout: 5000 } ),
+				timeout: 5000 }, { set: 0 } ),
 
 		// Door status
 		// Can only be read from mqtt
@@ -60,11 +60,14 @@ export default function createKiln( config, index ) {
 		// Percentage the kiln is turned on
 		powerfactor: InOutProxy( {
 			type: 'f',
-			scale: 2 } ),
+			scale: 2 }, { set: 0 } ),
 
 		// Value set by the web
 		extramass: WebValue( {
-			type: 'f' }, { set: 40000 } )
+			type: 'f' }, { set: 40000 } ),
+
+		damper: WebValue( {
+			type: 'f' }, { set: 0 } )
 
 	} ), {
 

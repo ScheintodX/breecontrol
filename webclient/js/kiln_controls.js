@@ -45,8 +45,11 @@ BAG.Kiln_Controls = (function($){
 			// Temperature
 		 	'powerfactor': Control( 'input[name=".powerfactor.set"]', 100 ),
 
+			// Tuning
+			'extramass': Control( 'input[name=".extramass.set"] ', 0.001 ),
+			'damper': Control( 'input[name=".damper.set"] ', 1 )
+
 			// Override
-			'extramass': Control( 'input[name=".extramass.set"] ', 0.001 )
 			//'door.override': Control( 'input[name=".door.override"] ' ),
 		};
 

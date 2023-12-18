@@ -41,6 +41,7 @@ BAG.Kiln = (function($,Ψ){
 			setTimeRemaining: ψ.asHourMinSec( ψ.text( 'time_remaining' ) ),
 			setTimeElapsed: ψ.asHourMinSec( ψ.text( 'time_elapsed' ) ),
 			setExtramassStatus: ψ.asUnit( ψ.text( 'extramass_status' ), "kg", 3 ),
+			setDamper: ψ.oneOf( 'damper_', [ '0', '1', '2', '3', '4' ] ),
 			setHeaterPowerStatus: ψ.asUnit( ψ.text( 'heater_power_status' ), "%", -2 ),
 			setHeaterPowerBar: ψ.asPowerColor( ψ.fill( 'temp_heater_icon' ), 1 ),
 			setHeaterPowerIcon: ψ.visible( 'icon_heating' ),
@@ -61,7 +62,6 @@ BAG.Kiln = (function($,Ψ){
 				var kiln = data.devices[ device ];
 
 				console.log( kiln );
-				//console.log(`System: ${kiln.system ? kiln.system.status : 'N/A'}, Temp: ${kiln.temp ? kiln.temp.status : 'N/A'}, Power Factor: ${kiln.powerfactor ? kiln.powerfactor.status : 'N/A'}, Heater: ${kiln.heater ? kiln.heater.status : 'N/A'}, Extra Mass: ${kiln.extramass ? kiln.extramass.status : 'N/A'}`);
 
 				if( 'system' in kiln ) {
 					Kiln.setSystem( kiln.system.status );
@@ -79,6 +79,7 @@ BAG.Kiln = (function($,Ψ){
 				}
 
 				if( 'powerfactor' in kiln ) {
+					//Note: If this seems to not work perhaps the simulator/ktrl is missing...
 					Kiln.setHeaterPowerStatus( kiln.powerfactor.status );
 				}
 
@@ -89,6 +90,10 @@ BAG.Kiln = (function($,Ψ){
 
 				if( 'extramass' in kiln ) {
 					Kiln.setExtramassStatus( kiln.extramass.set );
+				}
+
+				if( 'damper' in kiln ) {
+					Kiln.setDamper( kiln.damper.set );
 				}
 
 				if( 'script' in kiln ) {

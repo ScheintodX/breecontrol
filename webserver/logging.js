@@ -1,4 +1,3 @@
-//GREEN } from './colors.js';
 import 'colors';
 
 import fs from 'fs';

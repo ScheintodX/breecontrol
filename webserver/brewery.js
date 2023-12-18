@@ -127,7 +127,6 @@ export default async function Brewery( config ) {
 
 					dev.publish( function( topic, data ) {
 
-						E.rr( topic, data );
 						emit( device + '/' + topic, data );
 					} );
 				}
