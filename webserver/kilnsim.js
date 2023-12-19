@@ -70,7 +70,7 @@ function gotMqttData( t, v ){
 		case "extramass/set":
 			var val = parseFloat( v );
 			if( val || val === 0 ){
-				Kiln.m_extra = val;
+				Kiln.m_extra = val/1000.0;
 			}
 			break;
 
