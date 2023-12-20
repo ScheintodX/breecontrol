@@ -22,6 +22,7 @@ const config = {
 
 var PWM_PERIODE = 10;
 var TEMP_OFFSET = 20;
+var U_DAMPER_FACTOR = 10; // W/K
 
 var dt = 1,
     time = 0,
@@ -74,6 +75,14 @@ function gotMqttData( t, v ){
 			}
 			break;
 
+		case "damper/set":
+			var val = parseInt( v );
+			if( val >= 0 && val <=4 ){
+				Kiln.i_damper = val;
+				Kiln.U_damper = val * U_DAMPER_FACTOR;
+			}
+			break;
+
 		case "dt/set":
 			var val = parseInt( v );
 			if( val ){
@@ -105,7 +114,6 @@ const C2K = c => c+273.15,
 const _Q = ( c, m, T ) => c * m * T,
       _T = ( c, m, Q ) => Q / ( c * m );
 
-
 var Buf = ( max, slice ) => {
 	var res = {
 		MAX: max,
@@ -129,23 +137,30 @@ var Kiln = {
 
 	system: false,
 	P_max: 18000, //kW
-	U_loss: 5, // W/K
+	U_loss: 0, // W/K
+	U_damper: 0, // W/K
 	m_mass: 400, //kg,
 	m_extra: 0,
 	c_spec_heat_capacity: 840, //J/(kg*K)
 	Q_heat: 0, //kWh
 	P_heater: 18000, //W
+	i_damper: 0, // 0-4
+	P_damper: 0, // W/K
+
 	get T_temp() {
 		return _T( this.c_spec_heat_capacity, (this.m_mass+this.m_extra), kWh2J( this.Q_heat ) );
 	}, //K
 	set T_temp( T ){
 		this.Q_heat = J2kWh( _Q( this.c_spec_heat_capacity, (this.m_mass+this.m_extra), T ) );
 	},
+
 	buf: Buf( 60, 10 ), // 1min delay, 10s avg
 	tick: function( dt ){
 
 		var P_loss = this.U_loss * this.T_temp,
 			Q_loss = P_loss * dt / 3600;
+		var P_damper = this.U_damper * this.T_temp,
+		    Q_damper = P_damper * dt / 3600;
 
 		var Q_heat = this.P_heater * dt / 3600;
 
@@ -159,6 +174,7 @@ var Kiln = {
 
 		this.Q_heat -= Q_loss/1000;
 		this.Q_heat += Q_heat/1000;
+		this.Q_heat -= Q_damper/1000;
 
 		this.buf.put( this.Q_heat );
 	},
@@ -174,6 +190,7 @@ var Kiln = {
 		E.cho( {
 			X: this.system,
 			U: this.U_loss + " W/K",
+			D: this.U_damper + " W/K",
 			m: (this.m_mass + this.m_extra) + " kg",
 			c: this.c_spec_heat_capacity + " J/(kg*K)",
 			q: this.Q_heat + " kWh",
@@ -230,6 +247,8 @@ function loop(){
 	publish( "powerabs/status", "" + Kiln.power.toFixed( 1 ) );
 	publish( "heater/status", h2s( h1 ) + h2s( h2 ) + h2s( h3 ) );
 	publish( "extramass/status", Kiln.m_extra.toFixed( 1 ) );
+	publish( "damper/status", Kiln.i_damper.toFixed( 1 ) );
+	publish( "damperpower/status", Kiln.P_damper.toFixed( 1 ) );
 }
 
 async function startMqtt() {
