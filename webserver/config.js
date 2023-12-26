@@ -29,13 +29,14 @@ export default function Config(){
 					id: 'kiln',
 					type: 'kiln',
 					name: 'Kera der Großklotz',
-					minTemp: 0,
-					maxTemp: 1300,
+					desc: 'Kiln for pottery. Hot stuff.',
+					max: 1300,
 					power: 18000
 				}/*, {
 					id: 'boiler1',
 					type: "boiler",
 					name: "Bernd der Bottich",
+					desc: "The brewing pot is brewing stuff",
 					minTemp:   0, //°C
 					maxTemp: 100, //°C
 					capacity: 180, // L
@@ -43,7 +44,7 @@ export default function Config(){
 					power: 9000, // W
 					upper: { minTemp: 0, maxTemp: 450 },
 					lower: { minTemp: 0, maxTemp: 450 }
-				}, {
+				},/* {
 					id: 'fan1',
 					type: 'fan',
 					name: 'Soeder',
@@ -53,7 +54,7 @@ export default function Config(){
 					type: 'pump',
 					name: 'Arni',
 					power: 400
-				}/*, {
+				}, {
 					id: 'boiler2',
 					type: "boiler",
 					name: "Kurt von Kessel",

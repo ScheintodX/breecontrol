@@ -4,22 +4,22 @@ import { log } from '../../logging.js';
 
 import SC_heat from './sc_heat.js';
 import SC_hold from './sc_hold.js';
-import SC_pause from './sc_pause.js';
-import SC_notify from './sc_notify.js';
-import SC_stop from './sc_stop.js';
+import SC_pause from '../boiler/sc_pause.js';
+import SC_notify from '../boiler/sc_notify.js';
+import SC_stop from '../boiler/sc_stop.js';
 
 /**
  * User loads scriptconfig.json. That includes reference
  * to this one. The json is given as first parameter.
  */
-export default function( script, boiler, config, env ) {
+export default function( script, kiln, config, env ) {
 
 	var _run,
 		_idx,
 	    _cur
 		;
 
-	E.rr( "5stop", script, boiler, config, env );
+	E.rr( "3steps", script, kiln, config, env );
 
 	function _exec( command ) {
 
@@ -32,7 +32,7 @@ export default function( script, boiler, config, env ) {
 		log.trace( command, current.desc );
 
 		current.mode = self.hello.mode;
-		_cur[ command ]( current, boiler );
+		_cur[ command ]( current, kiln );
 		self.hello.mode = current.mode;
 
 		return self.hello;
@@ -49,9 +49,9 @@ export default function( script, boiler, config, env ) {
 
 			version: 1,
 
-			controller: '5steps',
-			chart: '5steps.js',
-			view: '5steps.html',
+			controller: '3steps',
+			chart: '3steps.js',
+			view: '3steps.html',
 
 			mode: "stop",
 			start: 0,
@@ -145,7 +145,7 @@ export default function( script, boiler, config, env ) {
 			rem += current.remaining;
 			for( var i=_idx+1; i<_run.length; i++ ){
 				if( _run[ i ].guessRuntime ) {
-					rem += _run[ i ].guessRuntime( boiler );
+					rem += _run[ i ].guessRuntime( kiln );
 				}
 			}
 			hello.remaining = rem;
@@ -179,24 +179,25 @@ export default function( script, boiler, config, env ) {
 
 			// for time calculation
 			steps[ 0 ]._from = 15;
-			for( var i=1; i<5; i++ ){
-				steps[ i ]._from = steps[ i-1 ].heat;
+			for( var i=1; i<4; i++ ){
+				steps[ i ]._from = steps[ i-1 ].target;
 			}
 
 			_run = [];
 
-			// preheat
+			// start
 			_run.push( SC_notify( { what: 'run' }, config, env ) );
-			_run.push( SC_heat( steps[ 0 ], config, env ) );
 
-			// pause after preheat
-			_run.push( SC_notify( { what: 'ready', msg: 'preheat done' }, config, env ) );
-			_run.push( SC_pause( null, config, env ) );
-
-			_run.push( SC_notify( { what: 'run' }, config, env ) );
+			// steps
 			for( var i=1; i < 4; i++ ) {
 
 				var step = script.steps[ i ];
+
+				E.rr( step );
+				Assert.presentAll( [ "name", "heat", "rate" ], step );
+
+				var sc_notify = SC_notify( { what: step.name }, config, env )
+				_run.push( sc_notify );
 
 				var sc_heat = SC_heat( step, config, env );
 				_run.push( sc_heat );

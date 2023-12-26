@@ -1,12 +1,14 @@
 import repl from 'repl';
 import net from 'net';
 
-var help = {
-
-	A: "B"
-};
+var _therepl;
 
 export default function Repl( context, port ) {
+
+	if( arguments.length == 0 ) {
+		if( !_therepl ) throw "No repl here";
+		return _therepl;
+	}
 
 	var r;
 
@@ -34,12 +36,14 @@ export default function Repl( context, port ) {
 				output: socket,
 				terminal: true,
 				useGlobal: false
-			});
+			} );
 			addContext( context );
 			r.on('exit', function () {
 				socket.end()
 			})
-		}).listen( port );
+
+		} ).listen( port );
+
 	} else {
 
 		r = repl.start( {
@@ -51,9 +55,17 @@ export default function Repl( context, port ) {
 		addContext( context );
 	}
 
-	addContext( help );
-
 	r.addContext = addContext;
+
+	var help = {};
+	function addHelp( key, value ){
+		help[ key ] = value;
+	}
+	r.addContext( { help: help } );
+
+	r.addHelp = addHelp;
+
+	_therepl = r;
 
 	return r;
 };

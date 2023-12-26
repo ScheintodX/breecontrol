@@ -1,24 +1,27 @@
-import { E } from '../../E.js';
-import { Assert } from '../../assert.js';
-import { log } from '../../logging.js';
+import { E } from "../../E.js";
+import { Assert } from "../../assert.js";
+import { log } from "../../logging.js";
 
 
 export default function( args, config, env ){
 
 	var self = {
 
-		start: function( current, boiler ) {
+		start: function( current, device ) {
 			current.desc = "Notify " + args.what;
 			if( args.msg ) current.desc += " " + args.msg;
 		},
-		run: function( current, boiler ) {
 
-			if( current.mode != 'run' ) return;
+		run: function( current, device ) {
 
-			boiler.indicator._notify( args.what );
-			env.notify( boiler, args.what, args.msg );
+			if( current.mode != "run" ) return;
 
-			current.mode = 'done';
+			if( device.indicator && typeof device.indicator._notify === "function" ){
+				device.indicator._notify( args.what );
+			}
+			env.notify( device, args.what, args.msg );
+
+			current.mode = "done";
 		}
 	}
 	return self;

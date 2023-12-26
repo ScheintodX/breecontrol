@@ -53,7 +53,6 @@ export default function( conf, initial ) {
 		publish: function( emit ) {
 			if( typeof self.set != 'undefined' ) {
 				var as = Mqtt.toString( self.set, self._conf.type, self._conf.scale );
-				E.rr( as, self.set, self._conf.scale );
 				emit( 'set', as );
 			}
 		}

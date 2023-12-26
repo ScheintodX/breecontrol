@@ -6,7 +6,9 @@
 import { E } from './E.js';
 import fs from 'fs/promises';
 //import _ from 'underscore';
-import { log } from './logging.js';
+import { log as master } from './logging.js';
+const log = master.module( "scripts" );
+log.trace( "fubar" );
 
 import { Json as JS } from './helpers.js';
 
@@ -32,21 +34,33 @@ export function sc_save( devicetype, name, data ) {
  */
 export async function sc_load( devicetype, name ) {
 
-	log.trace( "LOAD", name ); // log
+	log.trace( "LOAD", devicetype, name ); // log
 
 	var file = _CONFIG_ + devicetype + "/" + name;
 
-	var data = await fs.readFile( file, "utf-8" );
+	try {
+		var data = await fs.readFile( file, "utf-8" );
 
-	var scriptconfig = JSON.parse( data );
+		var scriptconfig = JSON.parse( data );
 
-	var Script = await import( './' + _SCRIPT_ + devicetype + "/" + scriptconfig.script );
+		var scriptfile = './' + _SCRIPT_ + devicetype + "/" + scriptconfig.script;
 
-	var result = [Script, scriptconfig];
+		log.trace( "LOAD: " + scriptfile );
 
-	E.rr( result );
+		var Module = await import( scriptfile ),
+		    Script = Module.default;
 
-	return result;
+		var result = [Script, scriptconfig];
+
+		return result;
+
+	} catch( e ){
+
+		E.rr( e );
+		log.error( `Cannt load {file}` );
+
+		return [];
+	}
 }
 
 /**
@@ -66,15 +80,15 @@ export async function sc_list( devicetype ) {
 			if( file.startsWith( '.' ) ) return undefined;
 			if( !file.endsWith( '.json' ) ) return undefined;
 
-			return { file: file,
-					name: file.replace( /\.json$/, '' ),
-					description: "not given" };
-		} );
-
-		// E.rr( result );
+			return {
+				file: file,
+				name: file.replace( /\.json$/, '' ),
+				description: "not given"
+			};
+		} ).filter( it => it !== undefined );
 
 		//var res = _.filter( result, function( entry ) { return (entry); } );
-		//E.rr( res );
+
 		return {[devicetype]:result};
 
 	} catch( e ){

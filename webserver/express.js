@@ -60,7 +60,7 @@ function gotError( conn, err ) {
 }
 
 
-function gotMessage( message ) {
+async function gotMessage( message ) {
 
 	log.trace( 'Received ', message );
 
@@ -71,7 +71,7 @@ function gotMessage( message ) {
 	}
 
 	try {
-		_onData( data );
+		await _onData( data );
 	} catch( ex ) {
 		return log.ex( ex, 'Processing Event: ', data );
 	}

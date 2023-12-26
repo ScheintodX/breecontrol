@@ -1,10 +1,14 @@
 import { E } from './E.js';
 import { Catch } from './catch.js';
 
-import { log } from './logging.js';
+import { log as master} from './logging.js';
+const log = master.module( "ctrl" );
+log.trace( "Fu der Bär" );
 import { Assert } from './assert.js';
 
 import { sc_load, sc_save, sc_list } from './scripts.js';
+
+import Repl from './repl.js';
 
 
 export default function Ctr( config, hello, brewery ) {
@@ -68,6 +72,8 @@ export default function Ctr( config, hello, brewery ) {
 
 		function gotWebDataLoadSave( data ) {
 
+			log.trace( data, data.topic, data.device );
+
 			Assert.present( 'data.device', data.device );
 			Assert.present( 'data.topic', data.topic );
 
@@ -81,14 +87,22 @@ export default function Ctr( config, hello, brewery ) {
 
 					log.trace( 'load', data.value.load );
 
-					sc_load( device.type, data.value.load )
+					sc_load( device.conf.type, data.value.load )
 							.then( (data) => {
 
-								console.log( data );
+								global.data = data;
 
-								var [Script, script] = data;
+								var [Script, scriptconfig] = data;
 
-								var TheScript = Script( script, device, config, {
+								const repl = Repl();
+								repl.addContext( "Script", Script );
+								repl.addContext( "scriptconfig", scriptconfig );
+								global.Script = Script;
+								global.scriptconfig = scriptconfig;
+
+								E.rr( "SCRIPT:", global.Script, "script:", global.scriptconfig );
+
+								var TheScript = Script( scriptconfig, device, config, {
 
 									notify: function( device, what, message ){
 										log.info( device.name, what, message );
@@ -105,6 +119,7 @@ export default function Ctr( config, hello, brewery ) {
 								log.info( 'load done', data.value.load );
 							} )
 							.catch( err => {
+								E.rr( "ERR", err );
 								log.error( err );
 							} );
 
@@ -126,7 +141,7 @@ export default function Ctr( config, hello, brewery ) {
 
 					var saveable = device._script.save();
 
-					sc_save( device.type, data.value.name, saveable )
+					sc_save( device.conf.type, data.value.name, saveable )
 							.catch( err => {
 								_warn( data.device, err );
 							} )
@@ -260,7 +275,6 @@ export default function Ctr( config, hello, brewery ) {
 					for( var key in brewery.devices ){
 						devicetypes.add( brewery.devices[ key ].conf.type );
 					}
-
 					log.debug( "NOSCRIPT", "LOAD", devicetypes );
 
 					hello.scripts = {};

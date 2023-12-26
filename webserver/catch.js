@@ -1,5 +1,6 @@
 import { E } from './E.js';
 
+/*
 var _log;
 
 function gotError( done, err, module ) {
@@ -19,6 +20,8 @@ export const Catch = {
 
 	ExitOn: function( module, f ) {
 
+		E.rr( "Exit on " + module );
+
 		return function( err ) {
 
 			if( err ) {
@@ -31,6 +34,8 @@ export const Catch = {
 
 	ContinueOn: function( module, f ) {
 
+		E.rr( "Continue on " + module );
+
 		return function( err ) {
 
 			if( err ) {
@@ -42,9 +47,12 @@ export const Catch = {
 
 	fatal: function( module, f ) {
 
+		E.rr( "fatal " + module );
+
 		return function() {
 
 			try {
+				//E.rr( "apply" );
 				f.apply( null, arguments );
 			} catch( ex ) {
 				gotError( null, ex, module );
@@ -55,6 +63,8 @@ export const Catch = {
 
 	resume: function( module, f ) {
 
+		E.rr( "resume " + module );
+
 		return function() {
 
 			try {
@@ -65,6 +75,20 @@ export const Catch = {
 		}
 	},
 
+	log: function( log ) {
+		_log = log;
+		return this;
+	}
+};
+*/
+
+var _log;
+export const Catch = {
+
+	ExitOn: (module, f) => f,
+	ContinueOn: (module, f) => f,
+	fatal: (module, f) => f,
+	resume: (module, f) => f,
 	log: function( log ) {
 		_log = log;
 		return this;

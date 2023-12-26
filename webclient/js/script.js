@@ -65,7 +65,7 @@ BAG.Script = (function($,BAG){
 				notify( 'loadsave', 'load', { load: val } );
 			}
 		}
-		
+
 		function enableButtons( actions ) {
 
 			function $button( name ) {
@@ -184,11 +184,13 @@ BAG.Script = (function($,BAG){
 						updateElements( script );
 					}
 				}
-			} 
-			
+			}
+
 			if( 'scripts' in data ) {
 
 				var scripts = data.scripts;
+
+				console.log( scripts );
 
 				if( type in scripts ) {
 

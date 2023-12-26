@@ -19,7 +19,7 @@ BAG.Control = function($){
 			topic: topic,
 			trigger: trigger,
 			set: function( val ) {
-				var checked = !!(val.set);
+				var checked = !!(val);
 				$e.prop( {
 					checked: checked,
 					disabled: false
@@ -63,7 +63,7 @@ BAG.Control = function($){
 				if( typeof val == 'undefined' ){
 					$e.val( '' );
 				} else {
-					val = val.set;
+					//val = val.set;
 					$e.val( val * scale );
 				}
 				return self;

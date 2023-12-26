@@ -6,23 +6,26 @@ import fs from 'fs';
 
 import Tracer from 'tracer';
 
+
+function filetransport( data ){
+	if( log.pause ) return;
+	if( log.FILE ) {
+		fs.open( log.FILE, 'a', '0666', function( err, id ) {
+			if( err ) throw new Error( err ); //fail fast!
+			fs.write( id, data.output+"\n", null, 'utf8', function( err ) {
+				fs.close( id );
+				if( err ) throw new Error( err );
+			});
+		});
+	} else {
+		console.log( data.output );
+	}
+}
+
 export const log = Tracer.colorConsole( {
 	level: 'info',
 	inspectOpt: { depth: 3 },
-	transport : function( data ) {
-		if( log.pause ) return;
-		if( log.FILE ) {
-			fs.open( log.FILE, 'a', '0666', function( err, id ) {
-				if( err ) throw new Error( err ); //fail fast!
-				fs.write( id, data.output+"\n", null, 'utf8', function( err ) {
-					fs.close( id );
-					if( err ) throw new Error( err );
-				});
-			});
-		} else {
-			console.log( data.output );
-		}
-	}
+	transport: filetransport
 } );
 
 log.FILE = null;
@@ -48,4 +51,12 @@ log.ex = function( ex ) {
 log.file = function( file ) {
 	log.FILE = file;
 	return log;
+}
+
+log.module = function( moduleName, level=undefined ) {
+	return Tracer.colorConsole({
+		level: level || this.level,
+		inspectOpt: this.inspectOpt,
+		transport: filetransport
+	});
 }

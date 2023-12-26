@@ -41,7 +41,7 @@ export const E = {
 
 		var args = Array.prototype.slice.call( arguments ); //clone
 
-		args.unshift( stack( 3 ).red );
+		args.unshift( stack( 2 ).red );
 
 		console.log.apply( console, args );
 	},

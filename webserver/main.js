@@ -37,6 +37,8 @@ async function initConfig() {
 		}
 	}
 	repl.addContext( { config: config, hello: hello } );
+	repl.addHelp( "config", "Configuration" );
+	repl.addHelp( "hello", "Container for ctlr stuff" );
 
 	log.startup( "config", "READY" );
 
@@ -51,9 +53,12 @@ async function initBrewery( config ) {
 			brewery: brewery,
 			devices: brewery.devices,
 	} );
+	repl.addHelp( "brewery", "All off the devices and functions" );
+	repl.addHelp( "devices", "Only the devices" );
 
 	for( const [name,device] of Object.entries( brewery.devices ) ){
 		repl.addContext( name, device );
+		repl.addHelp( name, "One device: " + device.conf.description );
 	}
 
 	log.startup( "brewery", "READY" );
@@ -64,7 +69,7 @@ async function initBrewery( config ) {
 async function startMqtt( config, ctrl, brewery ) {
 
 	const mqtt = await Mqtt( ctrl.gotMqttData, config.mqtt, brewery.subscribe, ctrl.filter );
-			
+
 	Assert.present( 'mqtt', mqtt );
 
 	ctrl.setMqttCom( mqtt.send );

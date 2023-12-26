@@ -3,7 +3,7 @@
 (function($){
 
 	var ctrl = BAG.Ctrl( {} );
-	
+
 	var lastMessage = {};
 
 	function loadDevice( $parent, device ) {
@@ -14,7 +14,7 @@
 			dControls = dModule + "_Controls"
 			;
 
-		console.trace( "LOAD DEV", dId );
+		console.info( "LOAD DEV", dId );
 
 		var $device = $( '<section class="tab device ' + dType + '"/>' )
 					.attr( 'id', dId )
@@ -36,7 +36,7 @@
 						// fix for elements to display scripts aren't ready when we get that kind of config/data.
 						ctrl.gotData( lastMessage );
 					} )
-					
+
 	}
 
 	function gotData( data ) {
@@ -51,7 +51,7 @@
 
 		if( 'config' in data ) {
 
-			console.log( data.config );
+			console.info( "CONFIG", data.config );
 
 			var $main = $('main');
 

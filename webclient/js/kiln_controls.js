@@ -40,14 +40,14 @@ BAG.Kiln_Controls = (function($){
 		var manualControls = {
 
 			// System
-			'system': Control( 'input[name=".system.set" ]' ),
+			'system.set': Control( 'input[name=".system.set" ]' ),
 
 			// Temperature
-		 	'powerfactor': Control( 'input[name=".powerfactor.set"]', 100 ),
+		 	'powerfactor.set': Control( 'input[name=".powerfactor.set"]', 100 ),
 
 			// Tuning
-			'extramass': Control( 'input[name=".extramass.set"] ', 0.001 ),
-			'damper': Control( 'input[name=".damper.set"] ', 1 )
+			'extramass.set': Control( 'input[name=".extramass.set"] ', 0.001 ),
+			'damper.set': Control( 'input[name=".damper.set"] ', 1 )
 
 			// Override
 			//'door.override': Control( 'input[name=".door.override"] ' ),
