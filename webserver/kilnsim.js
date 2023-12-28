@@ -137,15 +137,16 @@ var Kiln = {
 
 	system: false,
 	P_max: 18000, //kW
-	U_loss: 0, // W/K
+	U_loss: 10, // W/K
 	U_damper: 0, // W/K
 	m_mass: 400, //kg,
 	m_extra: 0,
 	c_spec_heat_capacity: 840, //J/(kg*K)
 	Q_heat: 0, //kWh
-	P_heater: 18000, //W
+	P_heater: 0, //W
 	i_damper: 0, // 0-4
 	P_damper: 0, // W/K
+	runtime: 0,
 
 	get T_temp() {
 		return _T( this.c_spec_heat_capacity, (this.m_mass+this.m_extra), kWh2J( this.Q_heat ) );
@@ -157,20 +158,14 @@ var Kiln = {
 	buf: Buf( 60, 10 ), // 1min delay, 10s avg
 	tick: function( dt ){
 
+		this.runtime += dt;
+
 		var P_loss = this.U_loss * this.T_temp,
 			Q_loss = P_loss * dt / 3600;
 		var P_damper = this.U_damper * this.T_temp,
 		    Q_damper = P_damper * dt / 3600;
 
-		var Q_heat = this.P_heater * dt / 3600;
-
-		/*
-		log.debug( {
-			P_loss: P_loss + " W",
-			Q_loss: Q_loss + " Wh",
-			Q_heat: Q_heat + " Wh"
-		} );
-		*/
+		var Q_heat = this.system ? this.P_heater * dt / 3600 : 0;
 
 		this.Q_heat -= Q_loss/1000;
 		this.Q_heat += Q_heat/1000;
@@ -182,13 +177,11 @@ var Kiln = {
 	get heat(){
 		return this.buf.avg;
 	},
-	get power(){
-		return this.P_heater;
-	},
 
 	dump: function(){
-		E.cho( {
+		return {
 			X: this.system,
+			r: (this.runtime/60.0).toFixed(1) + " min",
 			U: this.U_loss + " W/K",
 			D: this.U_damper + " W/K",
 			m: (this.m_mass + this.m_extra) + " kg",
@@ -196,56 +189,50 @@ var Kiln = {
 			q: this.Q_heat + " kWh",
 			t: this.T_temp + " °C",
 			T: this.buf.avg + " °C"
-		} );
-		//E.rr( this.buf.data.length, this.buf.data );
-		//E.rr( this.buf.data.slice( -this.buf.slice ) );
+		};
 	}
 };
 Kiln.T_temp = 0;
 
-Kiln.dump();
+E.cho( Kiln.dump() );
 
 
-function publish( t, v ){
+function publish( t, v ) {
 
-	//E.rr( t+">", v );
 	_mqtt.send( t, v );
 }
 
-function pwm( phase, time, fac ){
+function pwm( phase, time, fac ) {
+
 	var offset = (PWM_PERIODE/3*phase),
 	    width = fac*PWM_PERIODE,
 	    result = (time+offset)%PWM_PERIODE < width;
+
 	return result;
 }
-function h2s( val ){
+function h2s( val ) {
 	return val ? "1" : "0";
 }
 
 var last = 0;
-function loop(){
+function loop() {
 
 	Kiln.tick( dt );
 	time += dt;
 
 	var now = Date.now();
-	if( now > last + 5000 ){
-		Kiln.dump();
-		last = now;
-	}
+	E.very( 5, Kiln.dump() );
 
-	var fac = (Kiln.power / Kiln.P_max);
+	var fac = ( Kiln.P_heater / Kiln.P_max );
 
-	var h1 = pwm( 0, time, fac ),
-	    h2 = pwm( 1, time, fac ),
-	    h3 = pwm( 2, time, fac );
+	var h1 = pwm( 0, time, fac );
 
 	publish( "system/status", Kiln.system ? "1" : "0" );
 	publish( "time", "" + time );
 	publish( "temp/status", "" + (Kiln.heat+TEMP_OFFSET).toFixed( 1 ) );
 	publish( "powerfactor/status", "" + fac.toFixed( 3 )  );
-	publish( "powerabs/status", "" + Kiln.power.toFixed( 1 ) );
-	publish( "heater/status", h2s( h1 ) + h2s( h2 ) + h2s( h3 ) );
+	publish( "powerabs/status", "" + Kiln.P_heater.toFixed( 1 ) );
+	publish( "heater/status", h2s( h1 ) );//+ h2s( h2 ) + h2s( h3 ) );
 	publish( "extramass/status", Kiln.m_extra.toFixed( 1 ) );
 	publish( "damper/status", Kiln.i_damper.toFixed( 1 ) );
 	publish( "damperpower/status", Kiln.P_damper.toFixed( 1 ) );
@@ -260,7 +247,7 @@ async function startMqtt() {
 	return mqtt;
 }
 
-async function main(){
+async function main() {
 
 	log.startup( "Main", "start all" );
 

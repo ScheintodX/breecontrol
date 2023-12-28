@@ -1,5 +1,11 @@
 import 'colors';
 
+
+function stackid( depth = 3 ){
+
+	return stack( depth+1, 1 );
+}
+
 function stack(numberOfLinesToRemove = 3, maxLines = -1) {
 
 	try {
@@ -35,6 +41,8 @@ function stack(numberOfLinesToRemove = 3, maxLines = -1) {
 	}
 }
 
+var everylog = {}
+
 export const E = {
 
 	rr: function(){
@@ -55,13 +63,36 @@ export const E = {
 		console.log.apply( console, args );
 	},
 
-	// E.x( 5, "fubar" )
 	x: function(){
+
 		var args = Array.prototype.slice.call( arguments );
 
 		args.unshift( stack( 2, 4 ).red );
 
 		console.log.apply( console, args );
+	},
+
+	very: function(){
+
+		var args = Array.prototype.slice.call( arguments ),
+		    now = Date.now();
+
+		var every = args.shift() * 1000,
+		    id = stackid( 2 );
+
+		var last = everylog[ id ];
+		if( !last ) {
+			last = 0;
+		}
+		if( now-last >= every ){
+			last = now;
+
+			args.unshift( stack( 2 ).red );
+			args.unshift( new Date( now ) );
+
+			console.log.apply( console, args );
+		}
+		everylog[ id ] = last;
 	}
 
 };

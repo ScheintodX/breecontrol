@@ -8,6 +8,8 @@ import SC_pause from '../boiler/sc_pause.js';
 import SC_notify from '../boiler/sc_notify.js';
 import SC_stop from '../boiler/sc_stop.js';
 
+const GUESSED_STARTING_TEMPERATURE = 15;
+
 /**
  * User loads scriptconfig.json. That includes reference
  * to this one. The json is given as first parameter.
@@ -178,9 +180,9 @@ export default function( script, kiln, config, env ) {
 			self.hello.steps = steps;
 
 			// for time calculation
-			steps[ 0 ]._from = 15;
-			for( var i=1; i<4; i++ ){
-				steps[ i ]._from = steps[ i-1 ].target;
+			steps[ 0 ]._from = GUESSED_STARTING_TEMPERATURE;
+			for( var i=1; i<steps.length; i++ ){
+				steps[ i ]._from = steps[ i-1 ].heat;
 			}
 
 			_run = [];
@@ -206,9 +208,6 @@ export default function( script, kiln, config, env ) {
 				_run.push( sc_hold );
 			}
 
-			// postheat
-			_run.push( SC_heat( steps[ 4 ], config, env ) );
-
 			_run.push( SC_notify( { what: 'done' }, config, env ) );
 
 			// go to first step but don't start
@@ -221,7 +220,7 @@ export default function( script, kiln, config, env ) {
 		save: function() {
 			return {
 				name: self.hello.name,
-				script: '5steps.js',
+				script: '3steps.js',
 				steps: self.hello.steps
 			}
 		}
