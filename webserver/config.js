@@ -25,14 +25,14 @@ export default function Config(){
 			},
 
 			devices: [
-				{
+				/*{
 					id: 'kiln',
 					type: 'kiln',
 					name: 'Kera der Großklotz',
 					desc: 'Kiln for pottery. Hot stuff.',
 					max: 1300,
 					power: 18000
-				}/*, {
+				},*/ {
 					id: 'boiler1',
 					type: "boiler",
 					name: "Bernd der Bottich",

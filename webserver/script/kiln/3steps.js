@@ -52,8 +52,7 @@ export default function( script, kiln, config, env ) {
 			version: 1,
 
 			controller: '3steps',
-			chart: '3steps.js',
-			view: '3steps.html',
+			view: '3Steps',
 
 			mode: "stop",
 			start: 0,

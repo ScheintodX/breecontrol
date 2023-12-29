@@ -2,17 +2,32 @@
 
 var BAG = BAG || {};
 
-BAG.Load = (function($){
+function printBAG(){
+
+	var cm = Object.entries( BAG )
+			.reduce( ( acc, [ key, value ] ) => {
+				acc[key] = Boolean(value);
+				return acc;
+			}, {} );
+	console.log( cm );
+}
+
+BAG.Load = (function(){
 
 	var self = {
 
 		load: function( name, done ) {
 
-			console.trace( "LOAD", name );
-
-			if( name in BAG ) return done( null, BAG[name] );
+			printBAG();
 
 			var file = "js/" + name.toLowerCase() + ".js";
+
+			console.log( "LOAD Js", file );
+
+			if( name in BAG ) {
+				console.log( "skipped" );
+				return  done( null, BAG[name] );
+			}
 
 			$.getScript( file )
 				.done( function(){ return done( null, BAG[name] ); } )
@@ -30,8 +45,8 @@ BAG.Load = (function($){
 
 			var file = name.toLowerCase() + ".html";
 
-			console.trace( "LOAD", file );
-			
+			console.log( "LOAD Html", file );
+
 			$.get( file )
 				.done( function( data ){ return done( null, data ); } )
 				.fail( done )
@@ -46,10 +61,13 @@ BAG.Load = (function($){
 
 		loadModule: function( name, done ) {
 
+			console.log( "LOAD Module", name );
+
 			async.parallel( [
 					self.loaderHtml( name ),
 					self.loader( 'Script_' + name + "_Controls" ),
 					self.loader( 'Script_' + name + "_Chart" )
+
 			], function( err, result ){
 
 				return done( err, {

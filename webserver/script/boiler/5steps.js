@@ -50,8 +50,7 @@ export default function( script, boiler, config, env ) {
 			version: 1,
 
 			controller: '5steps',
-			chart: '5steps.js',
-			view: '5steps.html',
+			view: '5Steps',
 
 			mode: "stop",
 			start: 0,

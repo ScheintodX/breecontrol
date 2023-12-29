@@ -25,7 +25,7 @@ BAG.Script = (function($,BAG){
 
 		function notify( on, topic, value ) {
 
-			console.trace( "NOTIFY", on, topic, value );
+			console.log( "NOTIFY", on, topic, value );
 
 			_onControl( { on: on, topic: topic, value: value, device: device } );
 		}
@@ -163,7 +163,9 @@ BAG.Script = (function($,BAG){
 						// prevent double loading but must be checked for if used
 						curChart = true;
 
-						BAG.Load.loadModule( "5Steps", function( err, data ){
+						BAG.Load.loadModule( script.view, function( err, data ){
+
+							console.log( err, data );
 
 							if( err ) throw new Error( err );
 
@@ -176,7 +178,7 @@ BAG.Script = (function($,BAG){
 							curControls = data.Controls( $secScript, device );
 							curChart = data.Chart( $secScript, device );
 
-							console.trace( "LOADED", curControls.name );
+							console.log( "LOADED", curControls.name );
 
 						} );
 
@@ -189,8 +191,6 @@ BAG.Script = (function($,BAG){
 			if( 'scripts' in data ) {
 
 				var scripts = data.scripts;
-
-				console.log( scripts );
 
 				if( type in scripts ) {
 

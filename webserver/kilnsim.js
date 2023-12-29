@@ -25,7 +25,7 @@ var TEMP_OFFSET = 20;
 var U_DAMPER_FACTOR = 10; // W/K
 
 var dt = 1,
-    time = 0,
+    runtime = 0,
     speed = 1;
 
 var loopH = null;
@@ -146,7 +146,6 @@ var Kiln = {
 	P_heater: 0, //W
 	i_damper: 0, // 0-4
 	P_damper: 0, // W/K
-	runtime: 0,
 
 	get T_temp() {
 		return _T( this.c_spec_heat_capacity, (this.m_mass+this.m_extra), kWh2J( this.Q_heat ) );
@@ -157,8 +156,6 @@ var Kiln = {
 
 	buf: Buf( 60, 10 ), // 1min delay, 10s avg
 	tick: function( dt ){
-
-		this.runtime += dt;
 
 		var P_loss = this.U_loss * this.T_temp,
 			Q_loss = P_loss * dt / 3600;
@@ -181,14 +178,14 @@ var Kiln = {
 	dump: function(){
 		return {
 			X: this.system,
-			r: (this.runtime/60.0).toFixed(1) + " min",
+			x: (this.runtime/60.0).toFixed(1) + " min",
 			U: this.U_loss + " W/K",
 			D: this.U_damper + " W/K",
 			m: (this.m_mass + this.m_extra) + " kg",
 			c: this.c_spec_heat_capacity + " J/(kg*K)",
 			q: this.Q_heat + " kWh",
-			t: this.T_temp + " °C",
-			T: this.buf.avg + " °C"
+			T: this.T_temp + " °C",
+			θ: this.buf.avg + " °C"
 		};
 	}
 };
@@ -202,11 +199,11 @@ function publish( t, v ) {
 	_mqtt.send( t, v );
 }
 
-function pwm( phase, time, fac ) {
+function pwm( phase, runtime, fac ) {
 
 	var offset = (PWM_PERIODE/3*phase),
 	    width = fac*PWM_PERIODE,
-	    result = (time+offset)%PWM_PERIODE < width;
+	    result = (runtime+offset)%PWM_PERIODE < width;
 
 	return result;
 }
@@ -218,17 +215,17 @@ var last = 0;
 function loop() {
 
 	Kiln.tick( dt );
-	time += dt;
+	runtime += dt;
 
 	var now = Date.now();
 	E.very( 5, Kiln.dump() );
 
 	var fac = ( Kiln.P_heater / Kiln.P_max );
 
-	var h1 = pwm( 0, time, fac );
+	var h1 = pwm( 0, runtime, fac );
 
+	publish( "runtime", "" + runtime );
 	publish( "system/status", Kiln.system ? "1" : "0" );
-	publish( "time", "" + time );
 	publish( "temp/status", "" + (Kiln.heat+TEMP_OFFSET).toFixed( 1 ) );
 	publish( "powerfactor/status", "" + fac.toFixed( 3 )  );
 	publish( "powerabs/status", "" + Kiln.P_heater.toFixed( 1 ) );

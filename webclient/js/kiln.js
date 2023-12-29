@@ -61,8 +61,6 @@ BAG.Kiln = (function($,Ψ){
 
 				var kiln = data.devices[ device ];
 
-				console.log( kiln );
-
 				if( 'system' in kiln ) {
 					Kiln.setSystem( kiln.system.status );
 				}

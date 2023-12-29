@@ -45,6 +45,7 @@
 		if( 'scripts' in data ) {
 			lastMessage.scripts = data.scripts;
 		}
+
 		if( 'config' in data ) {
 			lastMessage.config = data.config;
 		}
@@ -81,5 +82,7 @@
 	$(window).keydown(function(e) { if (e.keyCode == 123) debugger; });
 
 	$(main);
+
+	setInterval( printBAG, 1000 );
 
 })($);
