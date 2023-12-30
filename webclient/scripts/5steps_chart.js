@@ -34,7 +34,7 @@ export default function( elem, device, passive ) {
 
 	console.log( "ELEM", $elem );
 
-	var $chart = $('<object class="chart" data="5steps.svg" />' )
+	var $chart = $('<object class="chart" data="scripts/5steps.svg" />' )
 			.prependTo( $elem )
 			.on( 'load', (ev) => {
 				console.log( 'chart loaded', ev );
@@ -44,6 +44,8 @@ export default function( elem, device, passive ) {
 				console.error( 'error loading', ev );
 			} )
 			;
+
+	console.log( $chart );
 
 	function svg( id ) {
 		return _svg ? _svg.getElementById( id ) : false;
