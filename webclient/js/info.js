@@ -1,63 +1,58 @@
-"use strict";
+export default function( elem, device ) {
 
-BAG.Info = (function($){
+	var $e = ( elem instanceof jQuery ? elem : $( elem ) )
+			.expectOne()
+			.hide(),
+		$content = $('<div/>')
+			.appendTo( $e );
+			;
 
-	return function( elem, device ) {
+	function setInfo( level, messages ) {
 
-		var $e = ( elem instanceof jQuery ? elem : $( elem ) )
-				.expectOne()
-				.hide(),
-			$content = $('<div/>')
-				.appendTo( $e );
+		$e.replaceClass( 'warn severe', level )
 				;
 
-		function setInfo( level, messages ) {
+		$content.empty().append(
+				$.map( messages, function( msg ) {
+					return $( '<div class="' + msg.level + '">' + msg.text + '</div>' );
+				} )
+		);
 
-			$e.replaceClass( 'warn severe', level )
-					;
+	}
 
-			$content.empty().append(
-					$.map( messages, function( msg ) {
-						return $( '<div class="' + msg.level + '">' + msg.text + '</div>' );
-					} )
-			);
+	var Info = {
 
-		}
+		gotData: function( data ) {
 
-		var Info = {
+			if( 'devices' in data ) {
 
-			gotData: function( data ) {
+				var boiler = data.devices[ device ];
 
-				if( 'devices' in data ) {
+				if( 'warn' in boiler && boiler.warn.messages.length > 0 ) {
 
-					var boiler = data.devices[ device ];
+					var level = boiler.warn.level;
+					var messages = boiler.warn.messages;
 
-					if( 'warn' in boiler && boiler.warn.messages.length > 0 ) {
-
-						var level = boiler.warn.level;
-						var messages = boiler.warn.messages;
-
-						setInfo( level, messages );
-					}
-				}
-
-				if( 'message' in data ) {
-
-					var message = data.message;
-
-					if( message.device != device ) return;
-
-					setInfo( message.level, message.messages );
-				}
-
-				if( $content.children().length > 0 ) {
-
-					$e.show();
-				} else {
-					$e.hide();
+					setInfo( level, messages );
 				}
 			}
-		};
-		return Info;
+
+			if( 'message' in data ) {
+
+				var message = data.message;
+
+				if( message.device != device ) return;
+
+				setInfo( message.level, message.messages );
+			}
+
+			if( $content.children().length > 0 ) {
+
+				$e.show();
+			} else {
+				$e.hide();
+			}
+		}
 	};
-})($);
+	return Info;
+};
