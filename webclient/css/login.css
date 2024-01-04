@@ -1,0 +1,28 @@
+.loginform {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+.loginform form {
+  padding: 12px;
+  background-color: white;
+  color: #222;
+  border-radius: 4px;
+  background-color: #eee;
+}
+.loginform form label {
+  padding: 12px;
+  display: block;
+}
+.loginform form label input {
+  border: 0;
+  margin-left: 6px;
+  padding: 3px 6px 1px 6px;
+  border-radius: 2px;
+}
+.loginform form label:nth-child(3) {
+  text-align: right;
+}
+
+/*# sourceMappingURL=login.css.map */

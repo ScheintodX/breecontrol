@@ -4,18 +4,25 @@
 </label>
 
 <div class="step step0">
-	<label>Trocknung<input class="temp" type="number" name="heat" />°C</label>
-	<label><input class="temp" type="number" name="powerfactor" />%</label>
+	<label>Trocknung<input id="heat0" class="temp heat" type="number" name="heat" />°C</label>
+	<label><input id="rate0" class="temp rate" type="number" name="rate" />°C/h</label>
+	<label><input id="hold0" class="time hold" type="number" name="hold" />min</label>
 </div>
 
 <div class="step step1">
-	<label>Entbindung<input class="temp" type="number" name="heat" />°C</label>
-	<label><input class="temp" type="number" name="powerfactor" />%</label>
-	<label><input class="time" type="number" name="hold" />min</label>
+	<label>Entbindung<input id="heat1" class="temp heat" type="number" name="heat" />°C</label>
+	<label><input id="rate1" class="temp rate" type="number" name="rate" />°C/h</label>
+	<label><input id="hold1" class="time hold" type="number" name="hold" />min</label>
 </div>
 
 <div class="step step2">
-	<label>Schrüh<input class="temp" type="number" name="heat" />°C</label>
-	<label><input class="temp" type="number" name="powerfactor" />%</label>
-	<label><input class="time" type="number" name="hold" />min</label>
+	<label>Schrüh<input id="heat2" class="heat heat" type="number" name="heat" />°C</label>
+	<label><input id="rate2" class="temp rate" type="number" name="rate" />°C/h</label>
+	<label><input id="hold2" class="time hold" type="number" name="hold" />min</label>
+</div>
+
+<div class="step step3">
+	<label>Abkühlen<input id="heat3" class="heat heat" type="number" name="heat" />°C</label>
+	<label><input id="rate3" class="temp rate" type="number" name="rate" />°C/h</label>
+	<label><input id="hold3" class="time hold" type="number" name="hold" />min</label>
 </div>

@@ -1,8 +1,12 @@
 
-.phony: css
-css: css/elements.css css/load.css css/print.css css/screen.css css/sprites.css css/style.css
+#while true; do node_modules/sass/sass.js scss/login.scss:css/login.css; sleep 1; done
 
-# This does not work currently.
-# We are missing compass'
-css/%.css: sass/%.scss
-	sassc $< $@
+
+SASS=node_modules/sass/sass.js
+
+css/%.css: scss/%.scss
+	$(SASS) $< $@
+
+.phony: css
+css: css/login.css css/elements.css css/load.css css/print.css css/screen.css css/sprites.css css/style.css
+

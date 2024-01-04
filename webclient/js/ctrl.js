@@ -1,3 +1,5 @@
+//import jsondiffpatch from '../node_modules/jsondiffpatch/dist/jsondiffpatch.esm.js';
+
 /**
  * Keep track of components
  *
@@ -33,6 +35,7 @@ export default function( controls ) {
 			_last = data;
 		}
 		if( 'diff' in data && 'devices' in data.diff && _last ) {
+			console.log( data.diff );
 			_last = jsondiffpatch.patch( _last, data.diff );
 			data = _last;
 		}

@@ -1,5 +1,3 @@
-"use strict";
-
 function InputCheckbox( $e, topic ) {
 
 	function trigger() {
@@ -171,7 +169,6 @@ var self = function( $e, topic, scale ) {
 		default:
 			console.warn( "Unknown: " + tag );
 	}
-
 }
 self.InputCheckbox = InputCheckbox;
 self.InputNumber = InputNumber;

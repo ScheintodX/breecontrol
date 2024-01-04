@@ -8,6 +8,8 @@ import { Catch } from './catch.js';
 Catch.log( log );
 import { Assert } from './assert.js';
 
+import Repl from './repl.js';
+
 import Mqtt from './mqtt.js';
 var _mqtt = false;
 
@@ -190,8 +192,9 @@ var Kiln = {
 	}
 };
 Kiln.T_temp = 0;
-
 E.cho( Kiln.dump() );
+
+const repl = Repl( Kiln );
 
 
 function publish( t, v ) {
@@ -220,19 +223,21 @@ function loop() {
 	var now = Date.now();
 	E.very( 5, Kiln.dump() );
 
-	var fac = ( Kiln.P_heater / Kiln.P_max );
-
-	var h1 = pwm( 0, runtime, fac );
 
 	publish( "runtime", "" + runtime );
 	publish( "system/status", Kiln.system ? "1" : "0" );
 	publish( "temp/status", "" + (Kiln.heat+TEMP_OFFSET).toFixed( 1 ) );
-	publish( "powerfactor/status", "" + fac.toFixed( 3 )  );
-	publish( "powerabs/status", "" + Kiln.P_heater.toFixed( 1 ) );
-	publish( "heater/status", h2s( h1 ) );//+ h2s( h2 ) + h2s( h3 ) );
-	publish( "extramass/status", Kiln.m_extra.toFixed( 1 ) );
+	//publish( "powerabs/status", "" + Kiln.P_heater.toFixed( 1 ) );
+	//publish( "extramass/status", Kiln.m_extra.toFixed( 1 ) );
 	publish( "damper/status", Kiln.i_damper.toFixed( 1 ) );
-	publish( "damperpower/status", Kiln.P_damper.toFixed( 1 ) );
+	//publish( "damperpower/status", Kiln.P_damper.toFixed( 1 ) );
+
+	var fac = ( Kiln.P_heater / Kiln.P_max );
+	publish( "powerfactor/status", "" + fac.toFixed( 3 )  );
+
+	// Just for lols
+	var h1 = pwm( 0, runtime, fac );
+	publish( "heater/status", h2s( h1 ) );//+ h2s( h2 ) + h2s( h3 ) );
 }
 
 async function startMqtt() {

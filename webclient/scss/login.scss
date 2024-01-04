@@ -1,0 +1,27 @@
+.loginform {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 100px;
+	form {
+		padding: 12px;
+		background-color: white;
+		color: #222;
+		border-radius: 4px;
+		background-color: #eee;
+		label {
+			padding: 12px;
+			display: block;
+			input {
+				border: 0;
+				//border-bottom: 1px solid #bbb;
+				margin-left: 6px;
+				padding: 3px 6px 1px 6px;
+				border-radius: 2px;
+			}
+			&:nth-child( 3 ){
+				text-align: right;
+			}
+		}
+	}
+}

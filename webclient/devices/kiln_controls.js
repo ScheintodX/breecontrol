@@ -1,3 +1,5 @@
+import BAG_Control from '../js/controls.js';
+
 export default function( elem, device ) {
 
 	var _onControl = false;
@@ -23,7 +25,7 @@ export default function( elem, device ) {
 		var topic = $c.attr('name');
 
 		// instance is determined by input html
-		var control = BAG.Control( $c, topic, scale )
+		var control = BAG_Control( $c, topic, scale )
 				.onNotify( notify )
 				;
 

@@ -111,6 +111,5 @@ async function main(){
 	log.startup( "Startup", "DONE" );
 }
 
-
 E.cho( "Startup" );
 main();

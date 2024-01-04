@@ -35,11 +35,14 @@ export default function( elem, device, passive ) {
 	console.log( "ELEM", $elem );
 
 	var $chart = $('<object class="chart" data="scripts/5steps.svg" />' )
+
 			.prependTo( $elem )
+
 			.on( 'load', (ev) => {
 				console.log( 'chart loaded', ev );
 				_svg = $chart.get( 0 ).contentDocument;
 			} )
+
 			.on( 'error', (ev) => {
 				console.error( 'error loading', ev );
 			} )

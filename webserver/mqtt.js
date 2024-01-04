@@ -73,7 +73,7 @@ export default function Mqtt( onData, config, subscribe, filter ) {
 			log.info( 'Q<', topic, message.toString() );
 
 			_onData( topic, message.toString() );
-		});
+		} );
 
 		mqttClient.on( 'error', function( err ){
 

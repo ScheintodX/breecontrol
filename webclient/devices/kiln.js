@@ -13,7 +13,11 @@ const MAX_POWER = 18000;
 // Constructor function
 export default function( elem, device, passive ) {
 
+	console.log( "KILN ===", elem, device, passive );
+
 	passive = passive || true;
+
+	console.log( "KILN INIT ===", elem, device, passive );
 
 	var $elem = ( elem instanceof jQuery ? elem : $( elem ) )
 			.expectOne(),
@@ -110,11 +114,13 @@ export default function( elem, device, passive ) {
 		}
 	};
 
-	$elem.on( 'load', function() {
-
+	if( $elem.length == 1 ){
 		_svg = $elem.get( 0 ).contentDocument;
-
-	} );
+	} else {
+		$elem.on( 'load', function() {
+			_svg = $elem.get( 0 ).contentDocument;
+		} );
+	}
 
 	return Kiln;
 };

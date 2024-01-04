@@ -1,4 +1,4 @@
-export default function function( elem, device ) {
+export default function( elem, device ) {
 
 	var $elem = ( elem instanceof jQuery ? elem : $( elem ) ).expectOne(),
 		$secProgram = $elem.find( 'section.program' ).expectOne()
@@ -14,7 +14,8 @@ export default function function( elem, device ) {
 					.val( value );
 		}
 		function valF( idx, name, value ) {
-			var $step = $secProgram.find( "div.step" + idx )
+			var id = "div.step" + idx,
+			    $step = $secProgram.find( id )
 					.expectOne();
 			val( $step, name, value );
 		}
@@ -23,13 +24,11 @@ export default function function( elem, device ) {
 
 		valF( 0, 'heat', prog.steps[ 0 ].heat );
 
-		for( var i=1; i<4; i++ ) {
+		for( var i=1; i<3; i++ ) {
 			var step = prog.steps[ i ];
 			valF( i, 'heat', step.heat );
 			valF( i, 'hold', step.hold/60 );
 		}
-
-		valF( 4, 'heat', prog.steps[ 4 ].heat );
 	}
 
 	function readScript() {
@@ -47,15 +46,14 @@ export default function function( elem, device ) {
 		}
 
 		var steps = []
-		steps.push( { heat: valFF( 0, 'heat' ) } )
-		for( var i=1; i<4; i++ ) {
+		for( var i=0; i<4; i++ ) {
 
 			steps.push( {
 				heat: valFF( i, 'heat' ),
+				rate: valFF( i, 'rate' ),
 				hold: valFF( i, 'hold' ) * 60
 			} )
 		}
-		steps.push( { heat: valFF( 4, 'heat' ) } )
 
 		var prog = {
 			name: val( $secProgram, 'name' ),

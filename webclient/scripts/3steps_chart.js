@@ -26,13 +26,15 @@ var BOUNDS = [
 
 export default function( elem, device, passive ) {
 
+	console.log( "3STEPS CHART", elem );
+
 	passive = passive || true;
 
 	var $elem = ( elem instanceof jQuery ? elem : $( elem ) )
 			.expectOne(),
 		_svg = false;
 
-	var $chart = $('<object class="chart" data="3steps.svg" />' )
+	var $chart = $('<object class="chart" data="scripts/3steps.svg" />' )
 			.prependTo( $elem )
 			.on( 'load', function() {
 				console.log( 'chart loaded' );

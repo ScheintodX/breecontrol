@@ -24,7 +24,8 @@
 		{
 			"name": "Abkühlung",
 			"rate": 999,
-			"heat": 80
+			"heat": 80,
+			"hold": 0
 		}
 	]
 }
