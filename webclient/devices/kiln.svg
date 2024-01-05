@@ -145,9 +145,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568544"
-     inkscape:cx="152.82345"
-     inkscape:cy="9.987883"
+     inkscape:zoom="2.0000001"
+     inkscape:cx="162"
+     inkscape:cy="124.25"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -214,19 +214,6 @@
        d="m 26.302734,25.007812 c -2.959955,0 -5.34375,2.38384 -5.34375,5.34375 V 184.98047 c 0,2.9599 2.383795,5.34375 5.34375,5.34375 H 222.43555 c 2.95995,0 5.34179,-2.38385 5.34179,-5.34375 V 30.351562 c 0,-2.95991 -2.38184,-5.34375 -5.34179,-5.34375 h -27.41016 c -5.55208,0 -5.65839,8.052735 0,8.052735 h 2.26758 c 2.67158,0 4.82226,2.150665 4.82226,4.822265 V 177.44922 c 0,2.6716 -2.15068,4.82226 -4.82226,4.82226 H 35.855469 c -2.671585,0 -4.822266,-2.15066 -4.822266,-4.82226 V 37.882812 c 0,-2.6716 2.150681,-4.822265 4.822266,-4.822265 H 140.39062 c 5.58256,0 5.64355,-8.052735 0,-8.052735 z"
        transform="translate(0,852.36218)"
        sodipodi:nodetypes="sssssssssssssssssssss" />
-    <text
-       transform="scale(1.06949,0.93502511)"
-       id="temp_inner_nominal"
-       y="1041.649"
-       x="127.67808"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#ce5c00;fill-opacity:1;stroke:none"
-       xml:space="preserve"
-       temp_inner_set=""><tspan
-         style="font-weight:bold;font-size:19.8379px;line-height:1.25;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans Bold';text-align:center;text-anchor:middle;fill:#ce5c00"
-         y="1041.649"
-         x="127.67808"
-         id="tspan3182"
-         sodipodi:role="line">77°</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ce5c00;fill-opacity:1;stroke:none"
