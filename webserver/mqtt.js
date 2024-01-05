@@ -70,7 +70,7 @@ export default function Mqtt( onData, config, subscribe, filter ) {
 				if( f( topic, message ) ) return;
 			}
 
-			log.info( 'Q<', topic, message.toString() );
+			log.trace( 'Q<', topic, message.toString() );
 
 			_onData( topic, message.toString() );
 		} );

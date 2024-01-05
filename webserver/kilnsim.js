@@ -12,6 +12,7 @@ import Repl from './repl.js';
 
 import Mqtt from './mqtt.js';
 var _mqtt = false;
+var _publish;
 
 const config = {
     //url: "mqtt://mqtt.flo.axon-e.de:1883",
@@ -26,16 +27,18 @@ var PWM_PERIODE = 10;
 var TEMP_OFFSET = 20;
 var U_DAMPER_FACTOR = 10; // W/K
 
-var dt = 1,
-    runtime = 0,
-    speed = 1;
+var Sys = {
+	dt: 1,
+    runtime: 0,
+    speed: 1
+};
 
 var loopH = null;
 
 
 function reschedule(){
 	if( loopH ) clearInterval( loopH );
-	loopH = setInterval( loop, 1000/speed );
+	loopH = setInterval( loop, 1000/Sys.speed );
 }
 
 function gotMqttData( t, v ){
@@ -52,7 +55,7 @@ function gotMqttData( t, v ){
 		case "powerfactor/set":
 			var val = parseFloat( v );
 			if( val || val === 0 ){
-				Kiln.P_heater = Kiln.P_max * val;
+				Kiln.powerfactor = val;
 			}
 			break;
 
@@ -88,7 +91,7 @@ function gotMqttData( t, v ){
 		case "dt/set":
 			var val = parseInt( v );
 			if( val ){
-				dt = val;
+				Sys.dt = val;
 			}
 			break;
 
@@ -101,37 +104,41 @@ function gotMqttData( t, v ){
 
 
 		case "speed/set":
-			speed = parseInt( v );
+			Sys.speed = parseInt( v );
 			reschedule();
 			break;
 
 	}
 }
 
-const C2K = c => c+273.15,
+const Jconst = 3.6e6,
+      C2K = c => c+273.15,
       K2C = k => k-273.15,
-      J2kWh = Q => Q/3.6e6,
-      kWh2J = Q => Q*3.6e6
+      J2kWh = Q => Q/Jconst,
+      kWh2J = Q => Q*Jconst
 	  ;
 const _Q = ( c, m, T ) => c * m * T,
       _T = ( c, m, Q ) => Q / ( c * m );
 
 var Buf = ( max, slice ) => {
+	// Buffer with an delay.
+	// aka fifo wit an average over the oldest
+	//
+	// [ 1 2 3 4 5 6 7 8 ] <-input
+	//   \-avg-/
+
+	var data: new Array( max ).fill( 0 );
 	var res = {
-		MAX: max,
-		SLICE: slice,
-		data: [],
 		put: function( val ){
-			this.data.push( val ); // to the end
-			while( this.data.length > this.MAX ){
-				this.data.shift(); // from the beginning
+			data.push( val ); // to the end
+			while( data.length > max ){
+				data.shift(); // from the beginning
 			}
 		},
 		get avg(){
-			return this.data.slice(0,slice).reduce( (a,b) => ( a + b / this.data.length ) );
+			return data.slice(0,slice).reduce( (a,b) => ( a + b ) ) / data.length ) );
 		}
 	};
-	for( var i=0; i<max; i++ ) res.put( 0 );
 	return res;
 }
 
@@ -156,6 +163,13 @@ var Kiln = {
 		this.Q_heat = J2kWh( _Q( this.c_spec_heat_capacity, (this.m_mass+this.m_extra), T ) );
 	},
 
+	get powerfactor(){
+		return this.P_heater / this.P_max;
+	},
+	set powerfactor( val ){
+		this.P_heater = this.P_max * val;
+	},
+
 	buf: Buf( 60, 10 ), // 1min delay, 10s avg
 	tick: function( dt ){
 
@@ -166,8 +180,8 @@ var Kiln = {
 
 		var Q_heat = this.system ? this.P_heater * dt / 3600 : 0;
 
-		this.Q_heat -= Q_loss/1000;
 		this.Q_heat += Q_heat/1000;
+		this.Q_heat -= Q_loss/1000;
 		this.Q_heat -= Q_damper/1000;
 
 		this.buf.put( this.Q_heat );
@@ -180,33 +194,53 @@ var Kiln = {
 	dump: function(){
 		return {
 			X: this.system,
-			x: (this.runtime/60.0).toFixed(1) + " min",
+			x: (Sys.runtime/60.0).toFixed(0) + ":" + (Sys.runtime%60) + " min",
+			P: this.P_heater + " W",
+			H: (this.powerfactor * 100 ).toFixed(0) + " %",
 			U: this.U_loss + " W/K",
 			D: this.U_damper + " W/K",
 			m: (this.m_mass + this.m_extra) + " kg",
 			c: this.c_spec_heat_capacity + " J/(kg*K)",
-			q: this.Q_heat + " kWh",
+			Q: this.Q_heat + " kWh",
 			T: this.T_temp + " °C",
 			θ: this.buf.avg + " °C"
 		};
+	},
+
+	pub: function( p ){
+
+
+		p( "runtime", "" + Sys.runtime );
+		p( "system/status", Kiln.system ? "1" : "0" );
+		p( "temp/status", "" + (Kiln.heat+TEMP_OFFSET).toFixed( 1 ) );
+	//	p( "powerabs/status", "" + Kiln.P_heater.toFixed( 1 ) );
+	//	p( "extramass/status", Kiln.m_extra.toFixed( 1 ) );
+		p( "damper/status", Kiln.i_damper.toFixed( 1 ) );
+	//	p( "damperpower/status", Kiln.P_damper.toFixed( 1 ) );
+
+		var fac = ( Kiln.P_heater / Kiln.P_max );
+		p( "powerfactor/status", "" + fac.toFixed( 3 )  );
+
+		// Just for lols
+		var h1 = pwm( 0, Sys.runtime, fac );
+		p( "heater/status", h2s( h1 ) );//+ h2s( h2 ) + h2s( h3 ) );
 	}
 };
+
 Kiln.T_temp = 0;
 E.cho( Kiln.dump() );
 
-const repl = Repl( Kiln );
+const repl = Repl( {
+	kiln: Kiln,
+	sys: Sys
+} );
 
 
-function publish( t, v ) {
-
-	_mqtt.send( t, v );
-}
-
-function pwm( phase, runtime, fac ) {
+function pwm( phase, t, fac ) {
 
 	var offset = (PWM_PERIODE/3*phase),
 	    width = fac*PWM_PERIODE,
-	    result = (runtime+offset)%PWM_PERIODE < width;
+	    result = (t+offset)%PWM_PERIODE < width;
 
 	return result;
 }
@@ -217,27 +251,13 @@ function h2s( val ) {
 var last = 0;
 function loop() {
 
-	Kiln.tick( dt );
-	runtime += dt;
+	Kiln.tick( Sys.dt );
+	Sys.runtime += Sys.dt;
 
 	var now = Date.now();
 	E.very( 5, Kiln.dump() );
 
-
-	publish( "runtime", "" + runtime );
-	publish( "system/status", Kiln.system ? "1" : "0" );
-	publish( "temp/status", "" + (Kiln.heat+TEMP_OFFSET).toFixed( 1 ) );
-	//publish( "powerabs/status", "" + Kiln.P_heater.toFixed( 1 ) );
-	//publish( "extramass/status", Kiln.m_extra.toFixed( 1 ) );
-	publish( "damper/status", Kiln.i_damper.toFixed( 1 ) );
-	//publish( "damperpower/status", Kiln.P_damper.toFixed( 1 ) );
-
-	var fac = ( Kiln.P_heater / Kiln.P_max );
-	publish( "powerfactor/status", "" + fac.toFixed( 3 )  );
-
-	// Just for lols
-	var h1 = pwm( 0, runtime, fac );
-	publish( "heater/status", h2s( h1 ) );//+ h2s( h2 ) + h2s( h3 ) );
+	Kiln.pub( _publish );
 }
 
 async function startMqtt() {
@@ -249,13 +269,18 @@ async function startMqtt() {
 	return mqtt;
 }
 
+async function startSim( publish ){
+
+	_publish = publish;
+	reschedule();
+}
+
 async function main() {
 
 	log.startup( "Main", "start all" );
 
 	_mqtt = await startMqtt();
-
-	reschedule();
+	await startSim( _mqtt.send );
 
 	log.startup( "Main", "finish" );
 }
