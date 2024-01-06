@@ -5,7 +5,7 @@ const self = {
 		var file = name.toLowerCase() + ".js";
 		console.log( "LOAD Js", file );
 
-		return import( "../" + file )
+		return import( "../scripts/" + file )
 				.then( M => M.default );
 	},
 
@@ -14,12 +14,10 @@ const self = {
 		var file = name.toLowerCase() + ".html";
 		console.log( "LOAD Html", file );
 
-		return fetch( file ).then( resp => resp.text() );
+		return fetch( "scripts/" + file ).then( resp => resp.text() );
 	},
 
 	loadModule: function( name, done ) { // implizit async
-
-		name = "ScriptS/" + name;
 
 		console.log( "LOAD Module", name );
 

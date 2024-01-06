@@ -1,5 +1,3 @@
-import "../node_modules/jquery/dist/jquery.js";
-
 import BAG_Control from '../js/controls.js';
 
 export default function( elem, device ) {

@@ -1,10 +1,8 @@
-/* line 3, ../sass/load.scss */
 body {
   background-color: #16335e;
   color: white;
 }
 
-/* line 8, ../sass/load.scss */
 img.loading {
   position: absolute;
   width: 120px;
@@ -15,5 +13,7 @@ img.loading {
 }
 
 .hidetillneeded {
-	display: none !important;
+  display: none !important;
 }
+
+/*# sourceMappingURL=load.css.map */

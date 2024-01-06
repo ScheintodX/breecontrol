@@ -1,5 +1,3 @@
-//import jsondiffpatch from '../node_modules/jsondiffpatch/dist/jsondiffpatch.esm.js';
-
 /**
  * Keep track of components
  *
@@ -64,7 +62,7 @@ export default function( controls ) {
 
 	function initControl( name, control ) {
 
-		if( ! 'gotData' in control ) {
+		if( ! ('gotData' in control) ) {
 			console.warn( "Missing 'gotData'" );
 		}
 

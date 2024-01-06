@@ -1,5 +1,3 @@
-import "../node_modules/jquery/dist/jquery.js";
-
 function col( c ){
 	return '#' + d2h(c[0]) + d2h(c[1]) + d2h(c[2]);
 }

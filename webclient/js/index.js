@@ -1,6 +1,3 @@
-import "../node_modules/jquery/dist/jquery.js";
-import "./jqhelpers.js";
-
 import BAG_Ctrl from "./ctrl.js";
 import BAG_Com from "./com_ws.js";
 import BAG_Tab from "./tab.js";
