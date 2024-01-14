@@ -5,9 +5,9 @@ export default function( elem, device ) {
 	var _onControl = false;
 
 	var $e = ( elem instanceof jQuery ? elem : $( elem ) )
-			.expectOne(),
+				.expectOne(),
 		$secManual = $e.find( 'section.manual' )
-			.expectOne()
+				.expectOne()
 		;
 
 	function notify( on, topic, value ) {
@@ -15,9 +15,9 @@ export default function( elem, device ) {
 		_onControl( { on: on, topic: topic, value: value, device: device } );
 	}
 
-	function Control( sel, scale ) {
+	function Control( query, scale ) {
 
-		var $c = $secManual.find( sel );
+		var $c = $secManual.find( query );
 
 		if( !$c.isOne() ) return undefined;
 
