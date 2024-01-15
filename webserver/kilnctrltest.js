@@ -18,7 +18,7 @@ const Script = {
 		{ name: "Trocknen",    rate: 60,  heat: 160 },
 		{ name: "Entbinden",   rate: 90,  heat: 553 },
 		{ name: "Quarzsprung", rate: 30,  heat: 593 },
-		{ name: "Schrühen",    rate: 150, heat: 960, hold: 15 },
+		{ name: "Schrühen",    rate: 150, heat: 960, hold: 30 },
 		{ name: "Abkühlen",    rate: -30,  heat: 80 },
 	]
 }
@@ -36,10 +36,10 @@ kilnctrl._prepare( Script );
 
 console.log( Script );
 
-var T, t, step, power, fac;
+var T, t=0, step, power, fac;
 
 for( T = 0; T <= 1200; T+=10 ){
-	t = T;
+	t += 10;
 	step = kilnctrl._stepFor( Script, true, t, T );
 	if( !step ) break;
 	power = kilnctrl._powerFor( step.rate, T );
@@ -48,7 +48,7 @@ for( T = 0; T <= 1200; T+=10 ){
 }
 
 for( T; T >= 0; T-=50 ){
-	t = T;
+	t += 10;
 	step = kilnctrl._stepFor( Script, false, t, T );
 	if( !step ) break;
 	power = kilnctrl._powerFor( step.rate, T );

@@ -3,7 +3,8 @@ import { Assert } from './assert.js';
 export default function( CONFIG ) {
 
 	const HR =
-		// s. https://www.kanthal.de/produkte-und-dienstleistungen/material-datasheets/wire/resistance-heating-wire-and-resistance-wire/kanthal-a-1
+		// s. https://www.kanthal.de/produkte-und-dienstleistungen/material-
+		// datasheets/wire/resistance-heating-wire-and-resistance-wire/kanthal-a-1
 		T=>((x)=>1+[0,0,0,0,1,2,2,3,3,4,4,4,4,5][x<0?0:x>14?14:x]*.01)(T/100|0);
 
 	function check( script ){
@@ -20,6 +21,9 @@ export default function( CONFIG ) {
 	}
 
 	function prepare( script ){
+
+		script.end = -1;
+		script.step = -1;
 
 		var found = false;
 		var steps = script.steps
@@ -51,17 +55,21 @@ export default function( CONFIG ) {
 
 		for( i=start; i<end; i++ ){
 			step = script.steps[ i ];
-			if( heating ? step.heat > T : step.heat < T ) {
-				if( script.start ){
 
-					if( t-script.start < step.hold ){
+			if( script.step == i ){
+				if( script.heat <= T ){
+					if( !script.end ){
+						script.end = t;
+					}
+					if( script.end < t+step.hold ){
 						return step;
 					}
-
-				} else if( script.step != i ){
-					script.step = i;
-					script.start = t;
 				}
+			}
+
+			if( heating ? step.heat > T : step.heat < T ) {
+				script.step = i;
+				script.end = 0;
 				return step;
 			}
 		}
@@ -85,8 +93,12 @@ export default function( CONFIG ) {
 
 	return {
 
-		load: function( script ) {
+		var Script;
 
+		load: function( script ) {
+			check( script ); // throws Errors by its own
+			prepare( script );
+			script = Script;
 		},
 
 		start: function() {
@@ -99,5 +111,4 @@ export default function( CONFIG ) {
 		_powerFor: powerFor,
 		_power2fac: power2fac
 	}
-
 }
