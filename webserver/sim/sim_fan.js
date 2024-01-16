@@ -1,5 +1,5 @@
 import './patch.js';
-import { E } from "../E.js";
+import E from "../E.js";
 import _ from "underscore";
 
 import AOnOffAuto from './a_onoffauto.js';

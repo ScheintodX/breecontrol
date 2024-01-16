@@ -3,10 +3,10 @@
  * List available scripts
  */
 
-import { E } from './E.js';
+import E from './E.js';
 import fs from 'fs/promises';
 //import _ from 'underscore';
-import { log as master } from './logging.js';
+import master from './logging.js';
 const log = master.module( "scripts" );
 log.trace( "fubar" );
 

@@ -1,4 +1,4 @@
-import { Assert } from './assert.js';
+import Assert from './assert.js';
 
 export default function( CONFIG ) {
 
@@ -91,14 +91,14 @@ export default function( CONFIG ) {
 		return res > 0 ? res : 0;
 	}
 
-	return {
+	var Script;
 
-		var Script;
+	return {
 
 		load: function( script ) {
 			check( script ); // throws Errors by its own
 			prepare( script );
-			script = Script;
+			Script = script;
 		},
 
 		start: function() {

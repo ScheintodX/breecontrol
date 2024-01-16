@@ -1,4 +1,4 @@
-import { E } from "../E.js";
+import E from "../E.js";
 import { Mqtt as HQ } from "../helpers.js";
 import _ from "underscore";
 
@@ -31,7 +31,7 @@ export default function AFloat( conf ) {
 			}
 
 			if( ! conf.disabled ) emit( conf.topic + '/nominal', HQ.toString( self.nominal, 'f', 1 ) );
-			
+
 			parentRun( emit );
 
 			// Some delay from nominal to status

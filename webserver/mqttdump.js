@@ -2,12 +2,12 @@
 
 import 'colors';
 
-//import { E } from './E.js';
-import { log } from './logging.js';
+//import E from './E.js';
+import log from './logging.js';
 
-import { Catch } from './catch.js'
+import Catch from './catch.js'
 Catch.log( log );
-import { Assert } from './assert.js';
+import Assert from './assert.js';
 
 import Mqtt from './mqtt.js';
 var _mqtt = false;

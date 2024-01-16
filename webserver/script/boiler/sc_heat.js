@@ -1,6 +1,6 @@
-import { E } from '../../E.js';
-import { Assert } from '../../assert.js';
-import { log } from '../../logging.js';
+import E from '../../E.js';
+import Assert from '../../assert.js';
+import log from '../../logging.js';
 
 
 function calcTime( t_src, t_dest, vol, kw, efficiency ) {
@@ -22,7 +22,7 @@ export default function( args, config, env ){
 
 	Assert.present( 'args.heat', args.heat );
 	Assert.present( 'args._from', args._from );
-	
+
 	var self = {
 
 		start: function( current, boiler ) {
@@ -61,13 +61,13 @@ export default function( args, config, env ){
 
 			// Todo: 1°C vor erreichen der Zieltemperatur wird abgeschalten. Der Wert sollte in irgend eine Config
 			if( boiler.temp.status >= (args.heat-1.0) ) {
-				
+
 				current.mode = 'done';
 			}
 		},
 		guessRuntime: function( boiler ) {
 
-			return calcTime( 
+			return calcTime(
 					args._from,
 					args.heat,
 					boiler.conf.capacity,

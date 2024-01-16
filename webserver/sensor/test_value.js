@@ -1,6 +1,6 @@
 import { Mqtt } from '../helpers.js';
 import _ from 'underscore';
-import { E } from '../E.js';
+import E from '../E.js';
 
 export default function( conf, defaults ) {
 

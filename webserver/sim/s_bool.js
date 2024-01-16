@@ -1,4 +1,4 @@
-import { E } from "../E.js";
+import E from "../E.js";
 import { Mqtt as  HQ } from '../helpers.js';
 import _ from "underscore";
 

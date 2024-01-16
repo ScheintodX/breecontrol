@@ -1,10 +1,9 @@
 #!/usr/bin/node
 
-import { E } from './E.js';
+import E from './E.js';
 
 var PWM_PERIODE = 10;
 var TEMP_OFFSET = 20;
-var U_DAMPER_FACTOR = 10; // W/K
 
 const Jconst = 3.6e6,
       C2K = c => c+273.15,

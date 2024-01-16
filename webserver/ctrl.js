@@ -1,10 +1,10 @@
-import { E } from './E.js';
-import { Catch } from './catch.js';
+import E from './E.js';
+import Catch from './catch.js';
 
-import { log as master} from './logging.js';
+import master from './logging.js';
 const log = master.module( "ctrl" );
 log.trace( "Fu der Bär" );
-import { Assert } from './assert.js';
+import Assert from './assert.js';
 
 import { sc_load, sc_save, sc_list } from './scripts.js';
 

@@ -1,4 +1,4 @@
-import { E } from './E.js';
+import E from './E.js';
 
 /*
 var _log;
@@ -83,7 +83,7 @@ export const Catch = {
 */
 
 var _log;
-export const Catch = {
+export default {
 
 	ExitOn: (module, f) => f,
 	ContinueOn: (module, f) => f,

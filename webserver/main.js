@@ -2,15 +2,15 @@
 
 import 'colors';
 
-import { log } from './logging.js';
+import log from './logging.js';
 log.file( '/var/log/braumeister/braumeister.log' );
 
-import { E } from './E.js';
+import E from './E.js';
 
-import { Catch } from './catch.js'
+import Catch from './catch.js'
 Catch.log( log );
 
-import { Assert } from './assert.js';
+import Assert from './assert.js';
 
 import Repl from './repl.js';
 const repl = Repl( {} );

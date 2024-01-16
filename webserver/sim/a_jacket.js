@@ -1,4 +1,4 @@
-import { E } from "../E.js";
+import E from "../E.js";
 import _ from "underscore";
 
 import SBool from "./s_bool.js";

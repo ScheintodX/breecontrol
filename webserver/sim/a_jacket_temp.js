@@ -1,4 +1,4 @@
-import { E } from "../E.js";
+import E from "../E.js";
 import _ from "underscore";
 
 import AFloat from "./a_float.js";

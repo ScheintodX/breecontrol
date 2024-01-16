@@ -1,4 +1,4 @@
-import { Assert } from './assert.js';
+import Assert from './assert.js';
 import KilnCtrl from './kilnctrl.js';
 
 

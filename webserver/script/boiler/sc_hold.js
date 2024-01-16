@@ -1,6 +1,6 @@
-import { E } from '../../E.js';
-import { Assert } from '../../assert.js';
-import { log } from '../../logging.js';
+import E from '../../E.js';
+import Assert from '../../assert.js';
+import log from '../../logging.js';
 
 
 export default function( args, config, env ){
@@ -28,7 +28,7 @@ export default function( args, config, env ){
 			boiler.temp.setTo( 0 );
 		},
 		resume: function( current, boiler ) {
-			
+
 			_pauseTime += env.time() - _pauseStart;
 			boiler.temp.setTo( args.hold );
 		},

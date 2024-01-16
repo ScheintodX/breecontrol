@@ -1,8 +1,8 @@
-import { E } from './E.js';
+import E from './E.js';
 
 import 'colors';
-import { log } from './logging.js';
-import { Catch } from './catch.js';
+import log from './logging.js';
+import Catch from './catch.js';
 Catch.log( log );
 
 import KilnGen from './kilnsim.js';
@@ -11,6 +11,8 @@ import Repl from './repl.js';
 import Mqtt from './mqtt.js';
 var _mqtt = false;
 var _publish;
+
+var U_DAMPER_FACTOR = 10; // W/K
 
 var Kiln = KilnGen();
 E.rr( Kiln.dump( 0, 0 ) );
@@ -85,13 +87,6 @@ function gotMqttData( t, v ){
 			var val = parseInt( v );
 			if( val ){
 				Sys.dt = val;
-			}
-			break;
-
-		case "offset/set":
-			var val = parseInt( v );
-			if( val ){
-				TEMP_OFFSET = val;
 			}
 			break;
 

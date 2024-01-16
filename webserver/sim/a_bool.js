@@ -1,4 +1,4 @@
-import { E } from "../E.js";
+import E from "../E.js";
 import { Mqtt as HQ } from "../helpers.js";
 import _ from "underscore";
 
@@ -19,7 +19,7 @@ export default function ABool( conf ) {
 
 			if( conf.mode == 'random' ) {
 				self.nominal = self._genStatus( self.nominal );
-			} 
+			}
 			if( conf.mode == 'simulate' && self.nominal ) {
 				if( !self._last || new Date() - self._last > conf.timeout ) {
 					E.rr( "power off " + conf.topic + " due to missing messages" );

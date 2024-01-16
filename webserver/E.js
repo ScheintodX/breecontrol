@@ -1,6 +1,5 @@
 import 'colors';
 
-
 function stackid( depth = 3 ){
 
 	return stack( depth+1, 1 );
@@ -43,7 +42,7 @@ function stack(numberOfLinesToRemove = 3, maxLines = -1) {
 
 var everylog = {}
 
-export const E = {
+export default {
 
 	rr: function(){
 

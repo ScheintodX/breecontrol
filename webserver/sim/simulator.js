@@ -2,7 +2,7 @@
 
 import util from 'util';
 
-import { E } from '../E.js';
+import E from '../E.js';
 import './patch.js';
 
 import Config from '../config.js';
@@ -11,7 +11,7 @@ var _config;
 import mqtt from 'mqtt';
 var _mqttClient;
 
-import { log } from '../logging.js';
+import log from '../logging.js';
 log.file( '/var/log/braumeister/braumeister.test' );
 
 import Boiler from './sim_boiler.js';

@@ -1,5 +1,5 @@
 import './patch.js';
-import { E } from "../E.js";
+import E from "../E.js";
 import _ from "underscore";
 
 import SFloat from './s_float.js';

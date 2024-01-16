@@ -1,6 +1,3 @@
-//import { E } from './E.js';
-//import { log } from './logging.js';
-
 import { Message as HM } from '../helpers.js';
 
 import InProxy from '../sensor/in_proxy.js';
@@ -160,18 +157,18 @@ export default function createBoiler( config, index ) {
 				}
 			}
 
-			
+
 			// ============ Control Temperature ============
 			// Monitor the boiler temperature and regulate
 			// the jacket heaters accordingly
-			
+
 			self.temp.run( self, self.warn );
 
 
 			// ============ Security section ===============
 			// Check for things which shouldn't happen and
 			// correct the values. Send warnings.
-			
+
 			self.upper.temp.watch( self, self.warn );
 			self.lower.temp.watch( self, self.warn );
 

@@ -1,6 +1,6 @@
-import { E } from '../../E.js';
-import { Assert } from '../../assert.js';
-import { log } from '../../logging.js';
+import E from '../../E.js';
+import Assert from '../../assert.js';
+import log from '../../logging.js';
 
 
 function calcTime( t_src, t_dest, vol, kw, efficiency ) {

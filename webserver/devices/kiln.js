@@ -1,3 +1,5 @@
+import E from '../E.js';
+
 import { Message as HM } from '../helpers.js';
 
 import InProxy from '../sensor/in_proxy.js';
@@ -5,8 +7,6 @@ import OutProxy from '../sensor/out_proxy.js';
 import InOutProxy from '../sensor/inout_proxy.js';
 import Combined from '../sensor/combined.js';
 import WebValue from '../sensor/web_value.js';
-
-import { E } from '../E.js';
 
 /**
  * +------------+   +--------------+

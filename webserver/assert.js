@@ -1,4 +1,4 @@
-export const Assert = {
+const Assert = {
 
 	present: function( name, value ) {
 		if( !(typeof value != 'undefined')){
@@ -39,3 +39,5 @@ export const Assert = {
 	}
 
 };
+
+export default Assert;

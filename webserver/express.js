@@ -1,7 +1,6 @@
-import { log } from './logging.js';
-import { E } from './E.js';
-
-import { Assert } from './assert.js';
+import log from './logging.js';
+import E from './E.js';
+import Assert from './assert.js';
 
 import Http from 'http';
 import { WebSocketServer } from 'ws';

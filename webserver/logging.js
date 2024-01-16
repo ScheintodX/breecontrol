@@ -22,7 +22,7 @@ function filetransport( data ){
 	}
 }
 
-export const log = Tracer.colorConsole( {
+var log = Tracer.colorConsole( {
 	level: 'info',
 	inspectOpt: { depth: 3 },
 	transport: filetransport
@@ -60,3 +60,5 @@ log.module = function( moduleName, level=undefined ) {
 		transport: filetransport
 	});
 }
+
+export default log;
