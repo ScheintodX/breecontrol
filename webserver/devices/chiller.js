@@ -1,4 +1,4 @@
-import { Message as HM } from '../helpers.js';
+import { Message as HM } from '#helpers';
 
 import InProxy from '../sensor/in_proxy.js';
 import Combined from '../sensor/combined.js';
@@ -83,18 +83,18 @@ export default function createChiller( config, index ) {
 				}
 			}
 
-			
+
 			// ============ Control Temperature ============
 			// Monitor the boiler temperature and regulate
 			// the jacket heaters accordingly
-			
+
 			self.temp.run( self, self.warn );
 
 
 			// ============ Security section ===============
 			// Check for things which shouldn't happen and
 			// correct the values. Send warnings.
-			
+
 			self.jacket.temp.watch( self, self.warn );
 		}
 

@@ -1,4 +1,4 @@
-import E from '../../E.js';
+import E from '#E';
 
 import Repl from 'repl';
 import S_3steps from './3steps.js';

@@ -1,6 +1,6 @@
-import { Mqtt } from '../helpers.js';
+import E from '#E';
+import { Mqtt } from '#helpers';
 import _ from 'underscore';
-import E from '../E.js';
 
 /**
  * One value set by the web client.

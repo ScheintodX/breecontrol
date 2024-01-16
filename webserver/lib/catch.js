@@ -1,4 +1,4 @@
-import E from './E.js';
+import E from '#E';
 
 /*
 var _log;

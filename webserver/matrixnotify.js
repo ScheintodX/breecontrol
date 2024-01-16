@@ -1,7 +1,7 @@
 // Import necessary modules
 import { AutojoinRoomsMixin, MatrixClient } from "matrix-bot-sdk";
 import fs from "fs/promises";
-import log from './logging.js';
+import log from '#logging';
 
 export default async function notify( message ) {
 

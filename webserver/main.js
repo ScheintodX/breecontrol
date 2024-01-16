@@ -1,25 +1,25 @@
 #!/usr/bin/nodejs
 
-import 'colors';
+import '#colors';
 
-import log from './logging.js';
+import log from '#logging';
 log.file( '/var/log/braumeister/braumeister.log' );
 
-import E from './E.js';
+import E from '#E';
 
-import Catch from './catch.js'
+import Catch from '#catch'
 Catch.log( log );
 
-import Assert from './assert.js';
+import Assert from '#assert';
 
-import Repl from './repl.js';
+import Repl from '#repl';
 const repl = Repl( {} );
 
-import Ctrl from './ctrl.js';
+import Websocket from '#express';
+import Mqtt from '#mqtt';
 
 import Config from './config.js';
-import Websocket from './express.js';
-import Mqtt from './mqtt.js';
+import Ctrl from './ctrl.js';
 import Brewery from './brewery.js';
 
 var hello;

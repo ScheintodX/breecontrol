@@ -3,13 +3,13 @@
 import 'colors';
 
 //import E from './E.js';
-import log from './logging.js';
+import log from '#logging';
 
-import Catch from './catch.js'
+import Catch from '#catch'
 Catch.log( log );
-import Assert from './assert.js';
+import Assert from '#assert';
 
-import Mqtt from './mqtt.js';
+import Mqtt from '#mqtt';
 var _mqtt = false;
 
 const config = {

@@ -1,6 +1,6 @@
-import E from '../../E.js';
-import Assert from '../../assert.js';
-import log from '../../logging.js';
+import E from '#E';
+import Assert from '#assert';
+import log from '#logging';
 
 import SC_heat from './sc_heat.js';
 import SC_hold from './sc_hold.js';

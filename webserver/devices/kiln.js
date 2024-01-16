@@ -1,6 +1,6 @@
-import E from '../E.js';
+import E from '#E';
 
-import { Message as HM } from '../helpers.js';
+import { Message as HM } from '#helpers';
 
 import InProxy from '../sensor/in_proxy.js';
 import OutProxy from '../sensor/out_proxy.js';

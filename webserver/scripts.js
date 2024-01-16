@@ -3,14 +3,14 @@
  * List available scripts
  */
 
-import E from './E.js';
+import E from '#E';
 import fs from 'fs/promises';
 //import _ from 'underscore';
-import master from './logging.js';
+import master from '#logging';
 const log = master.module( "scripts" );
 log.trace( "fubar" );
 
-import { Json as JS } from './helpers.js';
+import { Json as JS } from '#helpers';
 
 var _CONFIG_ = 'scriptconfig/',
 	_SCRIPT_ = 'script/';

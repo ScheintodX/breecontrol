@@ -9,6 +9,17 @@
     "type": "git",
     "url": "git://github.com/ScheintodX/braumeister.git"
   },
+  "imports": {
+	"#E": "./lib/E.js",
+	"#assert": "./lib/assert.js",
+	"#catch": "./lib/catch.js",
+	"#colors": "./lib/colors.js",
+	"#express": "./lib/express.js",
+	"#helpers": "./lib/helpers.js",
+	"#logging": "./lib/logging.js",
+	"#mqtt": "./lib/mqtt.js",
+	"#repl": "./lib/repl.js"
+  },
   "dependencies": {
     "colors": "~1.4",
     "deep-diff": "^1.0.2",

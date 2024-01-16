@@ -1,4 +1,4 @@
-import { Message as HM } from '../helpers.js';
+import { Message as HM } from '#helpers';
 
 import InProxy from '../sensor/in_proxy.js';
 import OutProxy from '../sensor/out_proxy.js';

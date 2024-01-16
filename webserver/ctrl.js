@@ -1,14 +1,14 @@
-import E from './E.js';
-import Catch from './catch.js';
+import E from '#E';
+import Catch from '#catch';
 
-import master from './logging.js';
+import master from '#logging';
 const log = master.module( "ctrl" );
 log.trace( "Fu der Bär" );
-import Assert from './assert.js';
+import Assert from '#assert';
+
+import Repl from '#repl';
 
 import { sc_load, sc_save, sc_list } from './scripts.js';
-
-import Repl from './repl.js';
 
 
 export default function Ctr( config, hello, brewery ) {

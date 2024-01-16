@@ -1,5 +1,5 @@
-import Assert from '../assert.js';
-import E from '../E.js';
+import Assert from '#assert';
+import E from '#E';
 
 import InProxy from '../sensor/in_proxy.js';
 import Combined from '../sensor/combined.js';

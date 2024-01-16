@@ -1,4 +1,4 @@
-import { Mqtt } from '../helpers.js';
+import { Mqtt } from '#helpers';
 import _ from 'underscore';
 
 export default function( conf, defaults ) {
@@ -13,7 +13,7 @@ export default function( conf, defaults ) {
 			overheat = jacket._conf.overheat,
 			boost = jacket._conf.boost
 			;
-		
+
 		// If no temp set send 0 to heater
 		if( typeof nominal == 'undefined' )
 				return 0;
@@ -24,7 +24,7 @@ export default function( conf, defaults ) {
 
 		// Do something for "boiling mode"
 		// if( nominal == 100 )
-				
+
 		var opti = nominal
 				- overheat
 				+ (nominal - actual) * boost
