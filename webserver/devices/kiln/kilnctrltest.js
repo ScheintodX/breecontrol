@@ -1,5 +1,5 @@
-import Assert from './assert.js';
-import KilnCtrl from './kilnctrl.js';
+import Assert from '../../assert.js';
+import KilnCtrl from '../../kilnctrl.js';
 
 
 const CONFIG = {

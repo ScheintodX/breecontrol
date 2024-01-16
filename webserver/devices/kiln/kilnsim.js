@@ -1,6 +1,6 @@
 #!/usr/bin/node
 
-import E from './E.js';
+import E from '../../E.js';
 
 var PWM_PERIODE = 10;
 var TEMP_OFFSET = 20;

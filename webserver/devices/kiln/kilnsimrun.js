@@ -1,14 +1,14 @@
-import E from './E.js';
+import E from '../../E.js';
 
 import 'colors';
-import log from './logging.js';
-import Catch from './catch.js';
+import log from '../../logging.js';
+import Catch from '../../catch.js';
 Catch.log( log );
 
 import KilnGen from './kilnsim.js';
-import Repl from './repl.js';
+import Repl from '../../repl.js';
 
-import Mqtt from './mqtt.js';
+import Mqtt from '../../mqtt.js';
 var _mqtt = false;
 var _publish;
 

@@ -1,6 +1,6 @@
 #!/usr/bin/node
 
-import Mqtt from './mqtt.js';
+import Mqtt from '../../mqtt.js';
 var _mqtt = false;
 
 const config = {
