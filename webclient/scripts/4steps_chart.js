@@ -26,7 +26,7 @@ var BOUNDS = [
 
 export default function( elem, device, passive ) {
 
-	console.log( "3STEPS CHART", elem );
+	console.log( "4STEPS CHART", elem );
 
 	passive = passive || true;
 
@@ -34,7 +34,7 @@ export default function( elem, device, passive ) {
 			.expectOne(),
 		_svg = false;
 
-	var $chart = $('<object class="chart" data="scripts/3steps.svg" />' )
+	var $chart = $('<object class="chart" data="scripts/4steps.svg" />' )
 			.prependTo( $elem )
 			.on( 'load', function() {
 				console.log( 'chart loaded' );

@@ -1,9 +1,12 @@
-import 'colors';
+import colors from 'colors';
+import printf from 'printf';
 
 function stackid( depth = 3 ){
 
 	return stack( depth+1, 1 );
 }
+
+const DEFAULT_TRACEBACK = 2;
 
 function stack(numberOfLinesToRemove = 3, maxLines = -1) {
 
@@ -35,7 +38,8 @@ function stack(numberOfLinesToRemove = 3, maxLines = -1) {
 				fileName = fileMatch[1].trim();
 			}
 
-			return `${functionName}[${fileName}]`;
+			//return `${functionName}[${fileName}]`;
+			return fileName;
 		} ).join(' < ');
 	}
 }
@@ -48,7 +52,7 @@ export default {
 
 		var args = Array.prototype.slice.call( arguments ); //clone
 
-		args.unshift( stack( 2 ).red );
+		args.unshift( colors.red(""+stack( DEFAULT_TRACEBACK, 1 )) );
 
 		console.log.apply( console, args );
 	},
@@ -57,16 +61,27 @@ export default {
 
 		var args = Array.prototype.slice.call( arguments ); //clone
 
-		args.unshift( stack( 3 ).green );
+		args.unshift( colors.green(""+stack( DEFAULT_TRACEBACK, 1 )) );
 
 		console.log.apply( console, args );
 	},
 
+	rrf: function(){
+
+		var args = Array.prototype.slice.call( arguments ); //clone
+		var x = [];
+
+		x.unshift( printf( ...arguments ) );
+		x.unshift( colors.red( ""+stack( DEFAULT_TRACEBACK, 1 )) );
+
+		console.log.apply( console, x );
+	},
+
 	x: function(){
 
-		var args = Array.prototype.slice.call( arguments );
+		var args = Array.prototype.slice.call( arguments ); //clone
 
-		args.unshift( stack( 2, 4 ).red );
+		args.unshift( stack( DEFAULT_TRACEBACK, 4 ).red );
 
 		console.log.apply( console, args );
 	},
@@ -92,6 +107,12 @@ export default {
 			console.log.apply( console, args );
 		}
 		everylog[ id ] = last;
-	}
+	},
 
+	bar: function( p, w=160 ){
+
+		var l = Math.min( p, 1 ) *w |0;
+		if( l < 0 ) return "ERR: " + l;
+		return "=".repeat( l ) + ".".repeat( w-l );
+	}
 };

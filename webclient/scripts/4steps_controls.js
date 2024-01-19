@@ -84,7 +84,7 @@ export default function( elem, device ) {
 
 	return {
 
-		name: '3steps',
+		name: '4steps',
 
 		gotData: gotData,
 

@@ -1,4 +1,14 @@
-const Assert = {
+import _ from 'underscore';
+
+function AssertF( ){
+	switch( arguments.length ){
+		case 0: throw new Error( "What do u want master?" );
+		case 1: if( ! arguments[ 0 ] ) throw new Error( "Assertion not met" );
+		case 2: if( ! arguments[ 1 ] ) throw new Error( `${arguments[0]}: is not true` );
+		//case 3: if( arguments[ 1 ] !== arguments[ 2 ] ) throw new Error( `${arguments[0]}: ${arguments[1]} != ${arguments[2]}` );
+	}
+}
+const Assert = _.extend( AssertF, {
 
 	present: function( name, value ) {
 		if( !(typeof value != 'undefined')){
@@ -29,7 +39,7 @@ const Assert = {
 
 	equals: function( name, actual, expected ) {
 		if( !(actual === expected) ){
-			throw new Error( `${name} expected: ${expcted} but was: ${actual}` );
+			throw new Error( `${name} expected: ${expected} but was: ${actual}` );
 		}
 	},
 
@@ -38,6 +48,6 @@ const Assert = {
 		return value;
 	}
 
-};
+} );
 
 export default Assert;

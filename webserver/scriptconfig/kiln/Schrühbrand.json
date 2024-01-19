@@ -1,19 +1,25 @@
 {
 	"name": "Schrühbrand",
 	"description": "Vorsichtiger Schrühbrand",
-	"script": "3steps.js",
+	"script": "Nsteps.js",
 	"steps": [
 		{
 			"name": "Trocknung",
 			"rate": 60,
 			"heat": 160,
-			"hold": 600
+			"hold": 0
 		},
 		{
 			"name": "Entbrennung",
 			"rate": 90,
-			"heat": 573,
-			"hold": 900
+			"heat": 553,
+			"hold": 0
+		},
+		{
+			"name": "Quarzsprung",
+			"rate": 40,
+			"heat": 593,
+			"hold": 0
 		},
 		{
 			"name": "Sinterung",
@@ -23,7 +29,7 @@
 		},
 		{
 			"name": "Abkühlung",
-			"rate": 999,
+			"rate": -60,
 			"heat": 80,
 			"hold": 0
 		}

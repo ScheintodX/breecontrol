@@ -21,7 +21,7 @@ export default function( script, kiln, config, env ) {
 	    _cur
 		;
 
-	E.rr( "3steps", script, kiln, config, env );
+	E.rr( "4steps", script, kiln, config, env );
 
 	function _exec( command ) {
 
@@ -51,8 +51,8 @@ export default function( script, kiln, config, env ) {
 
 			version: 1,
 
-			controller: '3steps',
-			view: '3Steps',
+			controller: '4steps',
+			view: '4Steps',
 
 			mode: "stop",
 			start: 0,
@@ -219,7 +219,7 @@ export default function( script, kiln, config, env ) {
 		save: function() {
 			return {
 				name: self.hello.name,
-				script: '3steps.js',
+				script: '4steps.js',
 				steps: self.hello.steps
 			}
 		}

@@ -1,6 +1,7 @@
-import Assert from '../../assert.js';
+import Assert from '#assert';
+import E from '#E';
 
-export default function( CONFIG ) {
+export default function( CONFIG, emit ) {
 
 	const HR =
 		// s. https://www.kanthal.de/produkte-und-dienstleistungen/material-
@@ -24,10 +25,10 @@ export default function( CONFIG ) {
 
 		script.end = -1;
 		script.step = -1;
+		script.split = -1;
 
 		var found = false;
 		var steps = script.steps
-		script.split = -1;
 
 		for( var i=0; i<steps.length; i++ ){
 			var step = steps[i];
@@ -36,6 +37,12 @@ export default function( CONFIG ) {
 				break;
 			}
 		}
+
+		script.sec = [
+			[ 0, true ],
+			[ script.split, false ]
+		];
+		script.seci = 0;
 
 		if( script.split < 0 ) {
 			throw new Error( "No Split found" );
@@ -75,11 +82,21 @@ export default function( CONFIG ) {
 		}
 	}
 
-	function power2fac( kW, T ){
+	function currentStepFor( script, t, T ){
+
+		var sec = script.sec[ script.seci ];
+		// to be continued
+	}
+
+	function power2fac( watt, T ){
 
 		var p_max = CONFIG.P_MAX / HR( T );
 
-		return kW / p_max;
+		var fac = watt / p_max;
+
+		if( fac > 1 ) fac = 1;
+
+		return fac;
 	}
 
 	function powerFor( rate, T ){
@@ -92,6 +109,8 @@ export default function( CONFIG ) {
 	}
 
 	var Script;
+	var heating = true;
+	var kiln_temp = 0;
 
 	return {
 
@@ -102,6 +121,28 @@ export default function( CONFIG ) {
 		},
 
 		start: function() {
+
+		},
+
+		tick: function( t, T ) {
+
+			// console.log( "ctrl tick>", t, T );
+
+			var step = stepFor( Script, heating, t, T );
+			if( !step ){
+				if( heating ){
+					heating = false;
+					step = stepFor( Script, heating, t, T );
+				}
+			}
+			if( step ) { // not else!
+				emit( "step", step.name );
+				emit( "rate", step.rate );
+				var power = powerFor( step.rate, T );
+				emit( "power", power );
+				var powerfactor = power2fac( power, kiln_temp/1000 );
+				emit( "powerfactor", powerfactor );
+			}
 
 		},
 

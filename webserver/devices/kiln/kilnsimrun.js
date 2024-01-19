@@ -1,14 +1,18 @@
-import E from '../../E.js';
+#!/usr/bin/node
+/**
+ * Runs standalone kilm simulation with mqtt
+ */
+import E from '#E';
 
 import 'colors';
-import log from '../../logging.js';
-import Catch from '../../catch.js';
+import log from '#logging';
+import Catch from '#catch';
 Catch.log( log );
 
 import KilnGen from './kilnsim.js';
-import Repl from '../../repl.js';
+import Repl from '#repl';
 
-import Mqtt from '../../mqtt.js';
+import Mqtt from '#mqtt';
 var _mqtt = false;
 var _publish;
 

@@ -1,6 +1,11 @@
-#!/usr/bin/node
+/*
+ * Standalone Kiln simulator.
+ * To be used elsewhere
+ */
 
-import E from '../../E.js';
+import E from '#E';
+import _ from 'underscore';
+import Ringbuf from '#ringbuf';
 
 var PWM_PERIODE = 10;
 var TEMP_OFFSET = 20;
@@ -14,33 +19,6 @@ const Jconst = 3.6e6,
 
 const _Q = ( c, m, T ) => c * m * T,
       _T = ( c, m, Q ) => Q / ( c * m );
-
-var Ringbuf = ( max, slice=-1 ) => {
-
-	var data = new Array( max ).fill( 0 ),
-		idx = 0;
-
-	return {
-
-		put: function( val ){
-			data[ idx ] = val;
-			idx = (idx+1)%max;
-		},
-
-		avg: function(){
-			var sum=0;
-			for( var i=0; i<slice; i++ ){
-				sum += data[ (idx+i+max)%max ];
-			}
-			return sum/slice;
-		},
-
-		diff: function(){
-			return data[ (idx-1+max) % max ] - data[ idx ];
-		}
-
-	};
-}
 
 function pwm( phase, t, fac ) {
 
@@ -63,11 +41,12 @@ const P_max = 18000, //W
 	// P_loss == P_max
 	// U_loss * T_max == P_max
 
-export default function Kiln() {
+export default function Kiln( config={} ) {
 
-	var self = {
+	var self = _.extend( {
 
 		system: false,
+		flag_use_pwm_for_power: true,
 		P_max: P_max,
 		U_loss: U_loss, // W/K
 		U_damper: 0, // W/K
@@ -98,16 +77,23 @@ export default function Kiln() {
 
 		tick: function( runtime, dt ){
 
+			// console.log( "kiln tick>", runtime, dt );
+
 			var P_loss = this.U_loss * this.T_temp,
 				Q_loss = P_loss * dt / 3600;
 			var P_damper = this.U_damper * this.T_temp,
 				Q_damper = P_damper * dt / 3600;
 
-			//var Q_heat = this.system ? this.P_heater * dt / 3600 : 0;
+			var Q_heat;
+			if( this.flag_use_pwm_for_power ){
 
-			var fac = ( Kiln.P_heater / P_max ),
-				h1 = pwm( 0, runtime, fac );
-			var Q_heat = this.system && h1 ? this.P_max * dt / 3600 : 0;
+				var fac = ( Kiln.P_heater / P_max ),
+					h1 = pwm( 0, runtime, fac );
+
+				Q_heat = this.system && h1 ? this.P_max * dt / 3600 : 0;
+			} else {
+				Q_heat = this.system ? this.P_heater * dt / 3600 : 0;
+			}
 
 			this.Q_heat += Q_heat;
 			this.Q_heat -= Q_loss;
@@ -115,7 +101,7 @@ export default function Kiln() {
 
 			this.P_loss = P_loss + P_damper;
 
-			this.info = `${Q_heat/1000}kWh - ${Q_loss/1000}kWh - ${Q_damper/1000}kWh`;
+			this.info = `${(Q_heat/1000).toFixed(3)}kWh - ${(Q_loss/1000).toFixed(3)}kWh - ${(Q_damper/1000).toFixed(3)}kWh`;
 
 			this.Q_buf.put( this.Q_heat );
 			this.T_buf.put( this.T_temp );
@@ -156,7 +142,7 @@ export default function Kiln() {
 			var h1 = pwm( 0, runtime, fac );
 			p( "heater/status", this.system ? h2s( h1 ) : 0 );//+ h2s( h2 ) + h2s( h3 ) );
 		}
-	};
+	}, config );
 
 	self.T_temp = 0;
 

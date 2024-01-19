@@ -10,15 +10,16 @@
     "url": "git://github.com/ScheintodX/braumeister.git"
   },
   "imports": {
-	"#E": "./lib/E.js",
-	"#assert": "./lib/assert.js",
-	"#catch": "./lib/catch.js",
-	"#colors": "./lib/colors.js",
-	"#express": "./lib/express.js",
-	"#helpers": "./lib/helpers.js",
-	"#logging": "./lib/logging.js",
-	"#mqtt": "./lib/mqtt.js",
-	"#repl": "./lib/repl.js"
+    "#E": "./lib/E.js",
+    "#assert": "./lib/assert.js",
+    "#catch": "./lib/catch.js",
+    "#colors": "./lib/colors.js",
+    "#express": "./lib/express.js",
+    "#helpers": "./lib/helpers.js",
+    "#logging": "./lib/logging.js",
+    "#mqtt": "./lib/mqtt.js",
+    "#repl": "./lib/repl.js",
+	"#ringbuf": "./lib/ringbuf.js"
   },
   "dependencies": {
     "colors": "~1.4",
@@ -30,6 +31,7 @@
     "matrix-bot-sdk": "<0.6.0",
     "mqtt": "~4",
     "nodejs-websocket": "~1.7",
+    "printf": "^0.6.1",
     "tracer": "~1.1",
     "underscore": "~1.13.2",
     "ws": "~8.13"

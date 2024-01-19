@@ -1,5 +1,5 @@
-import Assert from '../../assert.js';
-import KilnCtrl from '../../kilnctrl.js';
+import Assert from '#assert';
+import KilnCtrl from './kilnctrl.js';
 
 
 const CONFIG = {
@@ -25,14 +25,17 @@ const Script = {
 
 var kilnctrl = KilnCtrl( CONFIG );
 
-function bar( p, w=160 ){
-	var l = Math.min( p, 1 ) *w |0;
-	if( l < 0 ) return "ERR: " + l;
-	return "=".repeat( l ) + ".".repeat( w-l );
-}
-
 kilnctrl._check( Script );
 kilnctrl._prepare( Script );
+
+Assert.equals( "split", Script.split, 4 );
+Assert.equals( "sec sizt", Script.sec.length, 2 );
+Assert.equals( "sec", Script.sec[0][0], 0 );
+Assert.equals( "sec", Script.sec[0][1], true );
+Assert.equals( "sec", Script.sec[1][0], 4 );
+Assert.equals( "sec", Script.sec[1][1], false );
+Assert.equals( "seci", Script.seci, 0 );
+
 
 console.log( Script );
 
@@ -40,11 +43,12 @@ var T, t=0, step, power, fac;
 
 for( T = 0; T <= 1200; T+=10 ){
 	t += 10;
+	// TODO: move heating true/false in script.
 	step = kilnctrl._stepFor( Script, true, t, T );
 	if( !step ) break;
 	power = kilnctrl._powerFor( step.rate, T );
 	fac = kilnctrl._power2fac( power, T );
-	console.log( T, step.name, step.heat, step.rate, power.toFixed(1), fac.toFixed(3), bar( fac ) );
+	console.log( T, step.name, step.heat, step.rate, power.toFixed(1), fac.toFixed(3), E.bar( fac ) );
 }
 
 for( T; T >= 0; T-=50 ){
@@ -53,6 +57,6 @@ for( T; T >= 0; T-=50 ){
 	if( !step ) break;
 	power = kilnctrl._powerFor( step.rate, T );
 	fac = kilnctrl._power2fac( power, T );
-	console.log( T, step.name, step.heat, step.rate, power.toFixed(1), fac.toFixed(3), bar( fac ) );
+	console.log( T, step.name, step.heat, step.rate, power.toFixed(1), fac.toFixed(3), E.bar( fac ) );
 }
 
