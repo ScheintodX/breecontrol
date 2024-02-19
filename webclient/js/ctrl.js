@@ -1,3 +1,4 @@
+console.log( "INIT ctrl" );
 /**
  * Keep track of components
  *
@@ -63,7 +64,7 @@ export default function( controls ) {
 	function initControl( name, control ) {
 
 		if( ! ('gotData' in control) ) {
-			console.warn( "Missing 'gotData'" );
+			console.warn( `Missing 'gotData' in ${name}` );
 		}
 
 		if( 'onControl' in control ) {

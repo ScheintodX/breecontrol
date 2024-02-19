@@ -1,3 +1,5 @@
+console.log( "INIT INDEX" );
+
 import BAG_Ctrl from "./ctrl.js";
 import BAG_Com from "./com_ws.js";
 import BAG_Tab from "./tab.js";
@@ -13,7 +15,8 @@ function loadDevice( $parent, device ) {
 	var dId = device.id,
 		dType = device.type,
 		dModule = dType.substring( 0,1 ).toUpperCase() + dType.substring( 1 ),
-		dControls = dModule + "_Controls"
+		dControls = dModule + "_Controls",
+		url = "devices/" + dType + ".html?id=" + btoa(+new Date).slice(-7, -2) //(prevent cache)
 		;
 
 	console.info( "LOAD DEV", dId, dType, dModule, dControls );
@@ -21,7 +24,9 @@ function loadDevice( $parent, device ) {
 	var $device = $( '<section class="tab device ' + dType + '"/>' )
 			.attr( 'id', dId )
 			.appendTo( $parent )
-			.load( "devices/" + dType + ".html", function() {
+			.load( url, null, html => {
+
+				console.log( "INDEX LOADED", dType, url );
 
 				( async () => {
 
@@ -37,6 +42,7 @@ function loadDevice( $parent, device ) {
 						var XMod = await import( "../devices/" + dModule.toLowerCase() + ".js");
 						ctrl.put( dType + '_'+dId, XMod.default( $dev, dId ) );
 						// if( BAG[ dModule ] ) ctrl.put( dType + '_'+dId, BAG[ dModule ]( $dev, dId ) );
+
 					} catch( e ){
 						if( e.code == "ERR_MODULE_NOT_FOUND" || e.code == "ERR_ABORTED" ){
 							console.log( "MISSING MOD", dModule );
@@ -67,6 +73,8 @@ function loadDevice( $parent, device ) {
 }
 
 function gotData( data ) {
+
+	// console.log( "Di>", data );
 
 	// store config for data we receive before controls are loaded.
 	if( 'scripts' in data ) {
@@ -105,6 +113,8 @@ function main() {
 
 	ctrl.onCom( com.send );
 }
+
+console.log( $ );
 
 $(window).keydown(function(e) { if (e.keyCode == 123) debugger; });
 

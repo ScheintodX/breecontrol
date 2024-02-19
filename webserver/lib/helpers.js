@@ -220,3 +220,13 @@ export const Json = {
 		}, pretty ? '\t' : undefined );
 	}
 };
+
+import { resolve } from 'path'
+import { fileURLToPath } from 'url'
+
+// call: amIAlpha( import.meta.url )
+export function amIAlpha( who ){
+	const pathToThisFile = resolve( fileURLToPath( who )),
+	      pathPassedToNode = resolve( process.argv[1] );
+	return pathToThisFile.includes( pathPassedToNode )
+}

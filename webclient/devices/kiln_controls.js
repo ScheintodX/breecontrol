@@ -69,6 +69,8 @@ export default function( elem, device ) {
 				var control = manualControls[ key ];
 				if( typeof( control ) == 'undefined' ) continue;
 
+				//console.log( key, value, control );
+
 				control.set( value );
 			}
 

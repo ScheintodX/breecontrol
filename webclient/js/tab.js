@@ -1,3 +1,4 @@
+console.log( "INIT tab" );
 /**
  * Master control for one tab.
  *
@@ -5,8 +6,6 @@
  */
 
 export default function( elem, device ) {
-
-	console.log( elem, device );
 
 	var $elem = ( elem instanceof jQuery ? elem : $( elem ) )
 			.expectOne(),
@@ -22,5 +21,8 @@ export default function( elem, device ) {
 			} )
 			;
 
-	return {};
+	return {
+		// prevents error message
+		gotData: ()=>null
+	};
 }

@@ -1,3 +1,5 @@
+/* not used. styles are in index.html so they are available before all.*/
+
 @import "config.lib";
 
 body {
@@ -14,4 +16,10 @@ img.loading {
 
 .hidetillneeded {
 	display: none !important;
+	//opacity: 0 !important;
+}
+// svg does not load if display: none
+.hidetillloaded {
+	//display: none !important;
+	opacity: 0 !important;
 }

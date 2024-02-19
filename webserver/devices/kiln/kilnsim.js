@@ -46,13 +46,13 @@ export default function Kiln( config={} ) {
 	var self = _.extend( {
 
 		system: false,
-		flag_use_pwm_for_power: true,
+		flag_use_pwm_for_power: false,
 		P_max: P_max,
 		U_loss: U_loss, // W/K
 		U_damper: 0, // W/K
 		m_mass: 400, //kg,
 		m_extra: 0,
-		c_spec_heat_capacity: 840, //kWh/(kg*K)
+		c_spec_heat_capacity: 840, //J/(kg*K)
 		Q_heat: 0, //kWh
 		P_heater: 0, //W
 		i_damper: 0, // 0-4

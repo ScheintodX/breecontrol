@@ -1,3 +1,4 @@
+console.log( "INIT com_ws" );
 /**
  * Manage communication
  *
@@ -27,9 +28,8 @@ function gotData( what ) {
 
 	var data = JSON.parse( what.data );
 
-	//console.trace( data );
-
 	if( _callback ) _callback( data );
+	else throw "Missing callback for data";
 }
 
 function gotClose( what ) {

@@ -1,3 +1,5 @@
+console.log( "INIT controls" );
+
 function InputCheckbox( $e, topic ) {
 
 	function trigger() {
@@ -11,11 +13,13 @@ function InputCheckbox( $e, topic ) {
 	} );
 
 	var self = Notifyable( Overridable( {
+		type: "checkbox", // only for debug
 		$e: $e,
 		topic: topic,
 		trigger: trigger,
 		set: function( val ) {
 			var checked = !!(val);
+			//console.log( "=", topic, "set", val, checked, $e, $e.prop('checked') );
 			$e.prop( {
 				checked: checked,
 				disabled: false
@@ -51,6 +55,8 @@ function InputNumber( $e, topic, scale ) {
 			;
 
 	var self = Notifyable( Overridable( {
+		type: "number",
+		$e: $e,
 		$e: $e,
 		topic: topic,
 		trigger: trigger,
@@ -82,6 +88,7 @@ function InputSelect( $e, topic ) {
 	} );
 
 	var self = Notifyable( Overridable( {
+		type: "select",
 		$e: $e,
 		topic: topic,
 		trigger: trigger,

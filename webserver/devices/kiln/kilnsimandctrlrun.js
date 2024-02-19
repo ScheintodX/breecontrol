@@ -82,6 +82,7 @@ async function main(){
 
 	var i, lastT, divT, Tph;
 	const minsT = 15;
+	console.log();
 	for( i=0; i<=hrs(24); i++ ){
 
 		ctrl.tick( sys.t, sys.T);

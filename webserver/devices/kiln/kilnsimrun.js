@@ -28,11 +28,6 @@ const MqttConfig = {
 	password: '3oropMLRr7PvFpFEhHVijqDH',
 	prefix: 'pottery/kiln/'
 }
-const repl = Repl( {
-	Kiln: Kiln,
-	Sys: Sys
-} );
-
 var Sys = {
 	dt: 1,
     runtime: 0,
@@ -45,6 +40,12 @@ var Sys = {
 		return this._speed;
 	}
 };
+
+const repl = Repl( {
+	Kiln: Kiln,
+	Sys: Sys
+} );
+
 
 var loopH = null;
 

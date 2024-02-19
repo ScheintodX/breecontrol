@@ -1,4 +1,4 @@
-"use strict";
+console.log( "INIT JQHELPER" );
 
 function ex( up ) {
 

@@ -2,6 +2,8 @@ import './helpers.js'; //onlyIfChanged
 
 import BAG_Load from './load.js';
 
+console.log( "INIT script" );
+
 export default function( elem, type, device ) {
 
 	var _onControl = false;

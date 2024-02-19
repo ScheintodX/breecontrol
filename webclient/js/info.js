@@ -1,3 +1,5 @@
+console.log( "INIT info" );
+
 export default function( elem, device ) {
 
 	var $e = ( elem instanceof jQuery ? elem : $( elem ) )

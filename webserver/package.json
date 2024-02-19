@@ -19,7 +19,8 @@
     "#logging": "./lib/logging.js",
     "#mqtt": "./lib/mqtt.js",
     "#repl": "./lib/repl.js",
-	"#ringbuf": "./lib/ringbuf.js"
+    "#ringbuf": "./lib/ringbuf.js",
+    "#agingbuf": "./lib/agingbuf.js"
   },
   "dependencies": {
     "colors": "~1.4",
@@ -41,10 +42,10 @@
     "ws 1.1.1 is  *way* outdated but last version of 1.X"
   ],
   "devDependencies": {
-    "tape": "~4.4"
+    "ava": "^6.0.1"
   },
   "scripts": {
     "start": "nodejs main.js",
-    "test": "nodejs test/boiler.js"
+    "test": "npx ava"
   }
 }

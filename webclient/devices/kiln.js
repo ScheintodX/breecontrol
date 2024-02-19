@@ -21,18 +21,36 @@ export default function( elem, device, passive ) {
 
 	var $elem = ( elem instanceof jQuery ? elem : $( elem ) )
 			.expectOne(),
-		_svg = false;
+		$elem0 = $elem
+			.get( 0 ),
+		_svg = false,
+		meid = crypto.randomUUID()
+		;
+
+	$elem.attr( "id", meid );
+
+	console.log( "Kiln>", $elem0, meid );
 
 	// Find svg element via dom
 	function svg( id ) {
-		return _svg.getElementById( id );
+		//return _svg.getElementById( id );
+		// This is slower but works independently to the
+		// the chaotic loading of the svg element
+		return $('#'+meid).get(0).contentDocument.getElementById( id );
+
+		// This seems to sometimes not work in a chaotic way
+		//return $elem.get(0).contentDocument.getElementById( id );
+
+		// This does not work when browser caches
+		//_svg.getElementById( id );
 	}
 
 	// Find svg element via jQuery
+	/*
 	function $svg( id ) {
 		//return $elem.contents().find( '#' + id );
 		return $(svg(id));
-	}
+	}*/
 
 	var ψ = Ψ( svg );
 
@@ -57,7 +75,9 @@ export default function( elem, device, passive ) {
 
 		gotData: function( data ) {
 
-			if( !_svg ) return;
+			//if( !_svg ) return;
+
+			//console.log( _svg );
 
 			if( !( 'devices' in data ) ) return;
 
@@ -74,6 +94,7 @@ export default function( elem, device, passive ) {
 			}*/
 
 			if( 'temp' in kiln ) {
+
 				Kiln.setTempInnerStatus( kiln.temp.status );
 				//Kiln.setTempInnerNominal( kiln.temp.nominal );
 			}
@@ -107,20 +128,42 @@ export default function( elem, device, passive ) {
 				Kiln.setMode( 'unknown' );
 			}
 
-		},
-
-		ready: function() {
-			return _svg !== false;
+			$elem.removeClass( "hidetillloaded" );
 		}
 	};
 
+	/*
+	 * This one is a fix for a wired svg loading problem.
+	 * When the browser caches the svg we dont get it in time
+	 * but an empty document. So we need to reload it by
+	 * resetting the data source and wait for the then fired
+	 * load event. Fixing this took weeks.
+	 * NOTE 2: Removed. Instead we query every time the
+	 * element. That is slower but works regardless.
+	 */
+	/*
+	$elem.on( 'load', () => {
+		_svg = $elem0.contentDocument;
+		console.log( "SVG LOADED" );
+		//$elem.removeClass( "hidetillloaded" );
+	} );
+	$elem.attr( "data", $elem.attr( "data" ) );
+	*/
+
+	//_svg = $elem.contentDocument;
+
+	/* expectOne should make sure we dont need to check
 	if( $elem.length == 1 ){
-		_svg = $elem.get( 0 ).contentDocument;
+		_svg = $elem.contentDocument;
+		console.log( "KILN ALREADY THERE", $elem, _svg );
 	} else {
+		console.log( "KILN NEED LOADING" );
 		$elem.on( 'load', function() {
-			_svg = $elem.get( 0 ).contentDocument;
+			_svg = $elem.contentDocument;
+			console.log( "KILN NOW HERE", _svg );
 		} );
 	}
+	*/
 
 	return Kiln;
 };
