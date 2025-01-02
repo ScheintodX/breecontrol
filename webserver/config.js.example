@@ -16,7 +16,7 @@ export default function Config(){
 				url: 'mqtt://localhost:1883/',
 				client: "braumeister",
 				username: 'braumeister',
-				password: '3oropMLRr7PvFpFEhHVijqDH',
+				password: 'braumeister',
 				prefix: 'pottery/'
 			},
 
