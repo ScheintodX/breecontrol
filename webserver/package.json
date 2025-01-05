@@ -38,8 +38,7 @@
     "ws": "~8.13"
   },
   "notes": [
-    "underscore 1.13.4 is stable",
-    "ws 1.1.1 is  *way* outdated but last version of 1.X"
+    "underscore 1.13.4 is stable"
   ],
   "devDependencies": {
     "ava": "^6.0.1"

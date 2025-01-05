@@ -4,7 +4,7 @@ import matplotlib.dates as mdates
 from pandas import DataFrame
 
 TEMPERATURE_FIX = 1.113
-ERROR_SCALE = 10.0
+ERROR_SCALE = 1000.0
 
 def load_data() -> DataFrame:
 
@@ -52,6 +52,8 @@ def load_data() -> DataFrame:
 
 def plot_data( final_dataset : DataFrame ):
 
+    plt.close('all')
+
     # Create a figure and axis for the plot
     fig, ax1 = plt.subplots(figsize=(12, 6))
 
@@ -72,15 +74,11 @@ def plot_data( final_dataset : DataFrame ):
     ax3.set_ylabel("Damper", color="tab:green")
     ax3.tick_params(axis="y", labelcolor="tab:green")
 
-    final_dataset["sim"] = final_dataset["temperature"]
-
     if "sim" in final_dataset.columns:
-        ax1.plot(final_dataset.index, final_dataset["sim"], label="Simulated Temp (°C)", linestyle="--", color="orange")
-        if not "error" in final_dataset.columns:
-            final_dataset["error"] = (final_dataset["sim"] - final_dataset["temperature"]) * ERROR_SCALE
+        ax1.plot(final_dataset.index, final_dataset["sim"], label="Simulated Temp (°C)", color="orange")
 
     if "error" in final_dataset.columns:
-        ax1.plot(final_dataset.index, final_dataset["error"], label=f"Temp Error (°C) * {ERROR_SCALE}", linestyle="--", color="orange")
+        ax1.plot(final_dataset.index, final_dataset["error"], label=f"Temp Error (°C)", linestyle="--", color="orange")
 
     # Format x-axis to show only hour:min:sec
     ax1.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M:%S"))
@@ -98,5 +96,4 @@ def plot_data( final_dataset : DataFrame ):
 
 if __name__ == "__main__":
     dataset = load_data()
-    print( dataset )
     plot_data(dataset)
