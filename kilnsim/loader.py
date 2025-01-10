@@ -9,7 +9,7 @@ ERROR_SCALE = 1000.0
 def load_data() -> DataFrame:
 
     def load_and_fix(filename:str, valuename:str) -> DataFrame:
-        theframe = pd.read_csv(filename).iloc[:, 1:]
+        theframe = pd.read_csv("data/"+filename).iloc[:, 1:]
         theframe["time"] = pd.to_datetime(theframe["time"])
         theframe.set_index("time", inplace=True)
         theframe_resampled = theframe.resample("1s").mean()
@@ -17,7 +17,7 @@ def load_data() -> DataFrame:
         return theframe_resampled
 
     # Load datasets
-    tmprset = load_and_fix("temperature.csv", "temperature")
+    tmprset = load_and_fix("temp.csv", "temperature")
     pwerset = load_and_fix("powerfactor.csv", "powerfactor")
     systset = load_and_fix("system.csv", "system")
     dmprset = load_and_fix("damper.csv", "damper")

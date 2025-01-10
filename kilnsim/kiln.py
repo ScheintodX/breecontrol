@@ -1,42 +1,45 @@
 from datetime import datetime, timedelta
-from functools import partial
+from functools import partial, wraps
 
 import pandas as pd
 import loader
 import numpy as np
 from scipy.optimize import minimize
+#from pint import UnitRegistry, Quantity
 
 from pandas import DataFrame
 import math
 
-K:float = 273.15
-T_r:float = 20 + K
+K = 273
 
-Dt:float = 30
+#Unit = UnitRegistry()
 
-minute = lambda x: x*60
-hour = lambda x: x*minute(60)
+T_room:float = 20
+#T_room:Quantity = Unit.Quantity(20, Unit.degC).to(Unit.K)
 
-# 1J = 1Ws
+#Dt:Quantity = 30 * Unit.hour #s intervals
+Dt:float = 30 #s intervals
 
 
 class Kiln:
 
-    c:float = 920 #J/(kg*K)
-    m:float = 100 #kg
-    Q:float = 18e3 #W
+    #c:Quantity = 920 * Unit.J / Unit.kilogram / Unit.K
+    #m:Quantity = 100 * Unit.kilogram
+    #Q:Quantity = 18e3 * Unit.W
+    c:float = 920
+    m:float = 100
+    Q:float = 18000
 
-    E:float = T_r * c * m #Ws
+    E:float = T_room * c * m #Ws
 
 
-    def tick( self, dt:float, f:float, damper:int, A1:float, A2:float, A3:float, A4:float ):
+    def tick( self, dt:float, powerfactor:float, damper:float, A1:float, A2:float, A3:float, A4:float ):
 
-        dE:float = dt * f * self.Q
-        dE -= dt * A1 * f
-        #dE -= dt * A1 * (damper/4) * math.pow( self.T() - T_r, 1 )
-        dE -= dt * A2 * math.pow( self.T() - T_r, 1 )
-        dE -= dt * A3 * math.pow( self.T() - T_r, 2 )
-        dE -= dt * A4 * math.pow( self.T() - T_r, 3 )
+        dE:float = dt * powerfactor * self.Q
+        dE -= dt * A1 * powerfactor
+        dE -= dt * A2 * math.pow(self.T() - T_room, 1)
+        dE -= dt * A3 * math.pow(self.T() - T_room, 2)
+        dE -= dt * A4 * math.pow(self.T() - T_room, 3)
 
         self.E += dE
 
@@ -47,13 +50,14 @@ class Kiln:
         return r
 
     def C( self ):
+        #return self.T().to( Unit.degC )
         return self.T() - K
 
-    def setT( self, k ):
+    def setT( self, k:float ):
         self.E = k * self.c * self.m
 
-    def setC( self, c ):
-        self.setT( c+K )
+    def setC( self, c:float ):
+        self.setT( c + K )
 
 
 def timerange( start:str, end:str, step:int ):
@@ -68,7 +72,7 @@ def timerange( start:str, end:str, step:int ):
         current_time += step_delta
 
 
-def run_kiln( kiln:Kiln, ref, A1:float, A2:float, A3:float, A4:float):
+def run_kiln( kiln:Kiln, ref:DataFrame, A1:float, A2:float, A3:float, A4:float):
 
     data:dict = []
 
@@ -79,6 +83,7 @@ def run_kiln( kiln:Kiln, ref, A1:float, A2:float, A3:float, A4:float):
         T = row['temperature']
 
         kiln.tick( Dt, powerfactor, damper, A1, A2, A3, A4 )
+
         data.append( {
                 "time": time,
                 "sim": kiln.C(),
@@ -91,45 +96,51 @@ def run_kiln( kiln:Kiln, ref, A1:float, A2:float, A3:float, A4:float):
     return df
 
 
-def warp( ref:DataFrame, A1:float, A2:float, A3:float, A4:float ):
+def run_and_concat( ref:DataFrame, A1:float, A2:float, A3:float, A4:float):
 
     print( A1, A2, A3, A4 )
 
     kiln:Kiln = Kiln()
     kiln.setC( ref.iloc[0]['temperature'] )
 
+    ###############################
     sim: DataFrame = run_kiln(kiln, ref, A1, A2, A3, A4)
-    x: DataFrame = pd.concat(objs=[ref, sim], axis=1)
+    ###############################
 
-    rmsq: float = np.sqrt(((x['temperature'] - x['sim']) ** 2).mean())
+    x: DataFrame = pd.concat(objs=[ref, sim], axis=1)
+    print( x )
+
+    rmsq: float = np.sqrt((( x['temperature'] - x['sim'] ) ** 2 ).mean())
     print( rmsq )
 
-    #if( rmsq < 200 ):
+    #if rmsq < 500:
     loader.plot_data( x )
+
+    #exit()
 
     return rmsq
 
 
 if __name__ == "__main__":
 
-    ref:DataFrame = loader.load_data()
+    reference:DataFrame = loader.load_data()
     #ref = ref.loc["2024-11-24 10:00:00":"2024-11-24 13:00:00"]
-    ref = ref.loc["2024-11-24 19:00:00":"2024-11-24 23:00:00"]
-    #print( ref )
-    #print(f"Rows: {ref.shape[0]}, Columns: {ref.shape[1]}")
-    #exit()
+    #ref = ref.loc["2024-11-24 19:00:00":"2024-11-24 23:00:00"]
+    reference = reference.loc["2025-01-09 01:44:00":"2025-01-09 19:30:00"]
 
-    xxx = lambda x: warp( ref, x[0], x[1], x[2], x[3] )
-
-    #xxx( [0, .02, 0, 0] )
+    #run_and_concat(reference, 0, .02, 0, 0)
     #xxx( [16.5, 0.02, 0, 0] )
     #xxx( [0, 0, 0.00002, 0] )
     #xxx( [0, 0, 0, 0.00000002] )
 
-    warp( ref, 0, 20, 0, 0 )
+    #run_and_concat(reference, 0, 20, 0, 0)
     #exit()
 
-    print( minimize( xxx, [0,20,0,0], bounds=[(None,None),(0,100),(0,1),(0,1)] ) )
+    res = minimize(lambda x: run_and_concat(reference, x[0], x[1], x[2], x[3]),
+                   [0,2.6,0,0],
+                   bounds=[(None,None),(0,100),(0,1),(0,1)])
+
+    print( res )
 
 
 
